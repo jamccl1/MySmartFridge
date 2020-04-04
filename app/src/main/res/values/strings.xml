@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MySmartFridge</string>
+
+    <!-- Home screen strings -->
+    <string name="homescreen_title">TEST HOME SCREEN</string>
+    <string name="whats_in_fridge_home_button">What\'s In My Fridge?</string>
+    <string name="shopping_home_button">Grocery Shopping</string>
+    <string name="recipes_home_button">Recipes</string>
+    <string name="look_inside_home_button">Look Inside</string>
+    <string name="home_temp_widget_desc">Temperature widget goes here.</string>
+
+    <!-- Recipes screen strings -->
+    <string name="recipes_title">RECIPES</string>
+    <string name="recipes_back_button">Back</string>
+    <string name="recipes_placeholder_text">[food goes here]</string>
+</resources>
