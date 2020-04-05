@@ -1,16 +1,28 @@
 <resources>
     <string name="app_name">MySmartFridge</string>
 
+    <!-- General use strings -->
+    <string name="back_button_text">Back</string>
+    <string name="placeholder">[content goes here]</string>
+
     <!-- Home screen strings -->
-    <string name="homescreen_title">TEST HOME SCREEN</string>
+    <string name="homescreen_title">MY SMART FRIDGE</string>
     <string name="whats_in_fridge_home_button">What\'s In My Fridge?</string>
     <string name="shopping_home_button">Grocery Shopping</string>
     <string name="recipes_home_button">Recipes</string>
     <string name="look_inside_home_button">Look Inside</string>
     <string name="home_temp_widget_desc">Temperature widget goes here.</string>
+    <string name="temperature">%1$d°F</string>
+
+    <!-- What's In My Fridge screen strings -->
+    <string name="wimf_title">What\'s In My Fridge?</string>
+
+    <!-- Grocery Shopping screen strings -->
+    <string name="shopping_title">Grocery Shopping</string>
 
     <!-- Recipes screen strings -->
-    <string name="recipes_title">RECIPES</string>
-    <string name="recipes_back_button">Back</string>
-    <string name="recipes_placeholder_text">[food goes here]</string>
+    <string name="recipes_title">Recipes</string>
+
+    <!-- Look Inside screen strings -->
+    <string name="look_inside_title">Look Inside</string>
 </resources>
