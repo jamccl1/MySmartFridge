@@ -4,4 +4,13 @@
     <dimen name="button_text_size">24sp</dimen>
     <dimen name="menu_button_width">350dp</dimen>
     <dimen name="menu_button_height">75dp</dimen>
+
+    <!-- Recipes related items -->
+    <dimen name="recipes_image_width">70dp</dimen>
+    <dimen name="recipes_image_height">50dp</dimen>
+    <dimen name="recipes_name_width">210dp</dimen>
+    <dimen name="recipes_name_height">56dp</dimen>
+    <dimen name="recipes_button_width">70dp</dimen>
+    <dimen name="recipes_button_height">46dp</dimen>
+    <dimen name="recipes_button_text_size">14sp</dimen>
 </resources>

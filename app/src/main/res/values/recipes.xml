@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- RECIPE DATA -->
+    <!-- The "recipe_data" field that comes first contains all the IDs for each array of recipe info -->
+    <!-- Then all the other arrays, one for each recipe, contain (in this order): name, ingredients, -->
+    <!-- the cooking time, and the image id. -->
+
+    <string-array name="recipe_data">
+        <item>recipe_data_spaghetti</item>
+        <item>recipe_data_lasagna</item>
+    </string-array>
+
+    <!-- These are placeholders at the moment... -->
+
+    <string-array name="recipe_data_spaghetti">
+        <item>Spaghetti</item>
+        <item>Noodles,Tomato Sauce,Meatballs</item>
+        <item>15 minutes</item>
+        <item>spaghetti_image</item>
+    </string-array>
+
+    <string-array name="recipe_data_lasagna">
+        <item>Lasagna</item>
+        <item>Noodles,Tomato Sauce,Cheese</item>
+        <item>45 minutes</item>
+        <item>lasagna_image</item>
+    </string-array>
+
+    <drawable name="spaghetti_image">@drawable/spaghetti_small</drawable>
+    <drawable name="lasagna_image">@drawable/lasagna_small</drawable>
+</resources>

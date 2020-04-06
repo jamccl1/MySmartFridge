@@ -22,6 +22,8 @@
 
     <!-- Recipes screen strings -->
     <string name="recipes_title">Recipes</string>
+    <string name="recipe_select">More</string>
+    <string name="recipe_desc">Description placeholder.</string>
 
     <!-- Look Inside screen strings -->
     <string name="look_inside_title">Look Inside</string>

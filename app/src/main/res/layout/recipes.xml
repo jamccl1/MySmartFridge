@@ -23,20 +23,46 @@
         android:layout_width="142dp"
         android:layout_height="51dp"
         android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
         android:text="@string/recipes_title"
         android:textSize="@dimen/title_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/placeholder"
+    <ScrollView
+        android:id="@+id/recipesScrollView"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipeSearchBar">
+
+        <LinearLayout
+            android:id="@+id/recipesScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <SearchView
+        android:id="@+id/recipeSearchBar"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="#ECECEC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipesTitle" />
+
 </android.support.constraint.ConstraintLayout>
