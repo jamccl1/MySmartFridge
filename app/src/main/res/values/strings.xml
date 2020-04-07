@@ -23,7 +23,11 @@
     <!-- Recipes screen strings -->
     <string name="recipes_title">Recipes</string>
     <string name="recipe_select">More</string>
-    <string name="recipe_desc">Description placeholder.</string>
+    <string name="recipes_desc">Description placeholder.</string>
+    <string name="recipes_cooking_time_header">Cooking Time:</string>
+    <string name="recipes_ingredients_header">Ingredients:</string>
+    <string name="recipes_order_button">Order</string>
+    <string name="recipes_instructions_header">Instructions:</string>
 
     <!-- Look Inside screen strings -->
     <string name="look_inside_title">Look Inside</string>

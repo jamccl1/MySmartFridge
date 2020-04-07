@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="recipe_placeholder">Placeholder</string>
+
     <!-- RECIPE DATA -->
     <!-- The "recipe_data" field that comes first contains all the IDs for each array of recipe info -->
     <!-- Then all the other arrays, one for each recipe, contain (in this order): name, ingredients, -->
@@ -14,16 +16,19 @@
 
     <string-array name="recipe_data_spaghetti">
         <item>Spaghetti</item>
-        <item>Noodles,Tomato Sauce,Meatballs</item>
+        <item>Noodles (1 box),Tomato Sauce (½ cup),Meatballs (6)</item>
         <item>15 minutes</item>
         <item>spaghetti_image</item>
+        <item>Place spaghetti noodles into boiling water. Wait ten minutes, then pour noodles into colander. Add sauce and meatballs on top.\n
+        This is a second paragraph, serving as a test for whether this thing works or not.</item>
     </string-array>
 
     <string-array name="recipe_data_lasagna">
         <item>Lasagna</item>
-        <item>Noodles,Tomato Sauce,Cheese</item>
+        <item>Noodles (2 boxes),Tomato Sauce (1 can),Cheese (2 bags)</item>
         <item>45 minutes</item>
         <item>lasagna_image</item>
+        <item>Cook noodles by boiling them in water for ten minutes. Layer noodles, tomato sauce, and cheese in a tray. Place in the oven at 350°F for 30 mins.</item>
     </string-array>
 
     <drawable name="spaghetti_image">@drawable/spaghetti_small</drawable>
