@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="isTablet">false</bool>
+
     <dimen name="title_text_size">36sp</dimen>
     <dimen name="button_text_size">24sp</dimen>
     <dimen name="normal_text_size">18sp</dimen>
@@ -22,4 +24,9 @@
     <dimen name="recipes_indv_image_width">250dp</dimen>
     <dimen name="recipes_indv_image_padding">5dp</dimen>
     <dimen name="recipes_indv_scroll_width">350dp</dimen>
+
+    <!-- Items used for tablet mode. Note these are overwritten in the sw600dp version of ui_settings.xml;
+     these values are backups. -->
+    <dimen name="temperature_text_width">220dp</dimen>
+    <dimen name="temperature_text_height">140dp</dimen>
 </resources>

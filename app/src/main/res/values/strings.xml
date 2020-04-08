@@ -9,8 +9,10 @@
     <string name="homescreen_title">MY SMART FRIDGE</string>
     <string name="whats_in_fridge_home_button">What\'s In My Fridge?</string>
     <string name="shopping_home_button">Grocery Shopping</string>
+    <string name="d_shopping_home_button">Grocery Shopping List</string>
     <string name="recipes_home_button">Recipes</string>
     <string name="look_inside_home_button">Look Inside</string>
+    <string name="settings_home_button">Settings</string>
     <string name="home_temp_widget_desc">Temperature widget goes here.</string>
     <string name="temperature">%1$d°F</string>
 
@@ -31,4 +33,7 @@
 
     <!-- Look Inside screen strings -->
     <string name="look_inside_title">Look Inside</string>
+
+    <!-- Settings screen strings -->
+    <string name="settings_title">Settings</string>
 </resources>
