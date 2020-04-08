@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/homeTitleDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/homescreen_title"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/whatsInFridgeButtonDevice"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="32dp"
+        android:onClick="toWhatsInFridge"
+        android:text="@string/whats_in_fridge_home_button"
+        android:textAllCaps="false"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/shoppingButtonDevice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/shoppingButtonDevice"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="32dp"
+        android:onClick="toShopping"
+        android:text="@string/d_shopping_home_button"
+        android:textAllCaps="false"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/settingsButtonDevice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/settingsButtonDevice"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="48dp"
+        android:onClick="toSettings"
+        android:text="@string/settings_home_button"
+        android:textAllCaps="false"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/timeDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="3:42 p.m."
+        android:textSize="100sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/whatsInFridgeButtonDevice"
+        app:layout_constraintEnd_toStartOf="@+id/expiredIconDevice"
+        app:layout_constraintStart_toEndOf="@+id/temperatureDevice"
+        app:layout_constraintTop_toBottomOf="@+id/homeTitleDevice" />
+
+    <TextView
+        android:id="@+id/temperatureDevice"
+        android:layout_width="@dimen/temperature_text_width"
+        android:layout_height="@dimen/temperature_text_height"
+        android:layout_marginStart="140dp"
+        android:gravity="center_vertical"
+        android:text="@string/temperature"
+        android:textSize="100sp"
+        app:layout_constraintBottom_toTopOf="@+id/whatsInFridgeButtonDevice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeTitleDevice" />
+
+    <ImageView
+        android:id="@+id/expiredIconDevice"
+        android:layout_width="@dimen/temperature_text_width"
+        android:layout_height="@dimen/temperature_text_height"
+        android:layout_marginEnd="140dp"
+        app:layout_constraintBottom_toTopOf="@+id/whatsInFridgeButtonDevice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeTitleDevice"
+        app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+</android.support.constraint.ConstraintLayout>

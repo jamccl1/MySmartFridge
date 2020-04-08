@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="isTablet">true</bool>
+
+    <dimen name="title_text_size">56sp</dimen>
+    <dimen name="button_text_size">36sp</dimen>
+    <dimen name="menu_button_width">1000dp</dimen>
+    <dimen name="menu_button_height">100dp</dimen>
+    <dimen name="temperature_text_width">220dp</dimen>
+    <dimen name="temperature_text_height">140dp</dimen>
+</resources>

@@ -7,13 +7,21 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean isTablet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        isTablet = getResources().getBoolean(R.bool.isTablet);
+
         // Set temperature on home screen
-        setHomeScreenTemperature(75);
+        if (isTablet) {
+            setHomeScreenTemperatureDevice(75);
+        } else {
+            setHomeScreenTemperature(75);
+        }
     }
 
     public void toWhatsInFridge(View view) {
@@ -32,13 +40,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.look_inside);
     }
 
+    public void toSettings(View view) {
+        setContentView(R.layout.settings);
+    }
+
     public void toHome(View view) {
         setContentView(R.layout.home);
-        setHomeScreenTemperature(75);
+
+        if (isTablet) {
+            setHomeScreenTemperatureDevice(75);
+        } else {
+            setHomeScreenTemperature(75);
+        }
     }
 
     private void setHomeScreenTemperature(int temperature) {
         TextView uiTemperature = findViewById(R.id.temperature);
+        uiTemperature.setText(getString(R.string.temperature, temperature));
+    }
+
+    private void setHomeScreenTemperatureDevice(int temperature) {
+        TextView uiTemperature = findViewById(R.id.temperatureDevice);
         uiTemperature.setText(getString(R.string.temperature, temperature));
     }
 }
