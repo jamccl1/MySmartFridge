@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="isTablet">false</bool>
+
     <dimen name="title_text_size">36sp</dimen>
     <dimen name="button_text_size">24sp</dimen>
     <dimen name="menu_button_width">350dp</dimen>
     <dimen name="menu_button_height">75dp</dimen>
+
+    <!-- Items used for tablet mode. Note these are overwritten in the sw600dp version of ui_settings.xml;
+     these values are backups. -->
+    <dimen name="temperature_text_width">220dp</dimen>
+    <dimen name="temperature_text_height">140dp</dimen>
 </resources>
