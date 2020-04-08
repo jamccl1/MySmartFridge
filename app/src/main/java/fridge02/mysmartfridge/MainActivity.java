@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<LinearLayout> recipesInList;
     private String lastRecipeSearch;
-
     boolean isTablet;
 
     @Override
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setHomeScreenTemperature(75);
         }
-        setHomeScreenTemperature(75);
 
         // Set current displayed recipes to an empty list;
         recipesInList = new ArrayList<>();
