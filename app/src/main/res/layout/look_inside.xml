@@ -29,13 +29,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/lookInsidePlaceholderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/placeholder"
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="305dp"
+        android:layout_height="321dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="84dp"
         app:layout_constraintBottom_toTopOf="@+id/lookInsideBackButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lookInsideTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/lookInsideTitle"
+        app:layout_constraintVertical_bias="1.0">
+
+        <RadioButton
+            android:id="@+id/topShelfRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/top_shelf_radio" />
+
+        <RadioButton
+            android:id="@+id/middleShelfRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/middle_shelf_radio" />
+
+        <RadioButton
+            android:id="@+id/bottomSelfRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bottom_shelf_radio" />
+
+        <RadioButton
+            android:id="@+id/drawer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer" />
+    </RadioGroup>
+
 </android.support.constraint.ConstraintLayout>
