@@ -31,40 +31,53 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="305dp"
-        android:layout_height="321dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="84dp"
+        android:layout_width="297dp"
+        android:layout_height="129dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/lookInsideBackButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lookInsideTitle"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent">
 
         <RadioButton
             android:id="@+id/topShelfRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:checked="true"
+            android:onClick="showInsideFridge"
             android:text="@string/top_shelf_radio" />
 
         <RadioButton
             android:id="@+id/middleShelfRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="showInsideFridge"
             android:text="@string/middle_shelf_radio" />
 
         <RadioButton
             android:id="@+id/bottomSelfRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="showInsideFridge"
             android:text="@string/bottom_shelf_radio" />
 
         <RadioButton
             android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="showInsideFridge"
             android:text="@string/drawer" />
     </RadioGroup>
+
+    <ImageView
+        android:id="@+id/lookInsideImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lookInsideTitle"
+        app:layout_constraintVertical_bias="0.152" />
 
 </android.support.constraint.ConstraintLayout>
