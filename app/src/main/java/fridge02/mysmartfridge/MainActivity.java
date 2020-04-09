@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toShopping(View view) {
+        //hi
         setContentView(R.layout.shopping);
     }
 
