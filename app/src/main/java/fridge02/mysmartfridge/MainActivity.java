@@ -307,33 +307,26 @@ public class MainActivity extends AppCompatActivity {
     public void showInsideFridge(View view) {
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-
         int radioButtonID = radioGroup.getCheckedRadioButtonId();
-
-        ImageView tes = (ImageView) findViewById(R.id.lookInsideImage);
+        ImageView lookInsideImage = (ImageView) findViewById(R.id.lookInsideImage);
 
         switch(radioButtonID) {
             case R.id.topShelfRadio:
-                tes.setImageResource(R.drawable.spaghetti_image);
+                lookInsideImage.setImageResource(R.drawable.top_fridge_image);
                 break;
 
             case R.id.middleShelfRadio:
-                tes.setImageResource(R.drawable.lasagna_image);
+                lookInsideImage.setImageResource(R.drawable.middle_fridge_image);
                 break;
 
             case R.id.bottomSelfRadio:
-                tes.setImageResource(R.drawable.spaghetti_image);
-
+                lookInsideImage.setImageResource(R.drawable.bottom_fridge_image);
                 break;
 
             case R.id.drawer:
-                tes.setImageResource(R.drawable.spaghetti_image);
-
+                lookInsideImage.setImageResource(R.drawable.drawer_fridge_image);
                 break;
         }
-
-
-
 
 
     }

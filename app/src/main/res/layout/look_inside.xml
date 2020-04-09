@@ -71,13 +71,13 @@
 
     <ImageView
         android:id="@+id/lookInsideImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="345dp"
+        android:layout_height="229dp"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lookInsideTitle"
-        app:layout_constraintVertical_bias="0.152" />
+        app:layout_constraintVertical_bias="0.055" />
 
 </android.support.constraint.ConstraintLayout>
