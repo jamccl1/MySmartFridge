@@ -3,6 +3,8 @@
     <drawable name="top_fridge_image">@drawable/top_fridge_small</drawable>
     <drawable name="middle_fridge_image">@drawable/middle_fridge_small</drawable>
     <drawable name="bottom_fridge_image">@drawable/bottom_fridge_small</drawable>
-    <drawable name="drawer_fridge_image">@drawable/drawer_fridge_small</drawable>
+    <drawable name="drawer1_fridge_image">@drawable/drawer1_fridge_small</drawable>
+    <drawable name="drawer2_fridge_image">@drawable/drawer2_fridge_small</drawable>
+
 
 </resources>

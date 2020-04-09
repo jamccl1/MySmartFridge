@@ -36,7 +36,8 @@
     <string name="top_shelf_radio">Top Shelf</string>
     <string name="middle_shelf_radio">Middle Shelf</string>
     <string name="bottom_shelf_radio">Bottom Shelf</string>
-    <string name="drawer">Drawer</string>
+    <string name="drawer_one">Drawer 1</string>
+    <string name="drawer_two">Drawer 2</string>
 
     <!-- Settings screen strings -->
     <string name="settings_title">Settings</string>

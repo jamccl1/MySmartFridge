@@ -31,9 +31,9 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="297dp"
-        android:layout_height="129dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="325dp"
+        android:layout_height="161dp"
+        android:layout_marginBottom="6dp"
         app:layout_constraintBottom_toTopOf="@+id/lookInsideBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -62,17 +62,25 @@
             android:text="@string/bottom_shelf_radio" />
 
         <RadioButton
-            android:id="@+id/drawer"
+            android:id="@+id/drawer_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showInsideFridge"
-            android:text="@string/drawer" />
+            android:text="@string/drawer_one" />
+
+        <RadioButton
+            android:id="@+id/drawer_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showInsideFridge"
+            android:text="@string/drawer_two" />
     </RadioGroup>
 
     <ImageView
         android:id="@+id/lookInsideImage"
         android:layout_width="345dp"
         android:layout_height="229dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

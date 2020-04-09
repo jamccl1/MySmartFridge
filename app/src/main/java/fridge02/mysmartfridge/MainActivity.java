@@ -323,8 +323,12 @@ public class MainActivity extends AppCompatActivity {
                 lookInsideImage.setImageResource(R.drawable.bottom_fridge_image);
                 break;
 
-            case R.id.drawer:
-                lookInsideImage.setImageResource(R.drawable.drawer_fridge_image);
+            case R.id.drawer_one:
+                lookInsideImage.setImageResource(R.drawable.drawer1_fridge_image);
+                break;
+
+            case R.id.drawer_two:
+                lookInsideImage.setImageResource(R.drawable.drawer2_fridge_image);
                 break;
         }
 
