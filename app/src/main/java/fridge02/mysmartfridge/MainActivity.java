@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Space;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void toLookInside(View view) {
         setContentView(R.layout.look_inside);
+        showInsideFridge(null);
     }
 
     public void toSettings(View view) {
@@ -297,4 +299,43 @@ public class MainActivity extends AppCompatActivity {
         TextView uiTemperature = findViewById(R.id.temperatureDevice);
         uiTemperature.setText(getString(R.string.temperature, temperature));
     }
+
+
+
+// Look Inside METHODS //
+
+    public void showInsideFridge(View view) {
+
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        int radioButtonID = radioGroup.getCheckedRadioButtonId();
+        ImageView lookInsideImage = (ImageView) findViewById(R.id.lookInsideImage);
+
+        switch(radioButtonID) {
+            case R.id.topShelfRadio:
+                lookInsideImage.setImageResource(R.drawable.top_fridge_image);
+                break;
+
+            case R.id.middleShelfRadio:
+                lookInsideImage.setImageResource(R.drawable.middle_fridge_image);
+                break;
+
+            case R.id.bottomSelfRadio:
+                lookInsideImage.setImageResource(R.drawable.bottom_fridge_image);
+                break;
+
+            case R.id.drawer_one:
+                lookInsideImage.setImageResource(R.drawable.drawer1_fridge_image);
+                break;
+
+            case R.id.drawer_two:
+                lookInsideImage.setImageResource(R.drawable.drawer2_fridge_image);
+                break;
+        }
+
+
+    }
+
 }
+
+
+
