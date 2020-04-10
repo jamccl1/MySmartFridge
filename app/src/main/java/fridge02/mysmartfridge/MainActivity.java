@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ArrayList<CheckBox> groceriesInList;
     private ArrayList<LinearLayout> recipesInList;
     private String lastRecipeSearch;
     boolean isTablet;
@@ -42,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Set last searched recipe
         lastRecipeSearch = "";
+
+        //Set groceries shopping list to be empty list
+        groceriesInList = new ArrayList<>();
+
     }
 
     public void toWhatsInFridge(View view) {
@@ -51,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public void toShopping(View view) {
         //hi
         setContentView(R.layout.shopping);
+        loadGroceryList(view);
+
     }
 
     // Sets up the Recipes screen.
@@ -297,5 +307,45 @@ public class MainActivity extends AppCompatActivity {
     private void setHomeScreenTemperatureDevice(int temperature) {
         TextView uiTemperature = findViewById(R.id.temperatureDevice);
         uiTemperature.setText(getString(R.string.temperature, temperature));
+    }
+
+    // Grocery List Methods
+
+    public void addToGroceryList(View view){
+
+        //Check for empty string
+
+        int id = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
+
+        EditText userItem = findViewById(R.id.new_item_input);
+        String userItemString =  userItem.getText().toString();
+        userItem.getText().clear();
+
+        if (!userItemString.equals("")) {
+
+            LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+
+            CheckBox newCheckBox = new CheckBox(getApplicationContext());
+            newCheckBox.setText(userItemString);
+            newCheckBox.setTextColor(Color.BLACK);
+
+            newCheckBox.setButtonDrawable(id);
+
+            linearLay.addView(newCheckBox);
+
+            groceriesInList.add(newCheckBox);
+        }
+
+    }
+
+    public void loadGroceryList(View view){
+
+        LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+
+        for (View x: groceriesInList){
+            ((ViewGroup)x.getParent()).removeView(x);
+            linearLay.addView(x);
+        }
+
     }
 }

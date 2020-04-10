@@ -21,6 +21,8 @@
 
     <!-- Grocery Shopping screen strings -->
     <string name="shopping_title">Grocery Shopping</string>
+    <string name="shopping_add_hint">Type new item and click +</string>
+
 
     <!-- Recipes screen strings -->
     <string name="recipes_title">Recipes</string>
