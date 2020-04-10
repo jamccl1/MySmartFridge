@@ -323,12 +323,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (!userItemString.equals("")) {
 
-            LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+            final LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
 
             CheckBox newCheckBox = new CheckBox(getApplicationContext());
             newCheckBox.setText(userItemString);
             newCheckBox.setTextColor(Color.BLACK);
-
             newCheckBox.setButtonDrawable(id);
 
             linearLay.addView(newCheckBox);
@@ -340,6 +339,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadGroceryList(View view){
 
+        ArrayList <View> viewsToDelete = new ArrayList<>();
+
+        for (CheckBox x: groceriesInList){
+            if(x.isChecked()){
+                viewsToDelete.add(x);
+            }
+        }
+
+        for (View x: viewsToDelete){
+            groceriesInList.remove(x);
+
+        }
+
         LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
 
         for (View x: groceriesInList){
@@ -348,4 +360,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
