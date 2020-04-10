@@ -52,17 +52,20 @@
         android:id="@+id/groceryListAddButton"
         android:layout_width="98dp"
         android:layout_height="85dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="24dp"
         android:onClick="addToGroceryList"
         app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/new_item_input"
         app:srcCompat="@drawable/add_button_small" />
 
     <EditText
         android:id="@+id/new_item_input"
         android:layout_width="244dp"
         android:layout_height="46dp"
+        android:layout_marginStart="21dp"
         android:layout_marginBottom="44dp"
         android:hint="@string/shopping_add_hint"
         android:inputType="text"
