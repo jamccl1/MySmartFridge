@@ -29,6 +29,7 @@
     <!-- Order online items -->
     <dimen name="add_dialog_width">350dp</dimen>
     <dimen name="add_dialog_height">220dp</dimen>
+    <dimen name="cart_item_height">40dp</dimen>
 
     <!-- Items used for tablet mode. Note these are overwritten in the sw600dp version of ui_settings.xml;
      these values are backups. -->

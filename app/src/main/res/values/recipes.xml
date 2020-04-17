@@ -8,19 +8,21 @@
     <!-- the cooking time, and the image id. -->
 
     <string-array name="recipe_data">
-        <item>recipe_data_spaghetti</item>
+        <item>recipe_data_hamburger</item>
         <item>recipe_data_lasagna</item>
+        <item>recipe_data_salad</item>
+        <item>recipe_data_spaghetti</item>
     </string-array>
 
     <!-- These are placeholders at the moment... -->
 
-    <string-array name="recipe_data_spaghetti">
-        <item>Spaghetti</item>
-        <item>Noodles (1 box),Tomato Sauce (½ cup),Meatballs (6)</item>
-        <item>15 minutes</item>
-        <item>spaghetti_image</item>
-        <item>Place spaghetti noodles into boiling water. Wait ten minutes, then pour noodles into colander. Add sauce and meatballs on top.\n
-        This is a second paragraph, serving as a test for whether this thing works or not.</item>
+    <string-array name="recipe_data_hamburger">
+        <item>Hamburger</item>
+        <item>Buns (1 bag),Burger Patties (4),Lettuce (1 head),Tomatoes (1),Cheese (¼ lb)</item>
+        <item>5 minutes</item>
+        <item>hamburger_image</item>
+        <item>Cook patties on a stovetop until they appear completely brown on the outside.\n
+        Place each patty within a bun. Add on top of it, as desired, the lettuce, tomatoes, and cheese.</item>
     </string-array>
 
     <string-array name="recipe_data_lasagna">
@@ -31,6 +33,24 @@
         <item>Cook noodles by boiling them in water for ten minutes. Layer noodles, tomato sauce, and cheese in a tray. Place in the oven at 350°F for 30 mins.</item>
     </string-array>
 
-    <drawable name="spaghetti_image">@drawable/spaghetti_small</drawable>
-    <drawable name="lasagna_image">@drawable/lasagna_small</drawable>
+    <string-array name="recipe_data_salad">
+        <item>Salad</item>
+        <item>Lettuce (1 head),Tomatoes (2),Cucumbers (1),Onions (1),Olives (1 bottle),Dressing (1 bottle)</item>
+        <item>10 minutes</item>
+        <item>salad_image</item>
+        <item>Cut the tomatoes, cucumbers, and onions into thin slices. Add all the ingredients into a large bowl and mix. Drizzle dressing on top.</item>
+    </string-array>
+
+    <string-array name="recipe_data_spaghetti">
+        <item>Spaghetti</item>
+        <item>Noodles (1 box),Tomato Sauce (½ cup),Meatballs (6)</item>
+        <item>15 minutes</item>
+        <item>spaghetti_image</item>
+        <item>Place spaghetti noodles into boiling water. Wait ten minutes, then pour noodles into colander. Add sauce and meatballs on top.</item>
+    </string-array>
+
+    <drawable name="hamburger_image">@drawable/hamburger</drawable>
+    <drawable name="lasagna_image">@drawable/lasagna</drawable>
+    <drawable name="salad_image">@drawable/salad</drawable>
+    <drawable name="spaghetti_image">@drawable/spaghetti</drawable>
 </resources>

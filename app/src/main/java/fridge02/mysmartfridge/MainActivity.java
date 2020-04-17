@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.Button;
@@ -27,8 +28,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<LinearLayout> recipesInList;
-    private String lastRecipeSearch;
+    private ArrayList<LinearLayout> recipesInList, orderableItemsInList, listingsInCart;
+    private ArrayList<String> itemsInCart;
+    private String lastRecipeSearch, lastOnlineOrderSearch;
     boolean isTablet;
 
     @Override
@@ -47,9 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Set current displayed recipes to an empty list;
         recipesInList = new ArrayList<>();
+        orderableItemsInList = new ArrayList<>();
+        itemsInCart = new ArrayList<>();
+        listingsInCart = new ArrayList<>();
 
-        // Set last searched recipe
+        // Set last searched recipe/online order
         lastRecipeSearch = "";
+        lastOnlineOrderSearch = "";
     }
 
     public void toWhatsInFridge(View view) {
@@ -96,6 +102,39 @@ public class MainActivity extends AppCompatActivity {
 
     public void toOrderOnline(View view) {
         setContentView(R.layout.order_online);
+        populateOrderableItems(lastOnlineOrderSearch);
+
+        SearchView searchbar = findViewById(R.id.orderSearchBar);
+        searchbar.setQuery(lastOnlineOrderSearch, false);
+        if (!lastOnlineOrderSearch.equals("")) {
+            searchbar.setIconified(false);
+            searchbar.requestFocus();
+        } else {
+            searchbar.setIconified(true);
+        }
+
+        searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                lastOnlineOrderSearch = s;
+                clearOrderableItems();
+                populateOrderableItems(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                lastOnlineOrderSearch = s;
+                clearOrderableItems();
+                populateOrderableItems(s);
+                return false;
+            }
+        });
+    }
+
+    public void toCart(View view) {
+        setContentView(R.layout.order_online_cart);
+        populateCart();
     }
 
     public void toLookInside(View view) {
@@ -257,12 +296,14 @@ public class MainActivity extends AppCompatActivity {
             ingredientButton.setText(R.string.recipes_order_button);
             ingredientButton.setTextSize(STP(R.dimen.recipes_order_button_text_size));
             ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(Math.round( 0.2f * DTP(R.dimen.recipes_indv_scroll_width)), DTP(R.dimen.recipes_order_button_height)));
+            String tag = i.split(" [(]")[0]; // Name of the ingredient, in a string
+            ingredientButton.setTag(tag);
 
             ingredientButton.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    lastOnlineOrderSearch = ((String) view.getTag()).toLowerCase();
                     toOrderOnline(view);
-                    populateOrderableItems(view);
                 }
             });
 
@@ -354,57 +395,68 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // Order Online Methods //
-    private void populateOrderableItems(View view) {
-        LinearLayout scrollLayout = findViewById(R.id.orderScrollLayout);
+    private void clearOrderableItems() {
+        for (LinearLayout layout : orderableItemsInList) {
+            layout.setVisibility(View.GONE);
+        }
 
-        String[] foods = getResources().getStringArray(R.array.food_list);
+        orderableItemsInList.clear();
+    }
+
+    // Order Online Methods //
+    private void populateOrderableItems(String searchString) {
+        LinearLayout scrollLayout = findViewById(R.id.orderScrollLayout);
+        Resources r = getResources();
+        String[] foods = r.getStringArray(R.array.food_list);
 
         for (String foodId : foods) {
-            int id = getResources().getIdentifier(foodId, "array", getPackageName());
-            String[] foodInfo = getResources().getStringArray(id);
+            int id = r.getIdentifier(foodId, "array", getPackageName());
+            String[] foodInfo = r.getStringArray(id);
 
-            LinearLayout orderableItem = new LinearLayout(this);
-            orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.recipes_name_height) + 10));
-            orderableItem.setOrientation(LinearLayout.HORIZONTAL);
-            orderableItem.setGravity(Gravity.CENTER_VERTICAL);
+            if (foodInfo[0].toLowerCase().contains(searchString.toLowerCase())) {
+                LinearLayout orderableItem = new LinearLayout(this);
+                orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.recipes_name_height) + 10));
+                orderableItem.setOrientation(LinearLayout.HORIZONTAL);
+                orderableItem.setGravity(Gravity.CENTER_VERTICAL);
 
-            ImageView itemPicture = new ImageView(this);
-            String imageIdString = foodInfo[0].toLowerCase().replaceAll(" ", "_") + "_image";
-            int imageId = getResources().getIdentifier(imageIdString, "drawable", getPackageName());
-            itemPicture.setImageDrawable(getResources().getDrawable(imageId));
-            itemPicture.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_image_height), 0.14f));
+                ImageView itemPicture = new ImageView(this);
+                String imageIdString = foodInfo[0].toLowerCase().replaceAll(" ", "_") + "_image";
+                int imageId = r.getIdentifier(imageIdString, "drawable", getPackageName());
+                itemPicture.setImageDrawable(r.getDrawable(imageId));
+                itemPicture.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_image_height), 0.14f));
 
-            TextView itemName = new TextView(this);
-            itemName.setText(foodInfo[0]);
-            itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f));
-            itemName.setGravity(Gravity.CENTER);
-            itemName.setTextSize(STP(R.dimen.normal_text_size));
+                TextView itemName = new TextView(this);
+                itemName.setText(foodInfo[0]);
+                itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f));
+                itemName.setGravity(Gravity.CENTER);
+                itemName.setTextSize(STP(R.dimen.normal_text_size));
 
-            TextView itemPrice = new TextView(this);
-            itemPrice.setText(getString(R.string.order_price, foodInfo[1]));
-            itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.26f));
-            itemPrice.setGravity(Gravity.CENTER);
-            itemPrice.setTextSize(STP(R.dimen.normal_text_size));
+                TextView itemPrice = new TextView(this);
+                itemPrice.setText(getString(R.string.order_price, foodInfo[1]));
+                itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.26f));
+                itemPrice.setGravity(Gravity.CENTER);
+                itemPrice.setTextSize(STP(R.dimen.normal_text_size));
 
-            ImageButton itemAdd = new ImageButton(this);
-            itemAdd.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_input_add));
-            itemAdd.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_order_button_height), 0.12f));
-            itemAdd.setTag(foodInfo);
+                ImageButton itemAdd = new ImageButton(this);
+                itemAdd.setImageDrawable(r.getDrawable(android.R.drawable.ic_input_add));
+                itemAdd.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_order_button_height), 0.12f));
+                itemAdd.setTag(foodInfo);
 
-            itemAdd.setOnClickListener(new ImageButton.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    createDialog(view, (String[]) view.getTag());
-                }
-            });
+                itemAdd.setOnClickListener(new ImageButton.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        createDialog(view, (String[]) view.getTag());
+                    }
+                });
 
-            orderableItem.addView(itemPicture);
-            orderableItem.addView(itemName);
-            orderableItem.addView(itemPrice);
-            orderableItem.addView(itemAdd);
+                orderableItem.addView(itemPicture);
+                orderableItem.addView(itemName);
+                orderableItem.addView(itemPrice);
+                orderableItem.addView(itemAdd);
 
-            scrollLayout.addView(orderableItem);
+                scrollLayout.addView(orderableItem);
+                orderableItemsInList.add(orderableItem);
+            }
         }
     }
 
@@ -459,6 +511,123 @@ public class MainActivity extends AppCompatActivity {
                     blur.setBackgroundColor(Color.parseColor("#00FFFFFF"));
                 }
             });
+
+            Button addButton = dialogView.findViewById(R.id.orderDialogOkButton);
+            String foodInfoStr = foodInfo[0] + "," + foodInfo[1]; // Name and price, resp.
+            addButton.setTag(foodInfoStr);
+            addButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String foodString = (String) view.getTag();
+                    EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
+                    int inputNumber = Integer.parseInt(input.getText().toString());
+                    int numberInCart = 0; // How many of this item are already in the cart
+                    int indexInCart = -1; // Position of this item that's already in the cart list
+
+                    // Scan the cart to see if this item is already in it.
+                    for (String item : itemsInCart) {
+                        if (item.contains(foodString)) {
+                            indexInCart = itemsInCart.indexOf(item);
+
+                            String numInCartStr = item.split(",")[2];
+                            numberInCart = Integer.parseInt(numInCartStr);
+                        }
+                    }
+
+                    if (indexInCart != -1) {
+                        // Some items already in the cart, so add them together
+                        itemsInCart.set(indexInCart, foodString + "," + (inputNumber + numberInCart));
+                    } else {
+                        // Item is not in the cart yet, so add it
+                        itemsInCart.add(foodString + "," + inputNumber);
+                    }
+
+                    dialog.dismiss();
+                    blur.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+                }
+            });
+        }
+    }
+
+    private void populateCart() {
+        LinearLayout cartScrollLayout = findViewById(R.id.cartScrollLayout);
+        float total = 0;
+
+        for (String item : itemsInCart) {
+            LinearLayout itemLayout = new LinearLayout(this);
+            itemLayout.setOrientation(LinearLayout.HORIZONTAL);
+            itemLayout.setGravity(Gravity.CENTER_VERTICAL);
+
+            String[] itemInfo = item.split(",");
+
+            TextView itemName = new TextView(this);
+            itemName.setText(itemInfo[0]);
+            itemName.setTextSize(STP(R.dimen.normal_text_size));
+            itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4.5f));
+
+            TextView itemNum = new TextView(this);
+            itemNum.setText(itemInfo[2]);
+            itemNum.setTextSize(STP(R.dimen.normal_text_size));
+            itemNum.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+
+            TextView itemPrice = new TextView(this);
+            float price = Float.parseFloat(itemInfo[1]) * Integer.parseInt(itemInfo[2]);
+            total += price;
+            itemPrice.setText(getResources().getString(R.string.order_price, getPriceString(price)));
+            itemPrice.setTextSize(STP(R.dimen.normal_text_size));
+            itemPrice.setGravity(Gravity.END); // right
+            itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
+
+            Space space = new Space(this);
+            space.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0.5f));
+
+            ImageButton removeButton = new ImageButton(this);
+            removeButton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_delete));
+            removeButton.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.cart_item_height), 1));
+            removeButton.setTag(item);
+
+            removeButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemsInCart.remove((String) view.getTag());
+
+                    for (LinearLayout layout : orderableItemsInList) {
+                        layout.setVisibility(View.GONE);
+                    }
+
+                    orderableItemsInList.clear();
+                    populateCart();
+                }
+            });
+
+            itemLayout.addView(itemName);
+            itemLayout.addView(itemNum);
+            itemLayout.addView(itemPrice);
+            itemLayout.addView(space);
+            itemLayout.addView(removeButton);
+
+            cartScrollLayout.addView(itemLayout);
+            orderableItemsInList.add(itemLayout);
+        }
+
+        TextView totalText = findViewById(R.id.cartTotalAmount);
+        totalText.setText(getString(R.string.order_price, getPriceString(total)));
+
+        Button checkoutButton = findViewById(R.id.cartCheckoutButton);
+        checkoutButton.setEnabled(!itemsInCart.isEmpty());
+
+        findViewById(R.id.cartEmptyLabel).setVisibility(itemsInCart.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private String getPriceString(float price) {
+        if (price == 0) {
+            return "0.00";
+        } else {
+            int temp = Math.round(price * 100f);
+            boolean evenDime = temp % 10 == 0;
+            price = temp / 100f;
+
+            return Float.toString(price) + (evenDime ? "0" : "");
         }
     }
 

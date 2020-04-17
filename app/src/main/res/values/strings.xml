@@ -54,4 +54,11 @@
     <string name="order_init_unit_value">1</string>
     <string name="order_add_button_text">Add</string>
     <string name="order_back_button_text">Cancel</string>
+    <string name="cart_total_title">Your Cart</string>
+    <string name="cart_total_label">Total:</string>
+    <string name="cart_item_label">Item</string>
+    <string name="cart_number_label">No.</string>
+    <string name="cart_price_label">Price</string>
+    <string name="cart_checkout_button_text">Checkout</string>
+    <string name="cart_empty_alert">Your Cart is Empty!</string>
 </resources>
