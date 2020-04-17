@@ -3,20 +3,27 @@ package fridge02.mysmartfridge;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Space;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public void toOrderOnline(View view) {
+        setContentView(R.layout.order_online);
     }
 
     public void toLookInside(View view) {
@@ -247,6 +258,14 @@ public class MainActivity extends AppCompatActivity {
             ingredientButton.setTextSize(STP(R.dimen.recipes_order_button_text_size));
             ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(Math.round( 0.2f * DTP(R.dimen.recipes_indv_scroll_width)), DTP(R.dimen.recipes_order_button_height)));
 
+            ingredientButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toOrderOnline(view);
+                    populateOrderableItems(view);
+                }
+            });
+
             ingredientLayout.addView(bullet);
             ingredientLayout.addView(ingredientName);
             ingredientLayout.addView(ingredientButton);
@@ -333,6 +352,114 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    // Order Online Methods //
+    private void populateOrderableItems(View view) {
+        LinearLayout scrollLayout = findViewById(R.id.orderScrollLayout);
+
+        String[] foods = getResources().getStringArray(R.array.food_list);
+
+        for (String foodId : foods) {
+            int id = getResources().getIdentifier(foodId, "array", getPackageName());
+            String[] foodInfo = getResources().getStringArray(id);
+
+            LinearLayout orderableItem = new LinearLayout(this);
+            orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.recipes_name_height) + 10));
+            orderableItem.setOrientation(LinearLayout.HORIZONTAL);
+            orderableItem.setGravity(Gravity.CENTER_VERTICAL);
+
+            ImageView itemPicture = new ImageView(this);
+            String imageIdString = foodInfo[0].toLowerCase().replaceAll(" ", "_") + "_image";
+            int imageId = getResources().getIdentifier(imageIdString, "drawable", getPackageName());
+            itemPicture.setImageDrawable(getResources().getDrawable(imageId));
+            itemPicture.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_image_height), 0.14f));
+
+            TextView itemName = new TextView(this);
+            itemName.setText(foodInfo[0]);
+            itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f));
+            itemName.setGravity(Gravity.CENTER);
+            itemName.setTextSize(STP(R.dimen.normal_text_size));
+
+            TextView itemPrice = new TextView(this);
+            itemPrice.setText(getString(R.string.order_price, foodInfo[1]));
+            itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.26f));
+            itemPrice.setGravity(Gravity.CENTER);
+            itemPrice.setTextSize(STP(R.dimen.normal_text_size));
+
+            ImageButton itemAdd = new ImageButton(this);
+            itemAdd.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_input_add));
+            itemAdd.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_order_button_height), 0.12f));
+            itemAdd.setTag(foodInfo);
+
+            itemAdd.setOnClickListener(new ImageButton.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createDialog(view, (String[]) view.getTag());
+                }
+            });
+
+            orderableItem.addView(itemPicture);
+            orderableItem.addView(itemName);
+            orderableItem.addView(itemPrice);
+            orderableItem.addView(itemAdd);
+
+            scrollLayout.addView(orderableItem);
+        }
+    }
+
+    public void createDialog(View view, String[] foodInfo) {
+        final TextView blur = findViewById(R.id.orderBlur);
+        blur.setBackgroundColor(Color.parseColor("#BF424242"));
+
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        if (inflater != null) {
+            View dialogView = inflater.inflate(R.layout.order_online_dialog, null);
+            int width = DTP(R.dimen.add_dialog_width);
+            int height = DTP(R.dimen.add_dialog_height);
+            final PopupWindow dialog = new PopupWindow(dialogView, width, height, true);
+            dialog.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            TextView dialogTitle = dialogView.findViewById(R.id.orderDialogTitle);
+            dialogTitle.setText(getString(R.string.dialog_title, foodInfo[0]));
+
+            TextView dialogUnit = dialogView.findViewById(R.id.orderDialogUnit);
+            dialogUnit.setText(getString(R.string.order_unit, foodInfo[1], foodInfo[2]));
+
+            Button decButton = dialogView.findViewById(R.id.orderDialogDecButton);
+            decButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
+                    int inputNumber = Integer.parseInt(input.getText().toString());
+                    if (inputNumber > 0) {
+                        // It complains if I don't add the locale, so...yeah.
+                        input.setText(String.format(Locale.ENGLISH, "%d", --inputNumber));
+                    }
+                }
+            });
+
+            Button incButton = dialogView.findViewById(R.id.orderDialogIncButton);
+            incButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
+                    int inputNumber = Integer.parseInt(input.getText().toString());
+                    // It complains if I don't add the locale, so...yeah.
+                    input.setText(String.format(Locale.ENGLISH, "%d", ++inputNumber));
+                }
+            });
+
+            Button cancelButton = dialogView.findViewById(R.id.orderDialogCancelButton);
+            cancelButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    blur.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+                }
+            });
+        }
     }
 
 }

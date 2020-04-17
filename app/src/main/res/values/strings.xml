@@ -4,6 +4,8 @@
     <!-- General use strings -->
     <string name="back_button_text">Back</string>
     <string name="placeholder">[content goes here]</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
 
     <!-- Home screen strings -->
     <string name="homescreen_title">MY SMART FRIDGE</string>
@@ -41,4 +43,15 @@
 
     <!-- Settings screen strings -->
     <string name="settings_title">Settings</string>
+
+    <!-- Order Online screen strings -->
+    <string name="order_title">Order Online</string>
+    <string name="partner_text">Partnering With: </string>
+    <string name="cart_button_text">Your Cart</string>
+    <string name="dialog_title">Order %1$s</string>
+    <string name="order_price">$%1$s</string>
+    <string name="order_unit">$%1$s per %2$s</string>
+    <string name="order_init_unit_value">1</string>
+    <string name="order_add_button_text">Add</string>
+    <string name="order_back_button_text">Cancel</string>
 </resources>

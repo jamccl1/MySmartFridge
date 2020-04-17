@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/recipesTitle2"
         android:layout_width="wrap_content"
-        android:layout_height="51dp"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/recipe_placeholder"
         android:textSize="@dimen/title_text_size"
