@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +29,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> itemsInCart;
     private String[] paymentInfo;
     private String lastRecipeSearch, lastOnlineOrderSearch;
+    private int checkoutFieldsComplete;
     private float cartTotal;
     private boolean isTablet, saveCheckoutInfo, useExpressShipping;
 
@@ -67,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
         // Set booleans
         saveCheckoutInfo = false;
         useExpressShipping = false;
+
+        // Set numbers
+        cartTotal = 0;
+        checkoutFieldsComplete = 0;
     }
 
     public void toWhatsInFridge(View view) {
@@ -176,8 +182,14 @@ public class MainActivity extends AppCompatActivity {
         final EditText creditCardNumber = findViewById(R.id.chktCreditCardField);
         final EditText svcNumber = findViewById(R.id.chktSvcField);
 
+        final EditText[] fieldArray = {firstName, middleInitial, lastName, address, city, zipCode, creditCardNumber, svcNumber};
+        final TextView[] labelArray = {findViewById(R.id.chktFirstNameLabel), findViewById(R.id.chktMiddleInitialLabel), findViewById(R.id.chktLastNameLabel),
+                findViewById(R.id.chktAddressLabel), findViewById(R.id.chktCityLabel), findViewById(R.id.chktZipCodeLabel), findViewById(R.id.chktCreditCardLabel),
+                findViewById(R.id.chktSvcLabel)};
+
         final Button payButton = findViewById(R.id.chktPayButton);
         payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal * (useExpressShipping ? 1.05f : 1))));
+        payButton.setEnabled(checkoutFieldsComplete >= 8);
 
         CheckBox saveInfo = findViewById(R.id.chktSaveCheckbox);
         saveInfo.setChecked(saveCheckoutInfo);
@@ -259,13 +271,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TextWatcher textChangedListener = new TextWatcher() {
+            private String prevText;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                prevText = charSequence.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String currStr = charSequence.toString();
+                if (prevText.equals("") && !currStr.equals("")) {
+                    checkoutFieldsComplete++;
+
+                    if (checkoutFieldsComplete >= 8) {
+                        payButton.setEnabled(true);
+                    }
+                } else if (!prevText.equals("") && currStr.equals("")) {
+                    checkoutFieldsComplete--;
+                    payButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+
+        for (EditText field : fieldArray) {
+            field.addTextChangedListener(textChangedListener);
+        }
+
         final TextView thanksBackground = findViewById(R.id.chktBlur);
         final TextView thanksText = findViewById(R.id.chktThankYou);
         final ProgressBar thanksBar = findViewById(R.id.chktThinkingBar);
-
         payButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Resources r = getResources();
+
                 if (saveCheckoutInfo) {
                     paymentInfo[0] = firstName.getText().toString();
                     paymentInfo[1] = middleInitial.getText().toString();
@@ -276,6 +320,8 @@ public class MainActivity extends AppCompatActivity {
                     paymentInfo[6] = zipCode.getText().toString();
                     paymentInfo[7] = creditCardNumber.getText().toString();
                     paymentInfo[8] = svcNumber.getText().toString();
+                } else {
+                    checkoutFieldsComplete = 0;
                 }
 
                 thanksBackground.setVisibility(View.VISIBLE);
@@ -293,6 +339,8 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        cartTotal = 0;
+                        itemsInCart.clear();
                         toHome(holdView);
                     }
                 }, 2500);
