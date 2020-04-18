@@ -61,4 +61,71 @@
     <string name="cart_price_label">Price</string>
     <string name="cart_checkout_button_text">Checkout</string>
     <string name="cart_empty_alert">Your Cart is Empty!</string>
+    <string name="chkt_title">Checkout</string>
+    <string name="chkt_first_name_label">First Name</string>
+    <string name="chkt_middle_init_label">M.I.</string>
+    <string name="chkt_last_name_label">Last Name</string>
+    <string name="chkt_address_label">Address</string>
+    <string name="chkt_city_label">City</string>
+    <string name="chkt_state_label">State</string>
+    <string name="chkt_zip_code_label">Zip Code</string>
+    <string name="chkt_credit_card_label">Credit Card No.</string>
+    <string name="chkt_svc_label">SVC</string>
+    <string name="chkt_save_option">Save my info for next time</string>
+    <string name="chkt_express_option">One-Day Delivery (+$%1$s)</string>
+    <string name="chkt_pay_button_text">Pay $%1$s</string>
+    <string name="chkt_thank_you">Thank You!</string>
+    <string name="chkt_complete_text">Purchase Complete</string>
+    <string-array name="checkout_states">
+        <item>AL</item>
+        <item>AK</item>
+        <item>AZ</item>
+        <item>AR</item>
+        <item>CA</item>
+        <item>CO</item>
+        <item>CT</item>
+        <item>DE</item>
+        <item>FL</item>
+        <item>GA</item>
+        <item>HI</item>
+        <item>ID</item>
+        <item>IL</item>
+        <item>IN</item>
+        <item>IA</item>
+        <item>KS</item>
+        <item>KY</item>
+        <item>LA</item>
+        <item>ME</item>
+        <item>MD</item>
+        <item>MA</item>
+        <item>MI</item>
+        <item>MN</item>
+        <item>MS</item>
+        <item>MO</item>
+        <item>MT</item>
+        <item>NE</item>
+        <item>NV</item>
+        <item>NH</item>
+        <item>NJ</item>
+        <item>NM</item>
+        <item>NY</item>
+        <item>NC</item>
+        <item>ND</item>
+        <item>OH</item>
+        <item>OK</item>
+        <item>OR</item>
+        <item>PA</item>
+        <item>RI</item>
+        <item>SC</item>
+        <item>SD</item>
+        <item>TN</item>
+        <item>TX</item>
+        <item>UT</item>
+        <item>VT</item>
+        <item>VA</item>
+        <item>WA</item>
+        <item>WV</item>
+        <item>WI</item>
+        <item>WY</item>
+    </string-array>
 </resources>

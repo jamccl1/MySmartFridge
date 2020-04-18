@@ -62,7 +62,7 @@
         android:id="@+id/cartTotalLine2"
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="3dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:background="#373737"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -129,16 +129,14 @@
             android:id="@+id/cartScrollLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:orientation="vertical"/>
     </ScrollView>
 
     <TextView
         android:id="@+id/cartTotalLine"
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="3dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="24dp"
         android:background="#373737"
         app:layout_constraintBottom_toTopOf="@+id/cartTotalLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -159,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Total:"
+            android:text="@string/cart_total_label"
             android:textSize="@dimen/button_text_size"
             android:textStyle="bold" />
 
@@ -200,6 +198,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="toCheckout"
             android:text="@string/cart_checkout_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
@@ -216,4 +215,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cartTableLabelLayout" />
+
+    <ImageView
+        android:id="@+id/cartCanScrollDown"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartTotalLine"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <ImageView
+        android:id="@+id/cartCanScrollUp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        android:rotation="180"
+        app:layout_constraintBottom_toTopOf="@+id/cartTotalLine2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_more" />
 </android.support.constraint.ConstraintLayout>

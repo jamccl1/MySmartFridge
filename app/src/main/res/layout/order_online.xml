@@ -74,8 +74,9 @@
         android:id="@+id/orderScrollView"
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="26dp"
+        android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,6 +120,29 @@
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/orderCanScrollDown"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <ImageView
+        android:id="@+id/orderCanScrollUp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        android:rotation="180"
+        app:layout_constraintBottom_toTopOf="@+id/orderScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_more" />
 
     <TextView
         android:id="@+id/orderBlur"

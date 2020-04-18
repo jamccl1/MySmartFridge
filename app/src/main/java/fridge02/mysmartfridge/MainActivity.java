@@ -3,22 +3,27 @@ package fridge02.mysmartfridge;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.constraint.ConstraintLayout;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.Space;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
@@ -28,10 +33,12 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<LinearLayout> recipesInList, orderableItemsInList, listingsInCart;
+    private ArrayList<LinearLayout> recipesInList, orderableItemsInList;
     private ArrayList<String> itemsInCart;
+    private String[] paymentInfo;
     private String lastRecipeSearch, lastOnlineOrderSearch;
-    boolean isTablet;
+    private float cartTotal;
+    private boolean isTablet, saveCheckoutInfo, useExpressShipping;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +58,15 @@ public class MainActivity extends AppCompatActivity {
         recipesInList = new ArrayList<>();
         orderableItemsInList = new ArrayList<>();
         itemsInCart = new ArrayList<>();
-        listingsInCart = new ArrayList<>();
+        paymentInfo = new String[9];
 
         // Set last searched recipe/online order
         lastRecipeSearch = "";
         lastOnlineOrderSearch = "";
+
+        // Set booleans
+        saveCheckoutInfo = false;
+        useExpressShipping = false;
     }
 
     public void toWhatsInFridge(View view) {
@@ -104,7 +115,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.order_online);
         populateOrderableItems(lastOnlineOrderSearch);
 
+        final ScrollView scrollView = findViewById(R.id.orderScrollView);
+        final ImageView canScrollUp = findViewById(R.id.orderCanScrollUp);
+        final ImageView canScrollDown = findViewById(R.id.orderCanScrollDown);
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+            }
+        });
+
         SearchView searchbar = findViewById(R.id.orderSearchBar);
+
         searchbar.setQuery(lastOnlineOrderSearch, false);
         if (!lastOnlineOrderSearch.equals("")) {
             searchbar.setIconified(false);
@@ -127,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 lastOnlineOrderSearch = s;
                 clearOrderableItems();
                 populateOrderableItems(s);
+
                 return false;
             }
         });
@@ -135,6 +160,144 @@ public class MainActivity extends AppCompatActivity {
     public void toCart(View view) {
         setContentView(R.layout.order_online_cart);
         populateCart();
+    }
+
+    public void toCheckout(View view) {
+        setContentView(R.layout.order_online_checkout);
+
+        // Input Fields
+        final EditText firstName = findViewById(R.id.chktFirstNameField);
+        final EditText middleInitial = findViewById(R.id.chktMiddleInitialField);
+        final EditText lastName = findViewById(R.id.chktLastNameField);
+        final EditText address = findViewById(R.id.chktAddressField);
+        final EditText city = findViewById(R.id.chktCityField);
+        final Spinner state = findViewById(R.id.chktStateSpinner);
+        final EditText zipCode = findViewById(R.id.chktZipCodeField);
+        final EditText creditCardNumber = findViewById(R.id.chktCreditCardField);
+        final EditText svcNumber = findViewById(R.id.chktSvcField);
+
+        final Button payButton = findViewById(R.id.chktPayButton);
+        payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal * (useExpressShipping ? 1.05f : 1))));
+
+        CheckBox saveInfo = findViewById(R.id.chktSaveCheckbox);
+        saveInfo.setChecked(saveCheckoutInfo);
+
+        if (saveCheckoutInfo) {
+            firstName.setText(paymentInfo[0]);
+            middleInitial.setText(paymentInfo[1]);
+            lastName.setText(paymentInfo[2]);
+            address.setText(paymentInfo[3]);
+            city.setText(paymentInfo[4]);
+
+            String[] states = getResources().getStringArray(R.array.checkout_states);
+            for (int i = 0; i < states.length; i++) {
+                if (states[i].equals(paymentInfo[5])) {
+                    state.setSelection(i);
+                }
+            }
+
+            zipCode.setText(paymentInfo[6]);
+            creditCardNumber.setText(paymentInfo[7]);
+            svcNumber.setText(paymentInfo[8]);
+        }
+
+        saveInfo.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    paymentInfo[0] = firstName.getText().toString();
+                    paymentInfo[1] = middleInitial.getText().toString();
+                    paymentInfo[2] = lastName.getText().toString();
+                    paymentInfo[3] = address.getText().toString();
+                    paymentInfo[4] = city.getText().toString();
+                    paymentInfo[5] = state.getSelectedItem().toString();
+                    paymentInfo[6] = zipCode.getText().toString();
+                    paymentInfo[7] = creditCardNumber.getText().toString();
+                    paymentInfo[8] = svcNumber.getText().toString();
+
+                    saveCheckoutInfo = true;
+                } else {
+                    paymentInfo = new String[9];
+                    saveCheckoutInfo = false;
+                }
+            }
+        });
+
+        final CheckBox expressShipping = findViewById(R.id.chktShippingCheckbox);
+        expressShipping.setChecked(useExpressShipping);
+        expressShipping.setText(getString(R.string.chkt_express_option, getPriceString(cartTotal * 0.05f)));
+        expressShipping.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal * 1.05f)));
+                    useExpressShipping = true;
+                } else {
+                    payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal)));
+                    useExpressShipping = false;
+                }
+            }
+        });
+
+        Button backButton = findViewById(R.id.chktBackButton);
+        backButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (saveCheckoutInfo) {
+                    paymentInfo[0] = firstName.getText().toString();
+                    paymentInfo[1] = middleInitial.getText().toString();
+                    paymentInfo[2] = lastName.getText().toString();
+                    paymentInfo[3] = address.getText().toString();
+                    paymentInfo[4] = city.getText().toString();
+                    paymentInfo[5] = state.getSelectedItem().toString();
+                    paymentInfo[6] = zipCode.getText().toString();
+                    paymentInfo[7] = creditCardNumber.getText().toString();
+                    paymentInfo[8] = svcNumber.getText().toString();
+                }
+
+                toCart(view);
+            }
+        });
+
+        final TextView thanksBackground = findViewById(R.id.chktBlur);
+        final TextView thanksText = findViewById(R.id.chktThankYou);
+        final ProgressBar thanksBar = findViewById(R.id.chktThinkingBar);
+
+        payButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (saveCheckoutInfo) {
+                    paymentInfo[0] = firstName.getText().toString();
+                    paymentInfo[1] = middleInitial.getText().toString();
+                    paymentInfo[2] = lastName.getText().toString();
+                    paymentInfo[3] = address.getText().toString();
+                    paymentInfo[4] = city.getText().toString();
+                    paymentInfo[5] = state.getSelectedItem().toString();
+                    paymentInfo[6] = zipCode.getText().toString();
+                    paymentInfo[7] = creditCardNumber.getText().toString();
+                    paymentInfo[8] = svcNumber.getText().toString();
+                }
+
+                thanksBackground.setVisibility(View.VISIBLE);
+                thanksText.setVisibility(View.VISIBLE);
+                thanksBar.setVisibility(View.VISIBLE);
+                final View holdView = view; // So we can use it in the runnable call
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        thanksText.setText(R.string.chkt_complete_text);
+                    }
+                }, 1500);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toHome(holdView);
+                    }
+                }, 2500);
+            }
+        });
     }
 
     public void toLookInside(View view) {
@@ -415,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (foodInfo[0].toLowerCase().contains(searchString.toLowerCase())) {
                 LinearLayout orderableItem = new LinearLayout(this);
-                orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.recipes_name_height) + 10));
+                orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
                 orderableItem.setOrientation(LinearLayout.HORIZONTAL);
                 orderableItem.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -458,6 +621,18 @@ public class MainActivity extends AppCompatActivity {
                 orderableItemsInList.add(orderableItem);
             }
         }
+
+        final ScrollView scrollView = findViewById(R.id.orderScrollView);
+        final ImageView canScrollUp = findViewById(R.id.orderCanScrollUp);
+        final ImageView canScrollDown = findViewById(R.id.orderCanScrollDown);
+
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+            }
+        });
     }
 
     public void createDialog(View view, String[] foodInfo) {
@@ -612,11 +787,23 @@ public class MainActivity extends AppCompatActivity {
 
         TextView totalText = findViewById(R.id.cartTotalAmount);
         totalText.setText(getString(R.string.order_price, getPriceString(total)));
+        cartTotal = total;
 
         Button checkoutButton = findViewById(R.id.cartCheckoutButton);
         checkoutButton.setEnabled(!itemsInCart.isEmpty());
 
         findViewById(R.id.cartEmptyLabel).setVisibility(itemsInCart.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+
+        final ScrollView scrollView = findViewById(R.id.cartScrollView);
+        final ImageView canScrollUp = findViewById(R.id.cartCanScrollUp);
+        final ImageView canScrollDown = findViewById(R.id.cartCanScrollDown);
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+            }
+        });
     }
 
     private String getPriceString(float price) {
@@ -627,7 +814,7 @@ public class MainActivity extends AppCompatActivity {
             boolean evenDime = temp % 10 == 0;
             price = temp / 100f;
 
-            return Float.toString(price) + (evenDime ? "0" : "");
+            return price + (evenDime ? "0" : "");
         }
     }
 
