@@ -23,7 +23,7 @@
     <LinearLayout
         android:id="@+id/orderDialogSelectLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/add_dialog_widget_height"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/orderDialogButtonsLayout"
@@ -40,9 +40,10 @@
         <Button
             android:id="@+id/orderDialogDecButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="@string/minus" />
+            android:text="@string/minus"
+            android:textSize="@dimen/normal_text_size" />
 
         <Space
             android:id="@+id/orderSelectSpace2"
@@ -53,14 +54,15 @@
         <EditText
             android:id="@+id/orderDialogNumberField"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.5"
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/order_init_unit_value"
             android:inputType="number"
             android:text="@string/order_init_unit_value"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="@dimen/normal_text_size" />
 
         <Space
             android:id="@+id/orderSelectSpace3"
@@ -71,9 +73,10 @@
         <Button
             android:id="@+id/orderDialogIncButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="@string/plus" />
+            android:text="@string/plus"
+            android:textSize="@dimen/normal_text_size" />
 
         <Space
             android:id="@+id/orderSelectSpace4"
@@ -87,14 +90,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/order_unit"
+        android:textSize="@dimen/small_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderDialogSelectLayout" />
 
     <LinearLayout
         android:id="@+id/orderDialogButtonsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/add_dialog_button_width"
+        android:layout_height="@dimen/add_dialog_widget_height"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -103,19 +107,21 @@
 
         <Button
             android:id="@+id/orderDialogOkButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/order_add_button_text"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textSize="@dimen/normal_text_size" />
 
         <Button
             android:id="@+id/orderDialogCancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/order_back_button_text"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textSize="@dimen/normal_text_size" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

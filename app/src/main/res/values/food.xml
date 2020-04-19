@@ -32,19 +32,19 @@
     <string-array name="food_cheese">
         <item>Cheese</item>
         <item>3.45</item>
-        <item>quarter pound</item>
+        <item>quarter lb</item>
     </string-array>
 
     <string-array name="food_cucumbers">
         <item>Cucumbers</item>
         <item>1.00</item>
-        <item>cucumber</item>
+        <item>one cucumber</item>
     </string-array>
 
     <string-array name="food_lettuce">
         <item>Lettuce</item>
         <item>1.00</item>
-        <item>head</item>
+        <item>one head</item>
     </string-array>
 
     <string-array name="food_meatballs">
@@ -56,37 +56,37 @@
     <string-array name="food_noodles">
         <item>Noodles</item>
         <item>1.23</item>
-        <item>box</item>
+        <item>one box</item>
     </string-array>
 
     <string-array name="food_olives">
         <item>Olives</item>
         <item>1.00</item>
-        <item>bottle</item>
+        <item>one bottle</item>
     </string-array>
 
     <string-array name="food_onions">
         <item>Onions</item>
         <item>1.00</item>
-        <item>onion</item>
+        <item>one onion</item>
     </string-array>
 
     <string-array name="food_salad_dressing">
         <item>Salad Dressing</item>
         <item>1.00</item>
-        <item>bottle</item>
+        <item>one bottle</item>
     </string-array>
 
     <string-array name="food_tomato_sauce">
         <item>Tomato Sauce</item>
         <item>2.34</item>
-        <item>can</item>
+        <item>one can</item>
     </string-array>
 
     <string-array name="food_tomatoes">
         <item>Tomatoes</item>
         <item>1.00</item>
-        <item>tomato</item>
+        <item>one tomato</item>
     </string-array>
 
     <drawable name="burger_buns_image">@drawable/burger_buns</drawable>

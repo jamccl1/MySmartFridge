@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
@@ -30,6 +32,8 @@ import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -308,8 +312,6 @@ public class MainActivity extends AppCompatActivity {
         payButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Resources r = getResources();
-
                 if (saveCheckoutInfo) {
                     paymentInfo[0] = firstName.getText().toString();
                     paymentInfo[1] = middleInitial.getText().toString();
@@ -550,6 +552,12 @@ public class MainActivity extends AppCompatActivity {
     private int DTP(int dimensionId) {
         Resources r = getResources();
         float dpValue = r.getDimension(dimensionId) / r.getDisplayMetrics().density;
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, r.getDisplayMetrics()));
+    }
+
+    // Converts from dp to pixels. Takes in a value directly, rather than a dimension.
+    private int DTPDirect(int value) {
+        float dpValue = value / getResources().getDisplayMetrics().density;
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getResources().getDisplayMetrics()));
     }
 
@@ -620,6 +628,11 @@ public class MainActivity extends AppCompatActivity {
         Resources r = getResources();
         String[] foods = r.getStringArray(R.array.food_list);
 
+        // Weights for the image, item name, item price, and add button (respectively) in each layout
+        float[] phoneWeights = {1.4f, 3.4f, 2.6f, 1.2f};
+        float[] tabletWeights = {1.4f, 3.8f, 3f, 1.2f};
+        float[] weights = isTablet ? tabletWeights : phoneWeights;
+
         for (String foodId : foods) {
             int id = r.getIdentifier(foodId, "array", getPackageName());
             String[] foodInfo = r.getStringArray(id);
@@ -634,23 +647,52 @@ public class MainActivity extends AppCompatActivity {
                 String imageIdString = foodInfo[0].toLowerCase().replaceAll(" ", "_") + "_image";
                 int imageId = r.getIdentifier(imageIdString, "drawable", getPackageName());
                 itemPicture.setImageDrawable(r.getDrawable(imageId));
-                itemPicture.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_image_height), 0.14f));
+                itemPicture.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_image_height), weights[0]));
 
                 TextView itemName = new TextView(this);
                 itemName.setText(foodInfo[0]);
-                itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f));
+                itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
                 itemName.setGravity(Gravity.CENTER);
                 itemName.setTextSize(STP(R.dimen.normal_text_size));
 
+                orderableItem.addView(itemPicture);
+                orderableItem.addView(itemName);
+
+                if (isTablet) {
+                    // For whether the item is in the fridge, is expired, or isn't in, resp.
+                    float[] fridgeIconWeights = {1f, 1.1f, 0.7f};
+                    float [] fridgeTextWeights = {2.2f, 2.1f, 2.5f};
+
+                    ImageView inFridgeIcon = new ImageView(this);
+                    inFridgeIcon.setScaleType(ImageView.ScaleType.FIT_END);
+                    inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_online));
+                    inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[0]));
+
+                    TextView inFridgeText = new TextView(this);
+                    inFridgeText.setText(getString(R.string.order_in_fridge_text, " "));
+                    inFridgeText.setTextSize(STP(R.dimen.normal_text_size));
+                    inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[0]));
+
+                    orderableItem.addView(inFridgeIcon);
+                    orderableItem.addView(inFridgeText);
+                }
+
                 TextView itemPrice = new TextView(this);
-                itemPrice.setText(getString(R.string.order_price, foodInfo[1]));
-                itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.26f));
+                if (isTablet) {
+                    String priceString = getString(R.string.order_price_t, foodInfo[1], foodInfo[2]);
+                    priceString = priceString.replace("[", "<b>").replace("]", "</b>").replace("\n", "<br>");
+                    itemPrice.setText(Html.fromHtml(priceString));
+                } else {
+                    itemPrice.setText(getString(R.string.order_price, foodInfo[1]));
+                }
+                itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[2]));
                 itemPrice.setGravity(Gravity.CENTER);
                 itemPrice.setTextSize(STP(R.dimen.normal_text_size));
 
                 ImageButton itemAdd = new ImageButton(this);
-                itemAdd.setImageDrawable(r.getDrawable(android.R.drawable.ic_input_add));
-                itemAdd.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.recipes_order_button_height), 0.12f));
+                itemAdd.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                itemAdd.setImageDrawable(r.getDrawable(R.drawable.cart));
+                itemAdd.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_button_height), weights[3]));
                 itemAdd.setTag(foodInfo);
 
                 itemAdd.setOnClickListener(new ImageButton.OnClickListener() {
@@ -660,8 +702,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                orderableItem.addView(itemPicture);
-                orderableItem.addView(itemName);
                 orderableItem.addView(itemPrice);
                 orderableItem.addView(itemAdd);
 
@@ -696,11 +736,22 @@ public class MainActivity extends AppCompatActivity {
             final PopupWindow dialog = new PopupWindow(dialogView, width, height, true);
             dialog.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+            if (isTablet) {
+                // Increase offset between edges of dialog and content
+                ConstraintLayout dialogLayout = dialogView.findViewById(R.id.orderDialogLayout);
+                ConstraintSet test = new ConstraintSet();
+                test.clone(dialogLayout);
+                test.setMargin(R.id.orderDialogButtonsLayout, ConstraintSet.BOTTOM, DTPDirect(96));
+                test.setMargin(R.id.orderDialogTitle, ConstraintSet.TOP, DTPDirect(96));
+                test.applyTo(dialogLayout);
+            }
+
             TextView dialogTitle = dialogView.findViewById(R.id.orderDialogTitle);
             dialogTitle.setText(getString(R.string.dialog_title, foodInfo[0]));
 
             TextView dialogUnit = dialogView.findViewById(R.id.orderDialogUnit);
-            dialogUnit.setText(getString(R.string.order_unit, foodInfo[1], foodInfo[2]));
+            String unit = foodInfo[2].replace("one ", "");
+            dialogUnit.setText(getString(R.string.order_unit, foodInfo[1], unit));
 
             Button decButton = dialogView.findViewById(R.id.orderDialogDecButton);
             decButton.setOnClickListener(new Button.OnClickListener() {
@@ -775,23 +826,110 @@ public class MainActivity extends AppCompatActivity {
     private void populateCart() {
         LinearLayout cartScrollLayout = findViewById(R.id.cartScrollLayout);
         float total = 0;
+        Collections.sort(itemsInCart);
+
+        // Gives the items in each listing different weights depending on layout
+        float[] phoneWeights = {4.5f, 1, 2, 1};
+        float[] tabletWeights = {4.2f, 0.7f, 2, 0.7f};
+        float[] weights = isTablet ? tabletWeights : phoneWeights;
+
+        // This is only used for the tablet
+        Button minusButton = null;
 
         for (String item : itemsInCart) {
             LinearLayout itemLayout = new LinearLayout(this);
             itemLayout.setOrientation(LinearLayout.HORIZONTAL);
             itemLayout.setGravity(Gravity.CENTER_VERTICAL);
+            itemLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.cart_item_height)));
 
             String[] itemInfo = item.split(",");
 
             TextView itemName = new TextView(this);
             itemName.setText(itemInfo[0]);
             itemName.setTextSize(STP(R.dimen.normal_text_size));
-            itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4.5f));
+            itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[0]));
+            itemLayout.addView(itemName);
 
             TextView itemNum = new TextView(this);
             itemNum.setText(itemInfo[2]);
             itemNum.setTextSize(STP(R.dimen.normal_text_size));
-            itemNum.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            itemNum.setTag(item);
+            itemNum.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
+
+            if (isTablet) {
+                minusButton = new Button(this);
+                minusButton.setText(R.string.minus);
+                minusButton.setTextSize(STP(R.dimen.small_text_size));
+                minusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
+                minusButton.setTag(itemNum);
+
+                minusButton.setEnabled(Integer.parseInt(itemInfo[2]) != 1);
+
+                minusButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView itemNum = (TextView) view.getTag();
+                        int num = Integer.parseInt(itemNum.getText().toString());
+
+                        itemNum.setText(getString(R.string.number, --num));
+
+                        String cartElement = (String) itemNum.getTag();
+                        int index = itemsInCart.indexOf(cartElement);
+                        String[] cartElements = cartElement.split(",");
+                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + num);
+
+                        if (num == 1) {
+                            // If there's only one item left on our checkout list, don't let us remove any more this way
+                            view.setEnabled(false);
+                        }
+                    }
+                });
+
+                itemLayout.addView(minusButton);
+            }
+
+            // Had to add the minus button before we could do this
+            itemLayout.addView(itemNum);
+
+            if (isTablet) {
+                itemNum.setGravity(Gravity.CENTER);
+
+                Button plusButton = new Button(this);
+                plusButton.setText(R.string.plus);
+                plusButton.setTextSize(STP(R.dimen.small_text_size));
+                plusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
+                plusButton.setTag(minusButton);
+
+                plusButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Button minusButton = (Button) view.getTag();
+                        TextView itemNum = (TextView) minusButton.getTag();
+                        int num = Integer.parseInt(itemNum.getText().toString());
+
+                        itemNum.setText(getString(R.string.number, ++num));
+
+                        String cartElement = (String) itemNum.getTag();
+                        int index = itemsInCart.indexOf(cartElement);
+                        String[] cartElements = cartElement.split(",");
+                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + num);
+
+                        if (num > 1) {
+                            // If we increased from one item, we can subtract now
+                            minusButton.setEnabled(true);
+                        }
+                    }
+                });
+
+                TextView priceEachText = new TextView(this);
+                priceEachText.setText(getString(R.string.order_price, itemInfo[1]));
+                priceEachText.setTextSize(STP(R.dimen.normal_text_size));
+                priceEachText.setGravity(Gravity.END);
+                priceEachText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
+
+                itemLayout.addView(plusButton);
+                itemLayout.addView(priceEachText);
+            }
 
             TextView itemPrice = new TextView(this);
             float price = Float.parseFloat(itemInfo[1]) * Integer.parseInt(itemInfo[2]);
@@ -799,14 +937,15 @@ public class MainActivity extends AppCompatActivity {
             itemPrice.setText(getResources().getString(R.string.order_price, getPriceString(price)));
             itemPrice.setTextSize(STP(R.dimen.normal_text_size));
             itemPrice.setGravity(Gravity.END); // right
-            itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 2));
+            itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[2]));
 
             Space space = new Space(this);
             space.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0.5f));
 
             ImageButton removeButton = new ImageButton(this);
+            removeButton.setScaleType(ImageButton.ScaleType.CENTER);
             removeButton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_delete));
-            removeButton.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.cart_item_height), 1));
+            removeButton.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.cart_subitem_height), weights[3]));
             removeButton.setTag(item);
 
             removeButton.setOnClickListener(new Button.OnClickListener() {
@@ -823,8 +962,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            itemLayout.addView(itemName);
-            itemLayout.addView(itemNum);
             itemLayout.addView(itemPrice);
             itemLayout.addView(space);
             itemLayout.addView(removeButton);

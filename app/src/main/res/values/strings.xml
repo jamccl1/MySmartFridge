@@ -6,6 +6,7 @@
     <string name="placeholder">[content goes here]</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
+    <string name="number">%1$d</string>
 
     <!-- Home screen strings -->
     <string name="homescreen_title">MY SMART FRIDGE</string>
@@ -50,10 +51,14 @@
     <string name="cart_button_text">Your Cart</string>
     <string name="dialog_title">Order %1$s</string>
     <string name="order_price">$%1$s</string>
+    <string name="order_price_t">[$%1$s]\n(%2$s)</string> <!-- Tablet version, here for technical reasons -->
     <string name="order_unit">$%1$s per %2$s</string>
     <string name="order_init_unit_value">1</string>
     <string name="order_add_button_text">Add</string>
     <string name="order_back_button_text">Cancel</string>
+    <string name="order_in_fridge_text">%1$sIn Fridge</string>
+    <string name="order_expired_text">%1$sExpired</string>
+    <string name="order_not_in_fridge_text">%1$sNot In Fridge</string>
     <string name="cart_total_title">Your Cart</string>
     <string name="cart_total_label">Total:</string>
     <string name="cart_item_label">Item</string>
@@ -62,6 +67,7 @@
     <string name="cart_checkout_button_text">Checkout</string>
     <string name="cart_empty_alert">Your Cart is Empty!</string>
     <string name="chkt_title">Checkout</string>
+    <string name="chkt_personal_header">Personal Info:</string>
     <string name="chkt_first_name_label">First Name</string>
     <string name="chkt_middle_init_label">M.I.</string>
     <string name="chkt_last_name_label">Last Name</string>
@@ -69,10 +75,13 @@
     <string name="chkt_city_label">City</string>
     <string name="chkt_state_label">State</string>
     <string name="chkt_zip_code_label">Zip Code</string>
+    <string name="chkt_credit_header">Credit Card Info:</string>
     <string name="chkt_credit_card_label">Credit Card No.</string>
     <string name="chkt_svc_label">SVC</string>
+    <string name="chkt_options_header">Options:</string>
     <string name="chkt_save_option">Save my info for next time</string>
     <string name="chkt_express_option">One-Day Delivery (+$%1$s)</string>
+    <string name="chkt_fillout_warning">Please fill out all fields to continue.</string>
     <string name="chkt_pay_button_text">Pay $%1$s</string>
     <string name="chkt_thank_you">Thank You!</string>
     <string name="chkt_complete_text">Purchase Complete</string>
