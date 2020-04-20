@@ -60,9 +60,12 @@
     <string name="order_expired_text">%1$sExpired</string>
     <string name="order_not_in_fridge_text">%1$sNot In Fridge</string>
     <string name="cart_total_title">Your Cart</string>
+    <string name="cart_partial_title_front">Your</string>
+    <string name="cart_partial_title_back"> Cart</string>
     <string name="cart_total_label">Total:</string>
     <string name="cart_item_label">Item</string>
     <string name="cart_number_label">No.</string>
+    <string name="cart_price_each_label">Price Ea.</string>
     <string name="cart_price_label">Price</string>
     <string name="cart_checkout_button_text">Checkout</string>
     <string name="cart_empty_alert">Your Cart is Empty!</string>

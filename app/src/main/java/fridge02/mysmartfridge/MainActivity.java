@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -186,6 +187,13 @@ public class MainActivity extends AppCompatActivity {
         final EditText creditCardNumber = findViewById(R.id.chktCreditCardField);
         final EditText svcNumber = findViewById(R.id.chktSvcField);
 
+        if (isTablet) {
+            // Make spinner text size normal
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.checkout_states, R.layout.custom_spinner);
+            adapter.setDropDownViewResource(R.layout.custom_spinner);
+            state.setAdapter(adapter);
+        }
+
         final EditText[] fieldArray = {firstName, middleInitial, lastName, address, city, zipCode, creditCardNumber, svcNumber};
         final TextView[] labelArray = {findViewById(R.id.chktFirstNameLabel), findViewById(R.id.chktMiddleInitialLabel), findViewById(R.id.chktLastNameLabel),
                 findViewById(R.id.chktAddressLabel), findViewById(R.id.chktCityLabel), findViewById(R.id.chktZipCodeLabel), findViewById(R.id.chktCreditCardLabel),
@@ -197,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
         CheckBox saveInfo = findViewById(R.id.chktSaveCheckbox);
         saveInfo.setChecked(saveCheckoutInfo);
+        saveInfo.setTextColor(saveCheckoutInfo ? Color.BLACK : Color.parseColor("#737373"));
 
         if (saveCheckoutInfo) {
             firstName.setText(paymentInfo[0]);
@@ -232,9 +241,13 @@ public class MainActivity extends AppCompatActivity {
                     paymentInfo[8] = svcNumber.getText().toString();
 
                     saveCheckoutInfo = true;
+
+                    compoundButton.setTextColor(Color.BLACK);
                 } else {
                     paymentInfo = new String[9];
                     saveCheckoutInfo = false;
+
+                    compoundButton.setTextColor(Color.parseColor("#737373"));
                 }
             }
         });
@@ -242,15 +255,18 @@ public class MainActivity extends AppCompatActivity {
         final CheckBox expressShipping = findViewById(R.id.chktShippingCheckbox);
         expressShipping.setChecked(useExpressShipping);
         expressShipping.setText(getString(R.string.chkt_express_option, getPriceString(cartTotal * 0.05f)));
+        expressShipping.setTextColor(useExpressShipping ? Color.BLACK : Color.parseColor("#737373"));
         expressShipping.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal * 1.05f)));
                     useExpressShipping = true;
+                    compoundButton.setTextColor(Color.BLACK);
                 } else {
                     payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal)));
                     useExpressShipping = false;
+                    compoundButton.setTextColor(Color.parseColor("#737373"));
                 }
             }
         });
@@ -269,6 +285,8 @@ public class MainActivity extends AppCompatActivity {
                     paymentInfo[6] = zipCode.getText().toString();
                     paymentInfo[7] = creditCardNumber.getText().toString();
                     paymentInfo[8] = svcNumber.getText().toString();
+                } else {
+                    checkoutFieldsComplete = 0;
                 }
 
                 toCart(view);

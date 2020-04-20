@@ -27,7 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Your "
+            android:paddingRight="10dp"
+            android:text="@string/cart_partial_title_front"
             android:textAlignment="textEnd"
             android:textSize="@dimen/title_text_size" />
 
@@ -35,18 +36,18 @@
             android:id="@+id/cartPartnerLogo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-10dp"
             android:layout_weight="3"
             android:contentDescription="@string/placeholder"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/partner_logo" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/cartTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text=" Cart"
+            android:paddingLeft="10dp"
+            android:text="@string/cart_partial_title_back"
             android:textSize="@dimen/title_text_size" />
 
         <Space
@@ -97,11 +98,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/cartPriceEachLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Price Ea."
+            android:text="@string/cart_price_each_label"
             android:textAlignment="textEnd"
             android:textSize="@dimen/normal_text_size"
             android:textStyle="bold" />
@@ -111,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Price"
+            android:text="@string/cart_price_label"
             android:textAlignment="textEnd"
             android:textSize="@dimen/normal_text_size"
             android:textStyle="bold" />

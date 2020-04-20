@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/placeholder"
-            android:paddingTop="7dp"
             app:srcCompat="@drawable/partner_logo" />
 
         <Space
