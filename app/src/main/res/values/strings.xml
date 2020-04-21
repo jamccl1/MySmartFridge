@@ -14,6 +14,7 @@
     <string name="shopping_home_button">Grocery Shopping</string>
     <string name="d_shopping_home_button">Grocery Shopping List</string>
     <string name="recipes_home_button">Recipes</string>
+    <string name="order_online_home_button">Order Online</string>
     <string name="look_inside_home_button">Look Inside</string>
     <string name="settings_home_button">Settings</string>
     <string name="home_temp_widget_desc">Temperature widget goes here.</string>
