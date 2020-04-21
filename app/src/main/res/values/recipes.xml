@@ -5,7 +5,8 @@
     <!-- RECIPE DATA -->
     <!-- The "recipe_data" field that comes first contains all the IDs for each array of recipe info -->
     <!-- Then all the other arrays, one for each recipe, contain (in this order): name, ingredients, -->
-    <!-- the cooking time, and the image id. -->
+    <!-- the cooking time, experience level required, number of people the recipe serves, recipe -->
+    <!-- instructions, and the image id. -->
 
     <string-array name="recipe_data">
         <item>recipe_data_hamburger</item>
@@ -20,33 +21,41 @@
         <item>Hamburger</item>
         <item>Buns (1 bag),Burger Patties (4),Lettuce (1 head),Tomatoes (1),Cheese (¼ lb)</item>
         <item>5 minutes</item>
-        <item>hamburger_image</item>
+        <item>Four</item>
+        <item>Beginner</item>
         <item>Cook patties on a stovetop until they appear completely brown on the outside.\n
         Place each patty within a bun. Add on top of it, as desired, the lettuce, tomatoes, and cheese.</item>
+        <item>hamburger_image</item>
     </string-array>
 
     <string-array name="recipe_data_lasagna">
         <item>Lasagna</item>
         <item>Noodles (2 boxes),Tomato Sauce (1 can),Cheese (2 bags)</item>
         <item>45 minutes</item>
-        <item>lasagna_image</item>
+        <item>Six</item>
+        <item>Intermediate</item>
         <item>Cook noodles by boiling them in water for ten minutes. Layer noodles, tomato sauce, and cheese in a tray. Place in the oven at 350°F for 30 mins.</item>
+        <item>lasagna_image</item>
     </string-array>
 
     <string-array name="recipe_data_salad">
         <item>Salad</item>
         <item>Lettuce (1 head),Tomatoes (2),Cucumbers (1),Onions (1),Olives (1 bottle),Dressing (1 bottle)</item>
         <item>10 minutes</item>
-        <item>salad_image</item>
+        <item>Four</item>
+        <item>Beginner</item>
         <item>Cut the tomatoes, cucumbers, and onions into thin slices. Add all the ingredients into a large bowl and mix. Drizzle dressing on top.</item>
+        <item>salad_image</item>
     </string-array>
 
     <string-array name="recipe_data_spaghetti">
         <item>Spaghetti</item>
         <item>Noodles (1 box),Tomato Sauce (½ cup),Meatballs (6)</item>
         <item>15 minutes</item>
-        <item>spaghetti_image</item>
+        <item>Three</item>
+        <item>Beginner</item>
         <item>Place spaghetti noodles into boiling water. Wait ten minutes, then pour noodles into colander. Add sauce and meatballs on top.</item>
+        <item>spaghetti_image</item>
     </string-array>
 
     <drawable name="hamburger_image">@drawable/hamburger</drawable>

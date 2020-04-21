@@ -3,7 +3,7 @@
 
     <!-- General use strings -->
     <string name="back_button_text">Back</string>
-    <string name="placeholder">[content goes here]</string>
+    <string name="placeholder">[placeholder]</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="number">%1$d</string>
@@ -30,10 +30,19 @@
     <string name="recipes_title">Recipes</string>
     <string name="recipe_select">More</string>
     <string name="recipes_desc">Description placeholder.</string>
-    <string name="recipes_cooking_time_header">Cooking Time:</string>
     <string name="recipes_ingredients_header">Ingredients:</string>
     <string name="recipes_order_button">Order</string>
     <string name="recipes_instructions_header">Instructions:</string>
+    <string name="recipes_have_ingredients">You have the ingredients\nfor this recipe!</string>
+    <string name="recipes_expired_ingredients">Some ingredients for this\nrecipe are expired.</string>
+    <string name="recipes_no_ingredients">You do not have all the\ningredients for this recipe!</string>
+    <string name="recipes_have_ingredients_line">You have this ingredient!</string>
+    <string name="recipes_expired_ingredients_line">This ingredient is expired.</string>
+    <string name="recipes_no_ingredients_line">You do not have this ingredient</string>
+    <string name="recipes_cooking_time_label">Cooking Time:</string>
+    <string name="recipes_serves_label">Serves:</string>
+    <string name="recipes_experience_label">Experience Level:</string>
+    <string name="recipes_video_placeholder">[Instructional video goes here.]</string>
 
     <!-- Look Inside screen strings -->
     <string name="look_inside_title">Look Inside</string>
