@@ -24,6 +24,7 @@
         android:layout_marginBottom="48dp"
         android:onClick="toHome"
         android:text="@string/back_button_text"
+        android:textAllCaps="false"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
