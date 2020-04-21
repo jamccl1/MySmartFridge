@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/chktPartnerLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:id="@+id/chktSpace1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33" />
+
+        <TextView
+            android:id="@+id/chktPartnerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="@string/partner_text"
+            android:textAlignment="center"
+            android:textSize="@dimen/normal_text_size" />
+
+        <ImageView
+            android:id="@+id/chktPartnerLogo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/placeholder"
+            app:srcCompat="@drawable/partner_logo" />
+
+        <Space
+            android:id="@+id/chktSpace2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/chktTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chkt_title"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktPartnerLayout" />
+
+    <TextView
+        android:id="@+id/chktFirstNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_first_name_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintStart_toStartOf="@+id/chktNameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/chktTitle" />
+
+    <TextView
+        android:id="@+id/chktMiddleInitialLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_middle_init_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/chktNameLayout"
+        app:layout_constraintTop_toBottomOf="@+id/chktTitle" />
+
+    <TextView
+        android:id="@+id/chktSvcLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="34dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_svc_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/chktCreditCardLayout"
+        app:layout_constraintEnd_toEndOf="@+id/chktCreditCardLayout" />
+
+    <LinearLayout
+        android:id="@+id/chktNameLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktTitle">
+
+        <EditText
+            android:id="@+id/chktFirstNameField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="@dimen/normal_text_size"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
+
+        <Space
+            android:id="@+id/chktNameSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <EditText
+            android:id="@+id/chktMiddleInitialField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:maxLength="2"
+            android:textSize="@dimen/normal_text_size"
+            android:autofillHints=""
+            tools:ignore="LabelFor"  />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/chktLastNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_last_name_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintStart_toStartOf="@+id/chktLastNameField"
+        app:layout_constraintTop_toBottomOf="@+id/chktNameLayout" />
+
+    <EditText
+        android:id="@+id/chktLastNameField"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktNameLayout"
+        android:autofillHints=""
+        tools:ignore="LabelFor"  />
+
+    <TextView
+        android:id="@+id/chktAddressLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_address_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintStart_toStartOf="@+id/chktAddressField"
+        app:layout_constraintTop_toBottomOf="@+id/chktLastNameField" />
+
+    <EditText
+        android:id="@+id/chktAddressField"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktLastNameField"
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/chktCityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_city_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintStart_toStartOf="@+id/chktCityLayout"
+        app:layout_constraintTop_toBottomOf="@+id/chktAddressField" />
+
+    <TextView
+        android:id="@+id/chktStateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_state_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/chktCityLayout"
+        app:layout_constraintTop_toBottomOf="@+id/chktAddressField" />
+
+    <LinearLayout
+        android:id="@+id/chktCityLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktAddressField">
+
+        <EditText
+            android:id="@+id/chktCityField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:autofillHints=""
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="@dimen/normal_text_size"
+            tools:ignore="LabelFor" />
+
+        <Space
+            android:id="@+id/chktSpace3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Spinner
+            android:id="@+id/chktStateSpinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:entries="@array/checkout_states" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/chktZipCodeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_zip_code_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintStart_toStartOf="@+id/chktZipCodeField"
+        app:layout_constraintTop_toBottomOf="@+id/chktCityLayout" />
+
+    <EditText
+        android:id="@+id/chktZipCodeField"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="number"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktCityLayout"
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/chktCreditCardLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="34dp"
+        android:alpha="0.5"
+        android:text="@string/chkt_credit_card_label"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/chktCreditCardLayout"
+        app:layout_constraintStart_toStartOf="@+id/chktCreditCardLayout" />
+
+    <LinearLayout
+        android:id="@+id/chktCreditCardLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/chktCheckboxLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktZipCodeField">
+
+        <EditText
+            android:id="@+id/chktCreditCardField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:autofillHints=""
+            android:ems="10"
+            android:inputType="number"
+            android:maxLength="16"
+            android:textSize="@dimen/normal_text_size"
+            tools:ignore="LabelFor" />
+
+        <Space
+            android:id="@+id/chktSpace4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <EditText
+            android:id="@+id/chktSvcField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:autofillHints=""
+            android:ems="10"
+            android:inputType="number"
+            android:maxLength="3"
+            android:textSize="@dimen/normal_text_size"
+            tools:ignore="LabelFor" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chktCheckboxLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/chktButtonLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/chktSaveCheckbox"
+            android:layout_width="@dimen/menu_button_width"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/chkt_save_option"
+            android:textSize="@dimen/normal_text_size" />
+
+        <CheckBox
+            android:id="@+id/chktShippingCheckbox"
+            android:layout_width="@dimen/menu_button_width"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/chkt_express_option"
+            android:textSize="@dimen/normal_text_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chktButtonLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/chktBackButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/menu_button_height"
+            android:layout_weight="1"
+            android:text="@string/back_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
+
+        <Button
+            android:id="@+id/chktPayButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/menu_button_height"
+            android:layout_weight="1"
+            android:text="@string/chkt_pay_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/chktBlur"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#D3BAF3AE"
+        android:gravity="center"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chktThankYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:text="@string/chkt_thank_you"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/chktThinkingBar"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chktThankYou" />
+
+</android.support.constraint.ConstraintLayout>

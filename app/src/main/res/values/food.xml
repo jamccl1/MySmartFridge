@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="food_list">
+        <item>food_burger_buns</item>
+        <item>food_burger_patties</item>
+        <item>food_cheese</item>
+        <item>food_cucumbers</item>
+        <item>food_lettuce</item>
+        <item>food_meatballs</item>
+        <item>food_noodles</item>
+        <item>food_olives</item>
+        <item>food_onions</item>
+        <item>food_salad_dressing</item>
+        <item>food_tomatoes</item>
+        <item>food_tomato_sauce</item>
+    </string-array>
+
+    <!-- Entries are: Name, price, and unit of measure. -->
+
+    <string-array name="food_burger_buns">
+        <item>Burger Buns</item>
+        <item>1.00</item>
+        <item>bag of six</item>
+    </string-array>
+
+    <string-array name="food_burger_patties">
+        <item>Burger Patties</item>
+        <item>1.00</item>
+        <item>pack of four</item>
+    </string-array>
+
+    <string-array name="food_cheese">
+        <item>Cheese</item>
+        <item>3.45</item>
+        <item>quarter lb</item>
+    </string-array>
+
+    <string-array name="food_cucumbers">
+        <item>Cucumbers</item>
+        <item>1.00</item>
+        <item>one cucumber</item>
+    </string-array>
+
+    <string-array name="food_lettuce">
+        <item>Lettuce</item>
+        <item>1.00</item>
+        <item>one head</item>
+    </string-array>
+
+    <string-array name="food_meatballs">
+        <item>Meatballs</item>
+        <item>4.56</item>
+        <item>six meatballs</item>
+    </string-array>
+
+    <string-array name="food_noodles">
+        <item>Noodles</item>
+        <item>1.23</item>
+        <item>one box</item>
+    </string-array>
+
+    <string-array name="food_olives">
+        <item>Olives</item>
+        <item>1.00</item>
+        <item>one bottle</item>
+    </string-array>
+
+    <string-array name="food_onions">
+        <item>Onions</item>
+        <item>1.00</item>
+        <item>one onion</item>
+    </string-array>
+
+    <string-array name="food_salad_dressing">
+        <item>Salad Dressing</item>
+        <item>1.00</item>
+        <item>one bottle</item>
+    </string-array>
+
+    <string-array name="food_tomato_sauce">
+        <item>Tomato Sauce</item>
+        <item>2.34</item>
+        <item>one can</item>
+    </string-array>
+
+    <string-array name="food_tomatoes">
+        <item>Tomatoes</item>
+        <item>1.00</item>
+        <item>one tomato</item>
+    </string-array>
+
+    <drawable name="burger_buns_image">@drawable/burger_buns</drawable>
+    <drawable name="burger_patties_image">@drawable/burger_patties</drawable>
+    <drawable name="cheese_image">@drawable/cheese</drawable>
+    <drawable name="cucumbers_image">@drawable/cucumbers</drawable>
+    <drawable name="lettuce_image">@drawable/lettuce</drawable>
+    <drawable name="meatballs_image">@drawable/meatballs</drawable>
+    <drawable name="noodles_image">@drawable/noodles</drawable>
+    <drawable name="olives_image">@drawable/olives</drawable>
+    <drawable name="onions_image">@drawable/onions</drawable>
+    <drawable name="salad_dressing_image">@drawable/salad_dressing</drawable>
+    <drawable name="tomato_sauce_image">@drawable/tomato_sauce</drawable>
+    <drawable name="tomatoes_image">@drawable/tomatoes</drawable>
+</resources>

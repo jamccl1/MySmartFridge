@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- These strings are for the tablet, and will overwrite any pre-existing strings in the other,
+    "normal" strings.xml file. If your string is brand new, you should add it there first. -->
+    <string name="partner_text">By:</string>
+</resources>

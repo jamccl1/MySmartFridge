@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/orderOnlineLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/partnerLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:id="@+id/orderSpace1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33" />
+
+        <TextView
+            android:id="@+id/partnerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="@string/partner_text"
+            android:textAlignment="center"
+            android:textSize="@dimen/normal_text_size" />
+
+        <ImageView
+            android:id="@+id/partnerLogo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/placeholder"
+            app:srcCompat="@drawable/partner_logo" />
+
+        <Space
+            android:id="@+id/orderSpace2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/orderTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/order_title"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/partnerLayout" />
+
+    <SearchView
+        android:id="@+id/orderSearchBar"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/searchbar_height"
+        android:layout_marginTop="24dp"
+        android:background="@color/searchbar_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderTitle" />
+
+    <ScrollView
+        android:id="@+id/orderScrollView"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="26dp"
+        android:scrollbarStyle="outsideInset"
+        app:layout_constraintBottom_toTopOf="@+id/orderButtonLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderSearchBar">
+
+        <LinearLayout
+            android:id="@+id/orderScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/orderButtonLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/orderBlur"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/orderBackButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/menu_button_height"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:onClick="toHome"
+            android:text="@string/back_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
+
+        <Button
+            android:id="@+id/orderCartButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/menu_button_height"
+            android:layout_weight="1"
+            android:onClick="toCart"
+            android:text="@string/cart_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/orderCanScrollDown"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <ImageView
+        android:id="@+id/orderCanScrollUp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        android:rotation="180"
+        app:layout_constraintBottom_toTopOf="@+id/orderScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <TextView
+        android:id="@+id/orderBlur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

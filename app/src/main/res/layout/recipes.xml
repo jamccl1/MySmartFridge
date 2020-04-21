@@ -20,8 +20,8 @@
 
     <TextView
         android:id="@+id/recipesTitle"
-        android:layout_width="142dp"
-        android:layout_height="51dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         android:text="@string/recipes_title"
@@ -57,8 +57,8 @@
 
     <SearchView
         android:id="@+id/recipeSearchBar"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/searchbar_height"
         android:layout_marginTop="12dp"
         android:background="#ECECEC"
         android:saveEnabled="true"
