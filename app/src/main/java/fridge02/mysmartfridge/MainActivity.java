@@ -1,5 +1,7 @@
 package fridge02.mysmartfridge;
 
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -42,12 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<LinearLayout> recipesInList, orderableItemsInList;
     private ArrayList<String> itemsInCart;
-    private String[] paymentInfo;
+    private String[] paymentInfo, currentRecipe;
     private String lastRecipeSearch, lastOnlineOrderSearch;
     private int checkoutFieldsComplete;
     private float cartTotal;
     private boolean isTablet, saveCheckoutInfo, useExpressShipping;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
-        // Set temperature on home screen
+        // Do basic home screen things for tablet or phone. Note that the IDE will get upset if
+        // you lock the orientation (which I think we want to do), hence the suppression above
         if (isTablet) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setHomeScreenTemperatureDevice(75);
         } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             setHomeScreenTemperature(75);
         }
 
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         orderableItemsInList = new ArrayList<>();
         itemsInCart = new ArrayList<>();
         paymentInfo = new String[9];
+        currentRecipe = null;
 
         // Set last searched recipe/online order
         lastRecipeSearch = "";
@@ -92,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     // Sets up the Recipes screen.
     public void toRecipes(View view) {
         setContentView(R.layout.recipes);
+        currentRecipe = null;
         loadRecipes(lastRecipeSearch); // Load all recipes
 
         final HorizontalScrollView scrollView = findViewById(R.id.recipesScrollView);
@@ -190,6 +198,18 @@ public class MainActivity extends AppCompatActivity {
                 populateOrderableItems(s);
 
                 return false;
+            }
+        });
+
+        Button backButton = findViewById(R.id.orderBackButton);
+        backButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentRecipe != null) {
+                    createRecipeScreen(currentRecipe);
+                } else {
+                    toHome(view);
+                }
             }
         });
     }
@@ -384,7 +404,12 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         cartTotal = 0;
                         itemsInCart.clear();
-                        toHome(holdView);
+
+                        if (currentRecipe != null) {
+                            createRecipeScreen(currentRecipe);
+                        } else {
+                            toHome(holdView);
+                        }
                     }
                 }, 2500);
             }
@@ -451,6 +476,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String[] recipeInfo = (String[]) view.getTag();
+                currentRecipe = recipeInfo;
                 createRecipeScreen(recipeInfo);
             }
         });

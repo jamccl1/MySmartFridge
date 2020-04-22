@@ -83,7 +83,6 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/menu_button_height"
             android:layout_weight="1"
-            android:onClick="toHome"
             android:text="@string/back_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
