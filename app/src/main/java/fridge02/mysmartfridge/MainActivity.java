@@ -329,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
             newCheckBox.setText(userItemString);
             newCheckBox.setTextColor(Color.BLACK);
             newCheckBox.setButtonDrawable(id);
+            newCheckBox.setTextSize(STP(R.dimen.normal_text_size));
 
             linearLay.addView(newCheckBox);
 
