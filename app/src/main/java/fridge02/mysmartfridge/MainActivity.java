@@ -39,6 +39,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private int checkoutFieldsComplete;
     private float cartTotal;
     private boolean isTablet, saveCheckoutInfo, useExpressShipping;
+    private HashMap<String, String> itemsInFridge;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         orderableItemsInList = new ArrayList<>();
         itemsInCart = new ArrayList<>();
         paymentInfo = new String[9];
+        itemsInFridge = new HashMap<>();
         currentRecipe = null;
 
         // Set last searched recipe/online order
@@ -88,8 +91,93 @@ public class MainActivity extends AppCompatActivity {
         checkoutFieldsComplete = 0;
     }
 
+
+    //FRIDGE STUFF:
+
     public void toWhatsInFridge(View view) {
         setContentView(R.layout.whats_in_fridge);
+
+        for (String name: itemsInFridge.keySet()) {
+            addFridgeItem(name, itemsInFridge.get(name));
+        }
+
+    }
+
+    public void addFridgeItem(String name, String expiration) {
+        LinearLayout fridgeScrollLayout = findViewById(R.id.fridgeScrollLayout);
+
+        TextView itemName = new TextView(this);
+        itemName.setText(name);
+        itemName.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_image_width), DTP(R.dimen.recipes_image_height)));
+        itemName.setGravity(Gravity.CENTER);
+        itemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+
+        TextView expirationDate = new TextView(this);
+        expirationDate.setText(expiration);
+        expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
+        expirationDate.setGravity(Gravity.CENTER);
+        expirationDate.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+
+        Button button = new Button(this);
+        button.setText(R.string.fridge_item_remove);
+        button.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_select_button_width), DTP(R.dimen.recipes_select_button_height)));
+        button.setAllCaps(true);
+        button.setGravity(Gravity.CENTER);
+        button.setTextSize(STP(R.dimen.what_in_fridge_remove));
+
+        LinearLayout inFridge = new LinearLayout(this);
+        inFridge.setOrientation(LinearLayout.HORIZONTAL);
+        inFridge.setGravity(Gravity.CENTER_VERTICAL);
+        inFridge.addView(itemName);
+        inFridge.addView(expirationDate);
+        inFridge.addView(button);
+
+        //value to be passed into remove method
+        final LinearLayout inFridgeFinal = inFridge;
+        final String key = name;
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view instanceof Button) {
+                    //String[] recipeInfo = (String[]) view.getTag();
+                    //int imageId = getResources().getIdentifier(recipeInfo[3], "drawable", getPackageName());
+                    remove(inFridgeFinal, key);
+                }
+            }
+        });
+
+        fridgeScrollLayout.addView(inFridge);
+    }
+
+    private void remove(LinearLayout inFridge, String key) {
+        LinearLayout fridgeScrollLayout = findViewById(R.id.fridgeScrollLayout);
+        fridgeScrollLayout.removeView(inFridge);
+
+        itemsInFridge.remove(key);
+
+    }
+
+    public void toAddItem(View view) {
+        setContentView(R.layout.add_food_item);
+    }
+
+    public void addNewItem(View view) {
+        EditText nameText = findViewById(R.id.itemNameText);
+        EditText countText = findViewById(R.id.itemCountText);
+        EditText dayText = findViewById(R.id.itemExpText);
+
+        String name = nameText.getText().toString();
+        int count = Integer.parseInt(countText.getText().toString());
+        String day = dayText.getText().toString();
+
+        if ((!name.equals("")) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$"))) {
+            String key = name + " (" + count + ")";
+            String value = day;
+            itemsInFridge.put(key, value);
+            toWhatsInFridge(view);
+        }
+
     }
 
     public void toShopping(View view) {
