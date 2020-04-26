@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<CheckBox> groceriesInList;
+    private ArrayList<LinearLayout> groceriesInList;
     private ArrayList<LinearLayout> recipesInList;
     private String lastRecipeSearch;
     boolean isTablet;
@@ -315,15 +315,44 @@ public class MainActivity extends AppCompatActivity {
 
         //Check for empty string
 
+        final LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+
         int id = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
 
+
         EditText userItem = findViewById(R.id.new_item_input);
+        EditText userItemQuantity = findViewById(R.id.new_item_quantity);
         String userItemString =  userItem.getText().toString();
+        String userItemQuantityString =  userItemQuantity.getText().toString();
+
         userItem.getText().clear();
+        userItemQuantity.getText().clear();
+
+        if (userItemQuantityString.equals("")){
+            userItemQuantityString = "1";
+        }
 
         if (!userItemString.equals("")) {
 
-            final LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+
+            LinearLayout col = new LinearLayout(getApplicationContext());
+            col.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            col.setOrientation(LinearLayout.HORIZONTAL);
+            col.setGravity(Gravity.LEFT);
+
+
+            linearLay.addView(col);
+
+            LinearLayout.LayoutParams layoutParamsQuantity = new  LinearLayout.LayoutParams(100, 100);
+            layoutParamsQuantity.setMargins(10, 0, 0, 0);
+
+
+            final TextView quant = new TextView(getApplicationContext());
+            quant.setTextSize(STP(R.dimen.normal_text_size));
+            quant.setTextColor(Color.BLACK);
+            quant.setText(" (" + userItemQuantityString + ")");
+            quant.setLayoutParams(layoutParamsQuantity);
+
 
             CheckBox newCheckBox = new CheckBox(getApplicationContext());
             newCheckBox.setText(userItemString);
@@ -331,19 +360,78 @@ public class MainActivity extends AppCompatActivity {
             newCheckBox.setButtonDrawable(id);
             newCheckBox.setTextSize(STP(R.dimen.normal_text_size));
 
-            linearLay.addView(newCheckBox);
 
-            groceriesInList.add(newCheckBox);
+            Button incrementButton = new Button(this);
+            incrementButton.setText("+1");
+            incrementButton.setGravity(Gravity.CENTER);
+            incrementButton.setBackgroundColor(0xFF008000);
+
+
+            incrementButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Integer curr = Integer.parseInt(quant.getText().subSequence(2,quant.length()-1).toString());
+                    curr++;
+                    quant.setText(" (" + curr.toString() + ")");
+
+                }
+            });
+
+
+
+            Button decrementButton = new Button(this);
+            decrementButton.setText("-1");
+            decrementButton.setGravity(Gravity.CENTER);
+            decrementButton.setBackgroundColor(0xFFFF4040);
+
+
+
+            decrementButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Integer curr = Integer.parseInt(quant.getText().subSequence(2,quant.length()-1).toString());
+                    if(!curr.equals(0)) {
+                        curr--;
+                    }
+                    quant.setText(" (" + curr.toString() + ")");
+
+                }
+            });
+
+            LinearLayout.LayoutParams layoutParamsButton = new  LinearLayout.LayoutParams(150, 100);
+            layoutParamsButton.setMargins(10, 10, 0, 0);
+
+            incrementButton.setLayoutParams(layoutParamsButton);
+            decrementButton.setLayoutParams(layoutParamsButton);
+
+            LinearLayout.LayoutParams tex = new  LinearLayout.LayoutParams(0, 0);
+            tex.weight =1;
+
+            final TextView t = new TextView(getApplicationContext());
+            t.setLayoutParams(tex);
+
+
+            col.addView(newCheckBox);
+            col.addView(quant);
+            col.addView(t);
+            col.addView(incrementButton);
+            col.addView(decrementButton);
+
+            groceriesInList.add(col);
         }
 
     }
 
+
     public void loadGroceryList(View view){
 
-        ArrayList <View> viewsToDelete = new ArrayList<>();
+        ArrayList <LinearLayout> viewsToDelete = new ArrayList<>();
 
-        for (CheckBox x: groceriesInList){
-            if(x.isChecked()){
+        for (LinearLayout x: groceriesInList){
+
+            CheckBox checkBox = (CheckBox) x.getChildAt(0);
+            TextView quantity = (TextView) x.getChildAt(1);
+            Integer curr = Integer.parseInt(quantity.getText().subSequence(2,quantity.length()-1).toString());
+
+            if(checkBox.isChecked() || curr.equals(0)){
                 viewsToDelete.add(x);
             }
         }
