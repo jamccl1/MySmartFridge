@@ -29,6 +29,8 @@
     <dimen name="recipes_indv_image_padding">5dp</dimen>
     <dimen name="recipes_indv_scroll_width">350dp</dimen>
 
+    <dimen name="what_in_fridge_remove">10dp</dimen>
+
     <!-- Order online items -->
     <dimen name="add_dialog_width">350dp</dimen>
     <dimen name="add_dialog_height">220dp</dimen>
