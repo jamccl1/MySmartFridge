@@ -22,6 +22,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/temperature"
+        android:textSize="@dimen/extreme_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/whatsInFridgeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeTitle" />
+
     <Button
         android:id="@+id/whatsInFridgeButton"
         android:layout_width="@dimen/menu_button_width"
@@ -36,12 +48,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/recipesButton"
+        android:id="@+id/orderOnlineButton"
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="@dimen/menu_button_height"
         android:layout_marginBottom="12dp"
-        android:onClick="toRecipes"
-        android:text="@string/recipes_home_button"
+        android:onClick="toOrderOnline"
+        android:text="@string/order_online_home_button"
         android:textAllCaps="false"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toTopOf="@+id/lookInsideButton"
@@ -57,7 +69,7 @@
         android:text="@string/shopping_home_button"
         android:textAllCaps="false"
         android:textSize="@dimen/button_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/recipesButton"
+        app:layout_constraintBottom_toTopOf="@+id/orderOnlineButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -73,17 +85,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/temperature"
-        android:textSize="100sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/whatsInFridgeButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeTitle" />
 
 </android.support.constraint.ConstraintLayout>

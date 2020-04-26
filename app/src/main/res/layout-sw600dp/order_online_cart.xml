@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/cartPartnerLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:id="@+id/cartOrderSpace1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="10dp"
+            android:text="@string/cart_partial_title_front"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/title_text_size" />
+
+        <ImageView
+            android:id="@+id/cartPartnerLogo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:contentDescription="@string/placeholder"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/partner_logo" />
+
+        <TextView
+            android:id="@+id/cartTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/cart_partial_title_back"
+            android:textSize="@dimen/title_text_size" />
+
+        <Space
+            android:id="@+id/cartOrderSpace2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cartTotalLine2"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#373737"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartPartnerLayout" />
+
+    <LinearLayout
+        android:id="@+id/cartTableLabelLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartTotalLine2">
+
+        <TextView
+            android:id="@+id/cartItemLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4.2"
+            android:text="@string/cart_item_label"
+            android:textSize="@dimen/normal_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cartNumberLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.9"
+            android:text="@string/cart_number_label"
+            android:textAlignment="center"
+            android:textSize="@dimen/normal_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cartPriceEachLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/cart_price_each_label"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/normal_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cartPriceLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/cart_price_label"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/normal_text_size"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/cartScrollView"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/cartTotalLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartTableLabelLayout">
+
+        <LinearLayout
+            android:id="@+id/cartScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/cartTotalLine"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="3dp"
+        android:layout_marginBottom="8dp"
+        android:background="#373737"
+        app:layout_constraintBottom_toTopOf="@+id/cartTotalLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/cartTotalLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/cartButtonLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/cartTotalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cart_total_label"
+            android:textSize="@dimen/button_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cartTotalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/order_price"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/button_text_size"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cartButtonLayout"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="48dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/cartBackButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="toOrderOnline"
+            android:text="@string/back_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
+
+        <Button
+            android:id="@+id/cartCheckoutButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="toCheckout"
+            android:text="@string/cart_checkout_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cartEmptyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/cart_empty_alert"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/cartScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartTableLabelLayout" />
+
+    <ImageView
+        android:id="@+id/cartCanScrollDown"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/cartScrollView"
+        app:layout_constraintEnd_toStartOf="@+id/cartScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <ImageView
+        android:id="@+id/cartCanScrollUp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="6dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        android:rotation="180"
+        app:layout_constraintEnd_toStartOf="@+id/cartScrollView"
+        app:layout_constraintTop_toTopOf="@+id/cartTableLabelLayout"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+</android.support.constraint.ConstraintLayout>

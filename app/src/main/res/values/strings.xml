@@ -3,7 +3,10 @@
 
     <!-- General use strings -->
     <string name="back_button_text">Back</string>
-    <string name="placeholder">[content goes here]</string>
+    <string name="placeholder">[placeholder]</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="number">%1$d</string>
 
     <!-- Home screen strings -->
     <string name="homescreen_title">MY SMART FRIDGE</string>
@@ -11,6 +14,7 @@
     <string name="shopping_home_button">Grocery Shopping</string>
     <string name="d_shopping_home_button">Grocery Shopping List</string>
     <string name="recipes_home_button">Recipes</string>
+    <string name="order_online_home_button">Order Online</string>
     <string name="look_inside_home_button">Look Inside</string>
     <string name="settings_home_button">Settings</string>
     <string name="home_temp_widget_desc">Temperature widget goes here.</string>
@@ -18,6 +22,9 @@
 
     <!-- What's In My Fridge screen strings -->
     <string name="wimf_title">What\'s In My Fridge?</string>
+    <string name="add_item_button">+   Add New Item</string>
+    <string name="fridge_item_remove">Remove</string>
+    <string name="fridge_add_item_title">New Food Item</string>
 
     <!-- Grocery Shopping screen strings -->
     <string name="shopping_title">Grocery Shopping</string>
@@ -30,14 +37,124 @@
     <string name="recipes_title">Recipes</string>
     <string name="recipe_select">More</string>
     <string name="recipes_desc">Description placeholder.</string>
-    <string name="recipes_cooking_time_header">Cooking Time:</string>
     <string name="recipes_ingredients_header">Ingredients:</string>
     <string name="recipes_order_button">Order</string>
     <string name="recipes_instructions_header">Instructions:</string>
+    <string name="recipes_have_ingredients">You have the ingredients\nfor this recipe!</string>
+    <string name="recipes_expired_ingredients">Some ingredients for this\nrecipe are expired.</string>
+    <string name="recipes_no_ingredients">You do not have all the\ningredients for this recipe!</string>
+    <string name="recipes_have_ingredients_line">You have this ingredient!</string>
+    <string name="recipes_expired_ingredients_line">This ingredient is expired.</string>
+    <string name="recipes_no_ingredients_line">You do not have this ingredient</string>
+    <string name="recipes_cooking_time_label">Cooking Time:</string>
+    <string name="recipes_serves_label">Serves:</string>
+    <string name="recipes_experience_label">Experience Level:</string>
+    <string name="recipes_video_placeholder">[Instructional video goes here.]</string>
 
     <!-- Look Inside screen strings -->
     <string name="look_inside_title">Look Inside</string>
+    <string name="top_shelf_radio">Top Shelf</string>
+    <string name="middle_shelf_radio">Middle Shelf</string>
+    <string name="bottom_shelf_radio">Bottom Shelf</string>
+    <string name="drawer_one">Drawer 1</string>
+    <string name="drawer_two">Drawer 2</string>
 
     <!-- Settings screen strings -->
     <string name="settings_title">Settings</string>
+
+    <!-- Order Online screen strings -->
+    <string name="order_title">Order Online</string>
+    <string name="partner_text">Partnering With: </string>
+    <string name="cart_button_text">Your Cart</string>
+    <string name="dialog_title">Order %1$s</string>
+    <string name="order_price">$%1$s</string>
+    <string name="order_price_t">[$%1$s]\n(%2$s)</string> <!-- Tablet version, here for technical reasons -->
+    <string name="order_unit">$%1$s per %2$s</string>
+    <string name="order_init_unit_value">1</string>
+    <string name="order_add_button_text">Add</string>
+    <string name="order_back_button_text">Cancel</string>
+    <string name="order_in_fridge_text">%1$sIn Fridge</string>
+    <string name="order_expired_text">%1$sExpired</string>
+    <string name="order_not_in_fridge_text">%1$sNot In Fridge</string>
+    <string name="cart_total_title">Your Cart</string>
+    <string name="cart_partial_title_front">Your</string>
+    <string name="cart_partial_title_back"> Cart</string>
+    <string name="cart_total_label">Total:</string>
+    <string name="cart_item_label">Item</string>
+    <string name="cart_number_label">No.</string>
+    <string name="cart_price_each_label">Price Ea.</string>
+    <string name="cart_price_label">Price</string>
+    <string name="cart_checkout_button_text">Checkout</string>
+    <string name="cart_empty_alert">Your Cart is Empty!</string>
+    <string name="chkt_title">Checkout</string>
+    <string name="chkt_personal_header">Personal Info:</string>
+    <string name="chkt_first_name_label">First Name</string>
+    <string name="chkt_middle_init_label">M.I.</string>
+    <string name="chkt_last_name_label">Last Name</string>
+    <string name="chkt_address_label">Address</string>
+    <string name="chkt_city_label">City</string>
+    <string name="chkt_state_label">State</string>
+    <string name="chkt_zip_code_label">Zip Code</string>
+    <string name="chkt_credit_header">Credit Card Info:</string>
+    <string name="chkt_credit_card_label">Credit Card No.</string>
+    <string name="chkt_svc_label">SVC</string>
+    <string name="chkt_options_header">Options:</string>
+    <string name="chkt_save_option">Save my info for next time</string>
+    <string name="chkt_express_option">One-Day Delivery (+$%1$s)</string>
+    <string name="chkt_fillout_warning">Please fill out all fields to continue.</string>
+    <string name="chkt_pay_button_text">Pay $%1$s</string>
+    <string name="chkt_thank_you">Thank You!</string>
+    <string name="chkt_complete_text">Purchase Complete</string>
+    <string-array name="checkout_states">
+        <item>AL</item>
+        <item>AK</item>
+        <item>AZ</item>
+        <item>AR</item>
+        <item>CA</item>
+        <item>CO</item>
+        <item>CT</item>
+        <item>DE</item>
+        <item>FL</item>
+        <item>GA</item>
+        <item>HI</item>
+        <item>ID</item>
+        <item>IL</item>
+        <item>IN</item>
+        <item>IA</item>
+        <item>KS</item>
+        <item>KY</item>
+        <item>LA</item>
+        <item>ME</item>
+        <item>MD</item>
+        <item>MA</item>
+        <item>MI</item>
+        <item>MN</item>
+        <item>MS</item>
+        <item>MO</item>
+        <item>MT</item>
+        <item>NE</item>
+        <item>NV</item>
+        <item>NH</item>
+        <item>NJ</item>
+        <item>NM</item>
+        <item>NY</item>
+        <item>NC</item>
+        <item>ND</item>
+        <item>OH</item>
+        <item>OK</item>
+        <item>OR</item>
+        <item>PA</item>
+        <item>RI</item>
+        <item>SC</item>
+        <item>SD</item>
+        <item>TN</item>
+        <item>TX</item>
+        <item>UT</item>
+        <item>VT</item>
+        <item>VA</item>
+        <item>WA</item>
+        <item>WV</item>
+        <item>WI</item>
+        <item>WY</item>
+    </string-array>
 </resources>

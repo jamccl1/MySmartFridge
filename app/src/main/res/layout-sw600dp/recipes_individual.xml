@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/recipesIndvBackButton"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="48dp"
+        android:onClick="toRecipes"
+        android:text="@string/back_button_text"
+        android:textAllCaps="false"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/recipesIndvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/recipe_placeholder"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipeSubtitle" />
+
+    <TextView
+        android:id="@+id/recipeSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/recipes_title"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/recipesIndvScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/recipesIndvBackButton"
+        app:layout_constraintEnd_toEndOf="@+id/recipesIndvBackButton"
+        app:layout_constraintStart_toEndOf="@+id/recipesIndvCenterPoint"
+        app:layout_constraintTop_toBottomOf="@+id/recipesIndvTitle">
+
+        <LinearLayout
+            android:id="@+id/recipesIndvScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"/>
+    </ScrollView>
+
+    <Space
+        android:id="@+id/recipesIndvCenterPoint"
+        android:layout_width="48dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="132dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/recipesIndvCookTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/recipes_cooking_time_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/recipesIndvBackButton"
+        app:layout_constraintTop_toBottomOf="@+id/recipesIndvCenterPoint" />
+
+    <TextView
+        android:id="@+id/recipesIndvCookTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/recipesIndvCenterPoint"
+        app:layout_constraintStart_toEndOf="@+id/recipesIndvCookTimeLabel"
+        app:layout_constraintTop_toTopOf="@+id/recipesIndvCookTimeLabel" />
+
+    <TextView
+        android:id="@+id/recipesIndvServesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/recipes_serves_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recipesIndvExperienceLabel"
+        app:layout_constraintStart_toStartOf="@+id/recipesIndvBackButton"
+        app:layout_constraintTop_toBottomOf="@+id/recipesIndvCookTimeLabel" />
+
+    <TextView
+        android:id="@+id/recipesIndvExperienceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/recipes_experience_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/recipesIndvScrollView"
+        app:layout_constraintStart_toStartOf="@+id/recipesIndvBackButton" />
+
+    <TextView
+        android:id="@+id/recipesIndvServes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/recipesIndvCenterPoint"
+        app:layout_constraintStart_toEndOf="@+id/recipesIndvServesLabel"
+        app:layout_constraintTop_toTopOf="@+id/recipesIndvServesLabel" />
+
+    <TextView
+        android:id="@+id/recipesIndvExperience"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/recipesIndvCenterPoint"
+        app:layout_constraintStart_toEndOf="@+id/recipesIndvExperienceLabel"
+        app:layout_constraintTop_toTopOf="@+id/recipesIndvExperienceLabel" />
+
+    <TextView
+        android:id="@+id/recipesIndvVideoBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:background="#353535"
+        app:layout_constraintBottom_toTopOf="@+id/recipesIndvCenterPoint"
+        app:layout_constraintEnd_toStartOf="@+id/recipesIndvCenterPoint"
+        app:layout_constraintStart_toStartOf="@+id/recipesIndvBackButton"
+        app:layout_constraintTop_toBottomOf="@+id/recipesIndvTitle" />
+
+    <ImageView
+        android:id="@+id/recipesIndvVideoIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
+        android:contentDescription="@string/placeholder"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/recipesIndvVideoBackground"
+        app:layout_constraintEnd_toEndOf="@+id/recipesIndvVideoBackground"
+        app:layout_constraintStart_toStartOf="@+id/recipesIndvVideoBackground"
+        app:layout_constraintTop_toTopOf="@+id/recipesIndvVideoBackground"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <TextView
+        android:id="@+id/recipesIndvVideoText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/recipes_video_placeholder"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/recipesIndvVideoIcon"
+        app:layout_constraintEnd_toEndOf="@+id/recipesIndvVideoBackground"
+        app:layout_constraintStart_toStartOf="@+id/recipesIndvVideoBackground" />
+
+    <ImageView
+        android:id="@+id/recipesIndvCanScrollDown"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/recipesIndvScrollView"
+        app:layout_constraintStart_toEndOf="@+id/recipesIndvScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <ImageView
+        android:id="@+id/recipesIndvCanScrollUp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:alpha="0.25"
+        android:contentDescription="@string/placeholder"
+        android:rotation="180"
+        app:layout_constraintStart_toEndOf="@+id/recipesIndvScrollView"
+        app:layout_constraintTop_toTopOf="@+id/recipesIndvScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+</android.support.constraint.ConstraintLayout>
