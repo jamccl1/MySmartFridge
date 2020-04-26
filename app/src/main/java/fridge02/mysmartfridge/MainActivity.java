@@ -1,5 +1,7 @@
 package fridge02.mysmartfridge;
 
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -15,10 +17,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,13 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<LinearLayout> recipesInList, orderableItemsInList;
     private ArrayList<String> itemsInCart;
-    private String[] paymentInfo;
+    private String[] paymentInfo, currentRecipe;
     private String lastRecipeSearch, lastOnlineOrderSearch;
     private int checkoutFieldsComplete;
     private float cartTotal;
     private boolean isTablet, saveCheckoutInfo, useExpressShipping;
     private HashMap<String, String> itemsInFridge;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
-        // Set temperature on home screen
+        // Do basic home screen things for tablet or phone. Note that the IDE will get upset if
+        // you lock the orientation (which I think we want to do), hence the suppression above
         if (isTablet) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setHomeScreenTemperatureDevice(75);
         } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             setHomeScreenTemperature(75);
         }
 
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         itemsInCart = new ArrayList<>();
         paymentInfo = new String[9];
         itemsInFridge = new HashMap<>();
+        currentRecipe = null;
 
         // Set last searched recipe/online order
         lastRecipeSearch = "";
@@ -178,11 +187,31 @@ public class MainActivity extends AppCompatActivity {
     // Sets up the Recipes screen.
     public void toRecipes(View view) {
         setContentView(R.layout.recipes);
+        currentRecipe = null;
         loadRecipes(lastRecipeSearch); // Load all recipes
+
+        final HorizontalScrollView scrollView = findViewById(R.id.recipesScrollView);
+        final ImageView canScrollUp = findViewById(R.id.recipesCanScrollUp);
+        final ImageView canScrollDown = findViewById(R.id.recipesCanScrollDown);
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                canScrollDown.setAlpha(scrollView.canScrollHorizontally(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollHorizontally(-1) ? 1f : 0.25f);
+            }
+        });
 
         // Configures the search bar to, every time it's text is changed, clear the recipes list and
         // then re-add all recipes whose names contain the search text as a substring.
         SearchView searchbar = findViewById(R.id.recipeSearchBar);
+
+        LinearLayout linearLayout1 = (LinearLayout) searchbar.getChildAt(0);
+        LinearLayout linearLayout2 = (LinearLayout) linearLayout1.getChildAt(2);
+        LinearLayout linearLayout3 = (LinearLayout) linearLayout2.getChildAt(1);
+        AutoCompleteTextView test = (AutoCompleteTextView) linearLayout3.getChildAt(0);
+        test.setTextSize(STP(R.dimen.normal_text_size));
+
         searchbar.setQuery(lastRecipeSearch, false);
         if (!lastRecipeSearch.equals("")) {
             searchbar.setIconified(false);
@@ -227,6 +256,12 @@ public class MainActivity extends AppCompatActivity {
 
         SearchView searchbar = findViewById(R.id.orderSearchBar);
 
+        LinearLayout linearLayout1 = (LinearLayout) searchbar.getChildAt(0);
+        LinearLayout linearLayout2 = (LinearLayout) linearLayout1.getChildAt(2);
+        LinearLayout linearLayout3 = (LinearLayout) linearLayout2.getChildAt(1);
+        AutoCompleteTextView test = (AutoCompleteTextView) linearLayout3.getChildAt(0);
+        test.setTextSize(STP(R.dimen.normal_text_size));
+
         searchbar.setQuery(lastOnlineOrderSearch, false);
         if (!lastOnlineOrderSearch.equals("")) {
             searchbar.setIconified(false);
@@ -251,6 +286,18 @@ public class MainActivity extends AppCompatActivity {
                 populateOrderableItems(s);
 
                 return false;
+            }
+        });
+
+        Button backButton = findViewById(R.id.orderBackButton);
+        backButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentRecipe != null) {
+                    createRecipeScreen(currentRecipe);
+                } else {
+                    toHome(view);
+                }
             }
         });
     }
@@ -282,9 +329,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         final EditText[] fieldArray = {firstName, middleInitial, lastName, address, city, zipCode, creditCardNumber, svcNumber};
-        final TextView[] labelArray = {findViewById(R.id.chktFirstNameLabel), findViewById(R.id.chktMiddleInitialLabel), findViewById(R.id.chktLastNameLabel),
-                findViewById(R.id.chktAddressLabel), findViewById(R.id.chktCityLabel), findViewById(R.id.chktZipCodeLabel), findViewById(R.id.chktCreditCardLabel),
-                findViewById(R.id.chktSvcLabel)};
 
         final Button payButton = findViewById(R.id.chktPayButton);
         payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal * (useExpressShipping ? 1.05f : 1))));
@@ -448,7 +492,12 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         cartTotal = 0;
                         itemsInCart.clear();
-                        toHome(holdView);
+
+                        if (currentRecipe != null) {
+                            createRecipeScreen(currentRecipe);
+                        } else {
+                            toHome(holdView);
+                        }
                     }
                 }, 2500);
             }
@@ -503,117 +552,116 @@ public class MainActivity extends AppCompatActivity {
     private void addRecipe(String[] recipeInfo) {
         LinearLayout recipeScrollLayout = findViewById(R.id.recipesScrollLayout);
 
-        ImageView image = new ImageView(this);
-        int imageId = getResources().getIdentifier(recipeInfo[3], "drawable", getPackageName());
-        image.setImageDrawable(getResources().getDrawable(imageId));
-        image.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_image_width), DTP(R.dimen.recipes_image_height)));
+        LinearLayout recipe = new LinearLayout(this);
+        recipe.setOrientation(LinearLayout.VERTICAL);
+        recipe.setGravity(Gravity.CENTER_HORIZONTAL);
+        recipe.setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
+        recipe.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_item_width), LinearLayout.LayoutParams.MATCH_PARENT));
+        recipe.setClickable(true);
+        recipe.setTag(recipeInfo);
 
-        TextView recipeName = new TextView(this);
-        recipeName.setText(recipeInfo[0]);
-        recipeName.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
-        recipeName.setGravity(Gravity.CENTER);
-        recipeName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-
-        Button button = new Button(this);
-        button.setText(R.string.recipe_select);
-        button.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_select_button_width), DTP(R.dimen.recipes_select_button_height)));
-        button.setAllCaps(true);
-        button.setGravity(Gravity.CENTER);
-        button.setTextSize(STP(R.dimen.recipes_select_button_text_size));
-        button.setTag(recipeInfo);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        recipe.setOnClickListener(new LinearLayout.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (view instanceof Button) {
-                    String[] recipeInfo = (String[]) view.getTag();
-                    int imageId = getResources().getIdentifier(recipeInfo[3], "drawable", getPackageName());
-                    createRecipeScreen(view, imageId, recipeInfo[0], recipeInfo[1], recipeInfo[2], recipeInfo[4]);
-                }
+                String[] recipeInfo = (String[]) view.getTag();
+                currentRecipe = recipeInfo;
+                createRecipeScreen(recipeInfo);
             }
         });
 
-        LinearLayout recipe = new LinearLayout(this);
-        recipe.setOrientation(LinearLayout.HORIZONTAL);
-        recipe.setGravity(Gravity.CENTER_VERTICAL);
+        ImageView image = new ImageView(this);
+        int imageId = getResources().getIdentifier(recipeInfo[6], "drawable", getPackageName());
+        image.setImageDrawable(getResources().getDrawable(imageId));
+        image.setBackgroundColor(Color.parseColor("#ECECEC"));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 3.3f);
+        int margin = DTP(R.dimen.recipes_image_margin);
+        params.setMargins(margin, margin, margin, margin);
+        image.setLayoutParams(params);
+
+        TextView recipeName = new TextView(this);
+        recipeName.setText(recipeInfo[0]);
+        recipeName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.6f));
+        recipeName.setGravity(Gravity.CENTER);
+        recipeName.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
+        recipeName.setTextSize(STP(R.dimen.normal_text_size));
+
+        TextView haveIngredients = new TextView(this);
+        haveIngredients.setText(R.string.recipes_have_ingredients);
+        haveIngredients.setGravity(Gravity.CENTER);
+        haveIngredients.setTextSize(STP(R.dimen.small_text_size));
+        haveIngredients.setTextColor(getResources().getColor(R.color.green));
+        haveIngredients.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.3f));
+
         recipe.addView(image);
         recipe.addView(recipeName);
-        recipe.addView(button);
+        recipe.addView(haveIngredients);
 
         recipeScrollLayout.addView(recipe);
         recipesInList.add(recipe);
+
+        final HorizontalScrollView scrollView = findViewById(R.id.recipesScrollView);
+        final ImageView canScrollUp = findViewById(R.id.recipesCanScrollUp);
+        final ImageView canScrollDown = findViewById(R.id.recipesCanScrollDown);
+
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                canScrollDown.setAlpha(scrollView.canScrollHorizontally(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollHorizontally(-1) ? 1f : 0.25f);
+            }
+        });
     }
 
-    private void createRecipeScreen(View view, int imageDrawableId, String recipeName, String ingredientsList, String cookTime, String instructions) {
+    // cooktime is 2
+    private void createRecipeScreen(String[] recipeInfo) {
         setContentView(R.layout.recipes_individual);
-        LinearLayout recipeScrollLayout = findViewById(R.id.recipesScrollLayout2);
+        LinearLayout recipeScrollLayout = findViewById(R.id.recipesIndvScrollLayout);
 
-        TextView recipeTitle = findViewById(R.id.recipesTitle2);
-        recipeTitle.setText(recipeName);
+        TextView recipeTitle = findViewById(R.id.recipesIndvTitle);
+        recipeTitle.setText(recipeInfo[0]);
 
-        ImageView image = new ImageView(this);
-        image.setImageDrawable(getResources().getDrawable(imageDrawableId));
-        image.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_indv_image_width), DTP(R.dimen.recipes_indv_image_width)));
-        int padding = DTP(R.dimen.recipes_indv_image_padding);
-        image.setPadding(padding, padding, padding, padding);
-        image.setBackgroundColor(Color.rgb(214, 215, 215)); // The button color! (It's grey.)
+        TextView cookingTimeText = findViewById(R.id.recipesIndvCookTime);
+        cookingTimeText.setText(recipeInfo[2]);
 
-        Space space1 = new Space(this);
-        space1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.small_vertical_space)));
+        TextView servesText = findViewById(R.id.recipesIndvServes);
+        servesText.setText(recipeInfo[3]);
 
-        TextView cookingTimeHeader = new TextView(this);
-        cookingTimeHeader.setText(Html.fromHtml(getString(R.string.recipes_cooking_time_header)));
-        cookingTimeHeader.setTextSize(STP(R.dimen.normal_text_size));
-        cookingTimeHeader.setTypeface(cookingTimeHeader.getTypeface(), Typeface.BOLD);
-        cookingTimeHeader.setGravity(Gravity.CENTER_HORIZONTAL);
-        cookingTimeHeader.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        TextView cookingTimeValue = new TextView(this);
-        cookingTimeValue.setText(cookTime);
-        cookingTimeValue.setTextSize(STP(R.dimen.normal_text_size));
-        cookingTimeValue.setGravity(Gravity.CENTER_HORIZONTAL);
-        cookingTimeHeader.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        Space space2 = new Space(this);
-        space2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.small_vertical_space)));
-
-        recipeScrollLayout.addView(image);
-        recipeScrollLayout.addView(space1);
-        recipeScrollLayout.addView(cookingTimeHeader);
-        recipeScrollLayout.addView(cookingTimeValue);
-        recipeScrollLayout.addView(space2);
+        TextView experienceText = findViewById(R.id.recipesIndvExperience);
+        experienceText.setText(recipeInfo[4]);
 
         TextView ingredientsTitle = new TextView(this);
         ingredientsTitle.setText(R.string.recipes_ingredients_header);
         ingredientsTitle.setTextSize(STP(R.dimen.normal_text_size));
         ingredientsTitle.setTypeface(ingredientsTitle.getTypeface(), Typeface.BOLD);
         ingredientsTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-        ingredientsTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        ingredientsTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         recipeScrollLayout.addView(ingredientsTitle);
 
-        String[] ingredientsArray = ingredientsList.split(",");
+        String[] ingredientsArray = recipeInfo[1].split(",");
         for (String i : ingredientsArray) {
             LinearLayout ingredientLayout = new LinearLayout(this);
             ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
             ingredientLayout.setGravity(Gravity.CENTER);
+            ingredientLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.recipes_indv_item_height)));
 
             TextView bullet = new TextView(this);
             bullet.setText("• ");
             bullet.setTextSize(STP(R.dimen.normal_text_size));
             bullet.setGravity(Gravity.CENTER);
-            bullet.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            bullet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
 
             TextView ingredientName = new TextView(this);
             ingredientName.setText(i);
             ingredientName.setTextSize(STP(R.dimen.normal_text_size));
             ingredientName.setGravity(Gravity.START); // Left
-            ingredientName.setLayoutParams(new LinearLayout.LayoutParams(Math.round( 0.6f * DTP(R.dimen.recipes_indv_scroll_width)), LinearLayout.LayoutParams.WRAP_CONTENT));
+            ingredientName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 10));
 
             Button ingredientButton = new Button(this);
             ingredientButton.setText(R.string.recipes_order_button);
-            ingredientButton.setTextSize(STP(R.dimen.recipes_order_button_text_size));
-            ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(Math.round( 0.2f * DTP(R.dimen.recipes_indv_scroll_width)), DTP(R.dimen.recipes_order_button_height)));
+            ingredientButton.setTextSize(STP(R.dimen.small_text_size));
+            ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
             String tag = i.split(" [(]")[0]; // Name of the ingredient, in a string
             ingredientButton.setTag(tag);
 
@@ -630,6 +678,30 @@ public class MainActivity extends AppCompatActivity {
             ingredientLayout.addView(ingredientButton);
 
             recipeScrollLayout.addView(ingredientLayout);
+
+            LinearLayout alertLayout = new LinearLayout(this);
+            alertLayout.setOrientation(LinearLayout.HORIZONTAL);
+            alertLayout.setGravity(Gravity.CENTER);
+            alertLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            ImageView alertIcon = new ImageView(this);
+            alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_online));
+            alertIcon.setScaleType(ImageView.ScaleType.FIT_END);
+            alertIcon.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.5f));
+
+            Space alertSpace = new Space(this);
+            alertSpace.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
+
+            TextView alertText = new TextView(this);
+            alertText.setText(R.string.recipes_have_ingredients_line);
+            alertText.setTextColor(getResources().getColor(R.color.green));
+            alertText.setTextSize(STP(R.dimen.small_text_size));
+            alertText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 10));
+
+            alertLayout.addView(alertIcon);
+            alertLayout.addView(alertSpace);
+            alertLayout.addView(alertText);
+            recipeScrollLayout.addView(alertLayout);
         }
 
         Space space3 = new Space(this);
@@ -640,17 +712,37 @@ public class MainActivity extends AppCompatActivity {
         instructionsTitle.setTextSize(STP(R.dimen.normal_text_size));
         instructionsTitle.setTypeface(ingredientsTitle.getTypeface(), Typeface.BOLD);
         instructionsTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-        instructionsTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        instructionsTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         TextView instructionsText = new TextView(this);
-        instructionsText.setText(instructions.replace("\n", "\n\n"));
+        instructionsText.setText(recipeInfo[5].replace("\n", "\n\n"));
         instructionsText.setTextSize(STP(R.dimen.normal_text_size));
         instructionsText.setGravity(Gravity.CENTER_HORIZONTAL);
-        instructionsText.setLayoutParams(new LinearLayout.LayoutParams(Math.round( 0.8f * DTP(R.dimen.recipes_indv_scroll_width)), LinearLayout.LayoutParams.WRAP_CONTENT));
+        instructionsText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         recipeScrollLayout.addView(space3);
         recipeScrollLayout.addView(instructionsTitle);
         recipeScrollLayout.addView(instructionsText);
+
+        final ScrollView scrollView = findViewById(R.id.recipesIndvScrollView);
+        final ImageView canScrollUp = findViewById(R.id.recipesIndvCanScrollUp);
+        final ImageView canScrollDown = findViewById(R.id.recipesIndvCanScrollDown);
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+            }
+        });
+
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
+                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+            }
+        });
     }
 
     // Converts from dp to pixels.
@@ -744,6 +836,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (foodInfo[0].toLowerCase().contains(searchString.toLowerCase())) {
                 LinearLayout orderableItem = new LinearLayout(this);
+                orderableItem.setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
                 orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
                 orderableItem.setOrientation(LinearLayout.HORIZONTAL);
                 orderableItem.setGravity(Gravity.CENTER_VERTICAL);
@@ -809,6 +902,10 @@ public class MainActivity extends AppCompatActivity {
 
                 orderableItem.addView(itemPrice);
                 orderableItem.addView(itemAdd);
+
+                Space test = new Space(this);
+                test.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.1f));
+                orderableItem.addView(test);
 
                 scrollLayout.addView(orderableItem);
                 orderableItemsInList.add(orderableItem);

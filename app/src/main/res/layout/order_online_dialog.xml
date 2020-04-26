@@ -5,7 +5,7 @@
     android:id="@+id/orderDialogLayout"
     android:layout_width="@dimen/add_dialog_width"
     android:layout_height="@dimen/add_dialog_height"
-    android:background="#EFEFEF"
+    android:background="@android:drawable/dialog_holo_light_frame"
     android:focusable="auto">
 
     <TextView

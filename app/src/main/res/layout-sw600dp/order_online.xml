@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
         android:layout_marginBottom="68dp"
-        android:gravity="bottom|clip_horizontal"
+        android:gravity="center_horizontal"
         android:text="@string/partner_text"
         android:textAlignment="center"
         android:textSize="@dimen/normal_text_size"
@@ -83,7 +83,6 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/menu_button_height"
             android:layout_weight="1"
-            android:onClick="toHome"
             android:text="@string/back_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
@@ -123,7 +122,7 @@
         android:layout_height="32dp"
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/orderScrollView"
-        app:layout_constraintEnd_toStartOf="@+id/orderScrollView"
+        app:layout_constraintStart_toEndOf="@+id/orderScrollView"
         app:srcCompat="@android:drawable/ic_menu_more" />
 
     <ImageView
@@ -132,7 +131,7 @@
         android:layout_height="32dp"
         android:contentDescription="@string/placeholder"
         android:rotation="180"
-        app:layout_constraintEnd_toStartOf="@+id/orderScrollView"
+        app:layout_constraintStart_toEndOf="@+id/orderScrollView"
         app:layout_constraintTop_toTopOf="@+id/orderScrollView"
         app:srcCompat="@android:drawable/ic_menu_more" />
 

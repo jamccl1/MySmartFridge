@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/recipesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:gravity="center_horizontal"
+        android:text="@string/recipes_title"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SearchView
+        android:id="@+id/recipeSearchBar"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/searchbar_height"
+        android:layout_marginTop="16dp"
+        android:background="#ECECEC"
+        android:saveEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipesTitle">
+
+    </SearchView>
+
+    <HorizontalScrollView
+        android:id="@+id/recipesScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        app:layout_constraintBottom_toTopOf="@+id/backButton"
+        app:layout_constraintEnd_toEndOf="@+id/backButton"
+        app:layout_constraintStart_toStartOf="@+id/backButton"
+        app:layout_constraintTop_toBottomOf="@+id/recipeSearchBar">
+
+        <LinearLayout
+            android:id="@+id/recipesScrollLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginBottom="48dp"
+        android:onClick="toHome"
+        android:text="@string/back_button_text"
+        android:textAllCaps="false"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/recipesCanScrollUp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/placeholder"
+        android:rotation="90"
+        app:layout_constraintBottom_toBottomOf="@+id/recipesScrollView"
+        app:layout_constraintEnd_toStartOf="@+id/recipesScrollView"
+        app:layout_constraintTop_toTopOf="@+id/recipesScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+    <ImageView
+        android:id="@+id/recipesCanScrollDown"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/placeholder"
+        android:rotation="-90"
+        app:layout_constraintBottom_toBottomOf="@+id/recipesScrollView"
+        app:layout_constraintStart_toEndOf="@+id/recipesScrollView"
+        app:layout_constraintTop_toTopOf="@+id/recipesScrollView"
+        app:srcCompat="@android:drawable/ic_menu_more" />
+
+</android.support.constraint.ConstraintLayout>
