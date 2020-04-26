@@ -870,7 +870,7 @@ public class MainActivity extends AppCompatActivity {
             decrementButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Integer curr = Integer.parseInt(quant.getText().subSequence(2,quant.length()-1).toString());
-                    if(!curr.equals(0)) {
+                    if(!curr.equals(1)) {
                         curr--;
                     }
                     quant.setText(" (" + curr.toString() + ")");
