@@ -21,21 +21,72 @@
         android:id="@+id/shoppingBackButton"
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="@dimen/menu_button_height"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:onClick="toHome"
         android:text="@string/back_button_text"
+        android:textAllCaps="false"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/shoppingPlaceholderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/placeholder"
-        app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
+    <ScrollView
+        android:id="@+id/groceryListScrollView"
+        android:layout_width="331dp"
+        android:layout_height="327dp"
+        android:layout_marginTop="26dp"
+        app:layout_constraintBottom_toTopOf="@+id/new_item_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shoppingTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/shoppingTitle"
+        app:layout_constraintVertical_bias="0.02">
+
+        <LinearLayout
+            android:id="@+id/groceryListScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/groceryListAddButton"
+        android:layout_width="98dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="24dp"
+        android:onClick="addToGroceryList"
+        app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/new_item_input"
+        app:srcCompat="@drawable/add_button_small" />
+
+    <EditText
+        android:id="@+id/new_item_input"
+        android:layout_width="244dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="21dp"
+        android:hint="@string/shopping_add_hint"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/new_item_quantity"
+        app:layout_constraintEnd_toStartOf="@+id/groceryListAddButton"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/new_item_quantity"
+        android:layout_width="130dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="21dp"
+        android:hint="@string/shopping_add_quantity"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
+        app:layout_constraintEnd_toStartOf="@+id/groceryListAddButton"
+        app:layout_constraintHorizontal_bias="0.581"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

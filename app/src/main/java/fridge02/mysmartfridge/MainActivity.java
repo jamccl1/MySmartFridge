@@ -14,6 +14,8 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
+
+import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
@@ -24,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -43,7 +46,8 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<LinearLayout> recipesInList, orderableItemsInList;
+
+    private ArrayList<LinearLayout> recipesInList, orderableItemsInList,  groceriesInList;
     private ArrayList<String> itemsInCart;
     private String[] paymentInfo, currentRecipe;
     private String lastRecipeSearch, lastOnlineOrderSearch;
@@ -80,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Set last searched recipe/online order
         lastRecipeSearch = "";
+
+
+        //Set groceries shopping list to be empty list
+        groceriesInList = new ArrayList<>();
+
+
         lastOnlineOrderSearch = "";
 
         // Set booleans
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         // Set numbers
         cartTotal = 0;
         checkoutFieldsComplete = 0;
+
     }
 
 
@@ -181,7 +192,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toShopping(View view) {
+        //hi
         setContentView(R.layout.shopping);
+        loadGroceryList(view);
+
     }
 
     // Sets up the Recipes screen.
@@ -777,6 +791,149 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Grocery List Methods
+
+    public void addToGroceryList(View view){
+
+        //Check for empty string
+
+        final LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+
+        int id = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
+
+
+        EditText userItem = findViewById(R.id.new_item_input);
+        EditText userItemQuantity = findViewById(R.id.new_item_quantity);
+        String userItemString =  userItem.getText().toString();
+        String userItemQuantityString =  userItemQuantity.getText().toString();
+
+        userItem.getText().clear();
+        userItemQuantity.getText().clear();
+
+        if (userItemQuantityString.equals("")){
+            userItemQuantityString = "1";
+        }
+
+        if (!userItemString.equals("")) {
+
+
+            LinearLayout col = new LinearLayout(getApplicationContext());
+            col.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            col.setOrientation(LinearLayout.HORIZONTAL);
+            col.setGravity(Gravity.LEFT);
+
+
+            linearLay.addView(col);
+
+            LinearLayout.LayoutParams layoutParamsQuantity = new  LinearLayout.LayoutParams(100, 100);
+            layoutParamsQuantity.setMargins(10, 0, 0, 0);
+
+
+            final TextView quant = new TextView(getApplicationContext());
+            quant.setTextSize(STP(R.dimen.normal_text_size));
+            quant.setTextColor(Color.BLACK);
+            quant.setText(" (" + userItemQuantityString + ")");
+            quant.setLayoutParams(layoutParamsQuantity);
+
+
+            CheckBox newCheckBox = new CheckBox(getApplicationContext());
+            newCheckBox.setText(userItemString);
+            newCheckBox.setTextColor(Color.BLACK);
+            newCheckBox.setButtonDrawable(id);
+            newCheckBox.setTextSize(STP(R.dimen.normal_text_size));
+
+
+            Button incrementButton = new Button(this);
+            incrementButton.setText("+1");
+            incrementButton.setGravity(Gravity.CENTER);
+            incrementButton.setBackgroundColor(0xFF008000);
+
+
+            incrementButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Integer curr = Integer.parseInt(quant.getText().subSequence(2,quant.length()-1).toString());
+                    curr++;
+                    quant.setText(" (" + curr.toString() + ")");
+
+                }
+            });
+
+
+
+            Button decrementButton = new Button(this);
+            decrementButton.setText("-1");
+            decrementButton.setGravity(Gravity.CENTER);
+            decrementButton.setBackgroundColor(0xFFFF4040);
+
+
+
+            decrementButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Integer curr = Integer.parseInt(quant.getText().subSequence(2,quant.length()-1).toString());
+                    if(!curr.equals(0)) {
+                        curr--;
+                    }
+                    quant.setText(" (" + curr.toString() + ")");
+
+                }
+            });
+
+            LinearLayout.LayoutParams layoutParamsButton = new  LinearLayout.LayoutParams(150, 100);
+            layoutParamsButton.setMargins(10, 10, 0, 0);
+
+            incrementButton.setLayoutParams(layoutParamsButton);
+            decrementButton.setLayoutParams(layoutParamsButton);
+
+            LinearLayout.LayoutParams tex = new  LinearLayout.LayoutParams(0, 0);
+            tex.weight =1;
+
+            final TextView t = new TextView(getApplicationContext());
+            t.setLayoutParams(tex);
+
+
+            col.addView(newCheckBox);
+            col.addView(quant);
+            col.addView(t);
+            col.addView(incrementButton);
+            col.addView(decrementButton);
+
+            groceriesInList.add(col);
+        }
+
+    }
+
+
+    public void loadGroceryList(View view){
+
+        ArrayList <LinearLayout> viewsToDelete = new ArrayList<>();
+
+        for (LinearLayout x: groceriesInList){
+
+            CheckBox checkBox = (CheckBox) x.getChildAt(0);
+            TextView quantity = (TextView) x.getChildAt(1);
+            Integer curr = Integer.parseInt(quantity.getText().subSequence(2,quantity.length()-1).toString());
+
+            if(checkBox.isChecked() || curr.equals(0)){
+                viewsToDelete.add(x);
+            }
+        }
+
+        for (View x: viewsToDelete){
+            groceriesInList.remove(x);
+
+        }
+
+        LinearLayout linearLay = (LinearLayout) findViewById(R.id.groceryListScrollLayout);
+
+        for (View x: groceriesInList){
+            ((ViewGroup)x.getParent()).removeView(x);
+            linearLay.addView(x);
+        }
+
+    }
+
+
+
 
 // Look Inside METHODS //
 
@@ -1206,6 +1363,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-
-
