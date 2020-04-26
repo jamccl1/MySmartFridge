@@ -156,22 +156,18 @@ public class MainActivity extends AppCompatActivity {
     public void addNewItem(View view) {
         EditText nameText = findViewById(R.id.itemNameText);
         EditText countText = findViewById(R.id.itemCountText);
-        EditText dayText = findViewById(R.id.itemDayText);
-        EditText monthText = findViewById(R.id.itemMonthText);
-        EditText yearText = findViewById(R.id.itemYearText);
+        EditText dayText = findViewById(R.id.itemExpText);
 
         String name = nameText.getText().toString();
         int count = Integer.parseInt(countText.getText().toString());
-        int day = Integer.parseInt(dayText.getText().toString());
-        int month = Integer.parseInt(monthText.getText().toString());
-        int year = Integer.parseInt(yearText.getText().toString());
+        String day = dayText.getText().toString();
 
-        //TODO: CHECK TO SEE THAT ALL EDITTEXTS ARE FILLED IN WITH THE CORRECT INFORMATION; MAYBE ADD TO THE HINT WHAT IT SHOULD LOOK LIKE, MAYBE CHANGE THE WAY YOU ENTER DATE
-
-        String key = name + " (" + count + ")";
-        String value = month + "/" + day + "/" + year;
-        itemsInFridge.put(key, value);
-        toWhatsInFridge(view);
+        if ((!name.equals("")) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$"))) {
+            String key = name + " (" + count + ")";
+            String value = day;
+            itemsInFridge.put(key, value);
+            toWhatsInFridge(view);
+        }
 
     }
 
