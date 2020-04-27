@@ -39,8 +39,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 import java.util.HashMap;
 
@@ -333,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         final Spinner state = findViewById(R.id.chktStateSpinner);
         final EditText zipCode = findViewById(R.id.chktZipCodeField);
         final EditText creditCardNumber = findViewById(R.id.chktCreditCardField);
-        final EditText svcNumber = findViewById(R.id.chktSvcField);
+        final EditText cvcNumber = findViewById(R.id.chktCvcField);
 
         if (isTablet) {
             // Make spinner text size normal
@@ -342,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
             state.setAdapter(adapter);
         }
 
-        final EditText[] fieldArray = {firstName, middleInitial, lastName, address, city, zipCode, creditCardNumber, svcNumber};
+        final EditText[] fieldArray = {firstName, middleInitial, lastName, address, city, zipCode, creditCardNumber, cvcNumber};
 
         final Button payButton = findViewById(R.id.chktPayButton);
         payButton.setText(getString(R.string.chkt_pay_button_text, getPriceString(cartTotal * (useExpressShipping ? 1.05f : 1))));
@@ -368,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
             zipCode.setText(paymentInfo[6]);
             creditCardNumber.setText(paymentInfo[7]);
-            svcNumber.setText(paymentInfo[8]);
+            cvcNumber.setText(paymentInfo[8]);
         }
 
         saveInfo.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
@@ -383,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                     paymentInfo[5] = state.getSelectedItem().toString();
                     paymentInfo[6] = zipCode.getText().toString();
                     paymentInfo[7] = creditCardNumber.getText().toString();
-                    paymentInfo[8] = svcNumber.getText().toString();
+                    paymentInfo[8] = cvcNumber.getText().toString();
 
                     saveCheckoutInfo = true;
 
@@ -429,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
                     paymentInfo[5] = state.getSelectedItem().toString();
                     paymentInfo[6] = zipCode.getText().toString();
                     paymentInfo[7] = creditCardNumber.getText().toString();
-                    paymentInfo[8] = svcNumber.getText().toString();
+                    paymentInfo[8] = cvcNumber.getText().toString();
                 } else {
                     checkoutFieldsComplete = 0;
                 }
@@ -437,6 +441,8 @@ public class MainActivity extends AppCompatActivity {
                 toCart(view);
             }
         });
+
+        final TextView warningText = isTablet ? (TextView) findViewById(R.id.chktWarningText) : new TextView(this);
 
         TextWatcher textChangedListener = new TextWatcher() {
             private String prevText;
@@ -454,10 +460,18 @@ public class MainActivity extends AppCompatActivity {
 
                     if (checkoutFieldsComplete >= 8) {
                         payButton.setEnabled(true);
+
+                        if (isTablet) {
+                            warningText.setVisibility(View.INVISIBLE);
+                        }
                     }
                 } else if (!prevText.equals("") && currStr.equals("")) {
                     checkoutFieldsComplete--;
                     payButton.setEnabled(false);
+
+                    if (isTablet) {
+                        warningText.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -484,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
                     paymentInfo[5] = state.getSelectedItem().toString();
                     paymentInfo[6] = zipCode.getText().toString();
                     paymentInfo[7] = creditCardNumber.getText().toString();
-                    paymentInfo[8] = svcNumber.getText().toString();
+                    paymentInfo[8] = cvcNumber.getText().toString();
                 } else {
                     checkoutFieldsComplete = 0;
                 }
@@ -584,7 +598,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ImageView image = new ImageView(this);
-        int imageId = getResources().getIdentifier(recipeInfo[6], "drawable", getPackageName());
+        int imageId = getResources().getIdentifier(recipeInfo[7], "drawable", getPackageName());
         image.setImageDrawable(getResources().getDrawable(imageId));
         image.setBackgroundColor(Color.parseColor("#ECECEC"));
 
@@ -636,13 +650,13 @@ public class MainActivity extends AppCompatActivity {
         recipeTitle.setText(recipeInfo[0]);
 
         TextView cookingTimeText = findViewById(R.id.recipesIndvCookTime);
-        cookingTimeText.setText(recipeInfo[2]);
+        cookingTimeText.setText(recipeInfo[3]);
 
         TextView servesText = findViewById(R.id.recipesIndvServes);
-        servesText.setText(recipeInfo[3]);
+        servesText.setText(recipeInfo[4]);
 
         TextView experienceText = findViewById(R.id.recipesIndvExperience);
-        experienceText.setText(recipeInfo[4]);
+        experienceText.setText(recipeInfo[5]);
 
         TextView ingredientsTitle = new TextView(this);
         ingredientsTitle.setText(R.string.recipes_ingredients_header);
@@ -653,8 +667,16 @@ public class MainActivity extends AppCompatActivity {
 
         recipeScrollLayout.addView(ingredientsTitle);
 
+        int index = -1; // Probably should incorporate this into the for loop properly, but this is easier
         String[] ingredientsArray = recipeInfo[1].split(",");
+        String[] ingredientsAmounts = recipeInfo[2].split(",");
         for (String i : ingredientsArray) {
+            index++;
+            boolean[] fridgeInfo = fridgeHasFood(i.substring(0, i.indexOf("(")), ingredientsAmounts[index]);
+            boolean inFridge = fridgeInfo[0];
+            boolean isExpired = fridgeInfo[1];
+            boolean isEnough = fridgeInfo[2];
+
             LinearLayout ingredientLayout = new LinearLayout(this);
             ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
             ingredientLayout.setGravity(Gravity.CENTER);
@@ -672,50 +694,81 @@ public class MainActivity extends AppCompatActivity {
             ingredientName.setGravity(Gravity.START); // Left
             ingredientName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 10));
 
-            Button ingredientButton = new Button(this);
-            ingredientButton.setText(R.string.recipes_order_button);
-            ingredientButton.setTextSize(STP(R.dimen.small_text_size));
-            ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
-            String tag = i.split(" [(]")[0]; // Name of the ingredient, in a string
-            ingredientButton.setTag(tag);
-
-            ingredientButton.setOnClickListener(new Button.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    lastOnlineOrderSearch = ((String) view.getTag()).toLowerCase();
-                    toOrderOnline(view);
-                }
-            });
-
             ingredientLayout.addView(bullet);
             ingredientLayout.addView(ingredientName);
-            ingredientLayout.addView(ingredientButton);
+
+            if (!inFridge || isExpired || !isEnough) {
+                Button ingredientButton = new Button(this);
+                ingredientButton.setText(R.string.recipes_order_button);
+                ingredientButton.setTextSize(STP(R.dimen.small_text_size));
+                ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
+                String tag = i.split(" [(]")[0]; // Name of the ingredient, in a string
+                ingredientButton.setTag(tag);
+
+                ingredientButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        lastOnlineOrderSearch = ((String) view.getTag()).toLowerCase();
+                        toOrderOnline(view);
+                    }
+                });
+
+                ingredientLayout.addView(ingredientButton);
+            } else {
+                Space buttonSpace = new Space(this);
+                buttonSpace.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
+
+                ImageView checkmark = new ImageView(this);
+                checkmark.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+                checkmark.setScaleType(ImageView.ScaleType.CENTER);
+                checkmark.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 4));
+
+                ingredientLayout.addView(checkmark);
+            }
 
             recipeScrollLayout.addView(ingredientLayout);
 
-            LinearLayout alertLayout = new LinearLayout(this);
-            alertLayout.setOrientation(LinearLayout.HORIZONTAL);
-            alertLayout.setGravity(Gravity.CENTER);
-            alertLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            if (!inFridge || isExpired || !isEnough) {
+                LinearLayout alertLayout = new LinearLayout(this);
+                alertLayout.setOrientation(LinearLayout.HORIZONTAL);
+                alertLayout.setGravity(Gravity.CENTER);
+                alertLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            ImageView alertIcon = new ImageView(this);
-            alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_online));
-            alertIcon.setScaleType(ImageView.ScaleType.FIT_END);
-            alertIcon.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.5f));
+                ImageView alertIcon = new ImageView(this);
+                if (isExpired) {
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
+                } else if (!isEnough) {
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_offline));
+                } else {
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+                }
+                alertIcon.setScaleType(ImageView.ScaleType.FIT_END);
+                alertIcon.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.5f));
 
-            Space alertSpace = new Space(this);
-            alertSpace.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
+                Space alertSpace = new Space(this);
+                alertSpace.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
 
-            TextView alertText = new TextView(this);
-            alertText.setText(R.string.recipes_have_ingredients_line);
-            alertText.setTextColor(getResources().getColor(R.color.green));
-            alertText.setTextSize(STP(R.dimen.small_text_size));
-            alertText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 10));
+                TextView alertText = new TextView(this);
 
-            alertLayout.addView(alertIcon);
-            alertLayout.addView(alertSpace);
-            alertLayout.addView(alertText);
-            recipeScrollLayout.addView(alertLayout);
+                if (isExpired) {
+                    alertText.setText(R.string.recipes_expired_ingredients_line);
+                    alertText.setTextColor(getResources().getColor(R.color.orange));
+                } else if (!isEnough) {
+                    alertText.setText(R.string.recipes_not_enough_line);
+                    alertText.setTextColor(Color.GRAY);
+                } else {
+                    alertText.setText(R.string.recipes_no_ingredients_line);
+                    alertText.setTextColor(getResources().getColor(R.color.red));
+                }
+
+                alertText.setTextSize(STP(R.dimen.small_text_size));
+                alertText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 10));
+
+                alertLayout.addView(alertIcon);
+                alertLayout.addView(alertSpace);
+                alertLayout.addView(alertText);
+                recipeScrollLayout.addView(alertLayout);
+            }
         }
 
         Space space3 = new Space(this);
@@ -729,7 +782,7 @@ public class MainActivity extends AppCompatActivity {
         instructionsTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         TextView instructionsText = new TextView(this);
-        instructionsText.setText(recipeInfo[5].replace("\n", "\n\n"));
+        instructionsText.setText(recipeInfo[6].replace("\n", "\n\n"));
         instructionsText.setTextSize(STP(R.dimen.normal_text_size));
         instructionsText.setGravity(Gravity.CENTER_HORIZONTAL);
         instructionsText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -758,6 +811,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private boolean[] fridgeHasFood(String name, String number) {
+        boolean hasFood = false;
+        boolean isExpired = false;
+        boolean hasEnough = false;
+
+        for (String key : itemsInFridge.keySet()) {
+            boolean thisIsFood = key.toLowerCase().contains(name.toLowerCase());
+            boolean thisIsExpired = false;
+            boolean thisIsEnough;
+
+            hasFood = hasFood || thisIsFood;
+
+            if (thisIsFood) {
+                String expDateStr = itemsInFridge.get(key);
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+                try {
+                    Date expDate = formatter.parse(expDateStr);
+                    String currentDateStr = formatter.format(new Date());
+                    Date currentDate = formatter.parse(currentDateStr);
+                    if (currentDate.after(expDate)) {
+                        thisIsExpired = true;
+                    }
+                } catch (ParseException e) {
+                    System.out.println("Could not parse date");
+                }
+
+                if (number != null) {
+                    String num = key.substring(key.lastIndexOf("(") + 1, key.length() - 1);
+                    int numInFridge = Integer.parseInt(num);
+                    int numNeeded = Integer.parseInt(number);
+
+                    thisIsEnough = (numInFridge >= numNeeded) && (!thisIsExpired);
+                } else {
+                    thisIsEnough = !thisIsExpired;
+                }
+
+                if (thisIsEnough) {
+                    isExpired = false;
+                    hasEnough = true;
+                } else if (!hasEnough) {
+                    isExpired = isExpired || thisIsExpired;
+                }
+
+            }
+        }
+
+        return new boolean[] {hasFood, isExpired, hasEnough};
+    };
 
     // Converts from dp to pixels.
     private int DTP(int dimensionId) {
@@ -1018,15 +1120,36 @@ public class MainActivity extends AppCompatActivity {
                     float[] fridgeIconWeights = {1f, 1.1f, 0.7f};
                     float [] fridgeTextWeights = {2.2f, 2.1f, 2.5f};
 
+                    // Info about the food item
+                    boolean[] fridgeInfo = fridgeHasFood(foodInfo[0], null);
+                    boolean inFridge = fridgeInfo[0];
+                    boolean isExpired = fridgeInfo[1];
+
                     ImageView inFridgeIcon = new ImageView(this);
                     inFridgeIcon.setScaleType(ImageView.ScaleType.FIT_END);
-                    inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_online));
-                    inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[0]));
 
                     TextView inFridgeText = new TextView(this);
-                    inFridgeText.setText(getString(R.string.order_in_fridge_text, " "));
                     inFridgeText.setTextSize(STP(R.dimen.normal_text_size));
-                    inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[0]));
+
+                    if (inFridge && !isExpired) {
+                        inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_online));
+                        inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[0]));
+
+                        inFridgeText.setText(getString(R.string.order_in_fridge_text, " "));
+                        inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[0]));
+                    } else if (inFridge) {
+                        inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_away));
+                        inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[1]));
+
+                        inFridgeText.setText(getString(R.string.order_expired_text, " "));
+                        inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[1]));
+                    } else {
+                        inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_busy));
+                        inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[2]));
+
+                        inFridgeText.setText(getString(R.string.order_not_in_fridge_text, " "));
+                        inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[2]));
+                    }
 
                     orderableItem.addView(inFridgeIcon);
                     orderableItem.addView(inFridgeText);
@@ -1146,7 +1269,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             Button addButton = dialogView.findViewById(R.id.orderDialogOkButton);
-            String foodInfoStr = foodInfo[0] + "," + foodInfo[1]; // Name and price, resp.
+            String foodInfoStr = foodInfo[0] + "," + foodInfo[1] + "," + foodInfo[3]; // Name, price, num per unit, resp.
             addButton.setTag(foodInfoStr);
             addButton.setOnClickListener(new Button.OnClickListener() {
                 @Override
@@ -1210,7 +1333,7 @@ public class MainActivity extends AppCompatActivity {
             itemLayout.addView(itemName);
 
             TextView itemNum = new TextView(this);
-            itemNum.setText(itemInfo[2]);
+            itemNum.setText(itemInfo[3]);
             itemNum.setTextSize(STP(R.dimen.normal_text_size));
             itemNum.setTag(item);
             itemNum.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
@@ -1222,7 +1345,7 @@ public class MainActivity extends AppCompatActivity {
                 minusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
                 minusButton.setTag(itemNum);
 
-                minusButton.setEnabled(Integer.parseInt(itemInfo[2]) != 1);
+                minusButton.setEnabled(Integer.parseInt(itemInfo[3]) != 1);
 
                 minusButton.setOnClickListener(new Button.OnClickListener() {
                     @Override
@@ -1235,7 +1358,7 @@ public class MainActivity extends AppCompatActivity {
                         String cartElement = (String) itemNum.getTag();
                         int index = itemsInCart.indexOf(cartElement);
                         String[] cartElements = cartElement.split(",");
-                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + num);
+                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num);
 
                         if (num == 1) {
                             // If there's only one item left on our checkout list, don't let us remove any more this way
@@ -1271,7 +1394,7 @@ public class MainActivity extends AppCompatActivity {
                         String cartElement = (String) itemNum.getTag();
                         int index = itemsInCart.indexOf(cartElement);
                         String[] cartElements = cartElement.split(",");
-                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + num);
+                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num);
 
                         if (num > 1) {
                             // If we increased from one item, we can subtract now
@@ -1291,7 +1414,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             TextView itemPrice = new TextView(this);
-            float price = Float.parseFloat(itemInfo[1]) * Integer.parseInt(itemInfo[2]);
+            float price = Float.parseFloat(itemInfo[1]) * Integer.parseInt(itemInfo[3]);
             total += price;
             itemPrice.setText(getResources().getString(R.string.order_price, getPriceString(price)));
             itemPrice.setTextSize(STP(R.dimen.normal_text_size));
