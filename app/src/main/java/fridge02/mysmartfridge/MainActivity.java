@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.home);
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
-        temperature = 35; // Default to 35 degrees F.
 
         // Do basic home screen things for tablet or phone. Note that the IDE will get upset if
         // you lock the orientation (which I think we want to do), hence the suppression above
@@ -90,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
+        // Set temperature
+        temperature = 35; // Default to 35 degrees F.
         setHomeScreenTemperature(temperature);
 
         // Set current displayed recipes to an empty list;
@@ -132,9 +133,12 @@ public class MainActivity extends AppCompatActivity {
         String[] timeStr = formatter.format(new Date()).split(":");
         int hours = Integer.parseInt(timeStr[0]) % 12;
         int minutes = Integer.parseInt(timeStr[1]);
-        int seconds = Integer.parseInt(timeStr[2]);
         TextView time = findViewById(R.id.time);
-        time.setText(getString(R.string.time, hours, minutes, seconds));
+        time.setText(getString(R.string.time, hours, minutes));
+
+        // There won't be anything in the fridge yet, so nothing is expired!
+        ImageView expiredIcon = findViewById(R.id.expiredIcon);
+        expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
     }
 
 
@@ -900,12 +904,38 @@ public class MainActivity extends AppCompatActivity {
         Button orderOnlineButton = findViewById(R.id.orderOnlineButton);
         orderOnlineButton.setEnabled(!inSafeMode);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String[] timeStr = formatter.format(new Date()).split(":");
+        SimpleDateFormat clockFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String[] timeStr = clockFormatter.format(new Date()).split(":");
         int hours = Integer.parseInt(timeStr[0]) % 12;
         int minutes = Integer.parseInt(timeStr[1]);
         TextView time = findViewById(R.id.time);
         time.setText(getString(R.string.time, hours, minutes));
+
+        if (isTablet) {
+            boolean somethingIsExpired = false;
+
+            for (String value : itemsInFridge.values()) {
+                SimpleDateFormat expFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+
+                try {
+                    Date expDate = expFormatter.parse(value);
+                    String currentDateStr = expFormatter.format(new Date());
+                    Date currentDate = expFormatter.parse(currentDateStr);
+                    if (currentDate.after(expDate)) {
+                        somethingIsExpired = true;
+                    }
+                } catch (ParseException e) {
+                    System.out.println("Could not parse date");
+                }
+            }
+
+            ImageView expiredIcon = findViewById(R.id.expiredIcon);
+            if (somethingIsExpired) {
+                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_recent_history));
+            } else {
+                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+            }
+        }
     }
 
     // RECIPES METHODS //
