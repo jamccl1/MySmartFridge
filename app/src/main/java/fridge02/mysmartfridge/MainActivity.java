@@ -57,6 +57,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.HashMap;
+import android.text.TextUtils;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -154,28 +157,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addFridgeItem(String name, String expiration) {
+        float[] phoneWeights = {2.5f, 2.5f, 1.5f};
+        float[] tabletWeights = {2.5f, 2.5f, 1.5f};
+        float[] weights = isTablet ? tabletWeights : phoneWeights;
+
         LinearLayout fridgeScrollLayout = findViewById(R.id.fridgeScrollLayout);
 
         TextView itemName = new TextView(this);
         itemName.setText(name);
-        itemName.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_image_width), DTP(R.dimen.recipes_image_height)));
+        itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[0]));
         itemName.setGravity(Gravity.CENTER);
-        itemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        itemName.setTextSize(STP(R.dimen.small_text_size));
+        itemName.setTextColor(Color.BLACK);
+        //itemName.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_image_width), DTP(R.dimen.recipes_image_height)));
+        //itemName.setGravity(Gravity.CENTER);
+        //itemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
 
         TextView expirationDate = new TextView(this);
         expirationDate.setText(expiration);
-        expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
+        expirationDate.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
         expirationDate.setGravity(Gravity.CENTER);
-        expirationDate.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        expirationDate.setTextSize(STP(R.dimen.smaller_text_size));
+        //expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
+        //expirationDate.setGravity(Gravity.CENTER);
+        //expirationDate.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
 
         Button button = new Button(this);
         button.setText(R.string.fridge_item_remove);
-        button.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_select_button_width), DTP(R.dimen.recipes_select_button_height)));
+        button.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_button_height), weights[2]));
+        //button.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_select_button_width), DTP(R.dimen.recipes_select_button_height)));
         button.setAllCaps(true);
         button.setGravity(Gravity.CENTER);
         button.setTextSize(STP(R.dimen.what_in_fridge_remove));
 
+
         LinearLayout inFridge = new LinearLayout(this);
+        inFridge.setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
+        inFridge.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
+        //inFridge.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
         inFridge.setOrientation(LinearLayout.HORIZONTAL);
         inFridge.setGravity(Gravity.CENTER_VERTICAL);
         inFridge.addView(itemName);
@@ -218,14 +237,48 @@ public class MainActivity extends AppCompatActivity {
         EditText dayText = findViewById(R.id.itemExpText);
 
         String name = nameText.getText().toString();
-        int count = Integer.parseInt(countText.getText().toString());
+        String countStr = countText.getText().toString();
         String day = dayText.getText().toString();
 
-        if ((!name.equals("")) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$"))) {
-            String key = name + " (" + count + ")";
-            String value = day;
-            itemsInFridge.put(key, value);
-            toWhatsInFridge(view);
+
+        if ((!name.equals("")) && (!day.equals("")) && (!countStr.equals("")) && (name.matches("^[a-zA-Z0-9]*$")) && (Integer.parseInt(countStr) > 0) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$"))) {
+
+            Pattern p = Pattern.compile("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$");
+            Matcher m = p.matcher(day);
+            m.matches();
+            int year = Integer.parseInt(m.group(3));
+
+            if (year < 2020) {
+                dayText.getText().clear();
+            } else {
+                String key = name + " (" + Integer.parseInt(countStr) + ")";
+                String value = "exp: " + day;
+
+                if (itemsInFridge.get(key) != null) {
+                    if (itemsInFridge.get(key).equals(value)) {
+                        int actualCount = Integer.parseInt(countStr) * 2;
+                        itemsInFridge.remove(key);
+                        itemsInFridge.put(name + " (" + actualCount + ")", value);
+                    } else {
+                        String newKey = name + " (" + Integer.parseInt(countStr) + ") ";
+                        itemsInFridge.put(newKey, value);
+                    }
+                } else {
+                    itemsInFridge.put(key, value);
+                }
+                toWhatsInFridge(view);
+            }
+
+        }
+
+        if (!day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}\\s*$")) {
+            //delete anything in the edit text field
+            dayText.getText().clear();
+        }
+
+        if ((!countStr.equals("")) && (Integer.parseInt(countStr) <= 0)) {
+            //delete anything in the edit text field
+            countText.getText().clear();
         }
 
     }
