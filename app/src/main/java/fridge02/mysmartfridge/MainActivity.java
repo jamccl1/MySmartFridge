@@ -806,6 +806,7 @@ public class MainActivity extends AppCompatActivity {
         TextView myView = new TextView(this);
         myView.setText("How To Remove A Grocery List Item");
         myView.setTextSize(STP(R.dimen.normal_text_size));
+        myView.setGravity(Gravity.CENTER);
         dialog.setCustomTitle(myView);
 
         dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -820,6 +821,8 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
         textView.setTextSize(STP(R.dimen.normal_text_size));
+        textView.setGravity(Gravity.CENTER);
+
 
 
     }
