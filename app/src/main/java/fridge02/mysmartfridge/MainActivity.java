@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.HashMap;
+import android.text.TextUtils;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -159,14 +162,48 @@ public class MainActivity extends AppCompatActivity {
         EditText dayText = findViewById(R.id.itemExpText);
 
         String name = nameText.getText().toString();
-        int count = Integer.parseInt(countText.getText().toString());
+        String countStr = countText.getText().toString();
         String day = dayText.getText().toString();
 
-        if ((!name.equals("")) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$"))) {
-            String key = name + " (" + count + ")";
-            String value = day;
-            itemsInFridge.put(key, value);
-            toWhatsInFridge(view);
+
+        if ((!name.equals("")) && (!day.equals("")) && (!countStr.equals("")) && (name.matches("^[a-zA-Z0-9]*$")) && (Integer.parseInt(countStr) > 0) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$"))) {
+
+            Pattern p = Pattern.compile("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$");
+            Matcher m = p.matcher(day);
+            m.matches();
+            int year = Integer.parseInt(m.group(3));
+
+            if (year < 2020) {
+                dayText.getText().clear();
+            } else {
+                String key = name + " (" + Integer.parseInt(countStr) + ")";
+                String value = day;
+
+                if (itemsInFridge.get(key) != null) {
+                    if (itemsInFridge.get(key).equals(value)) {
+                        int actualCount = Integer.parseInt(countStr) * 2;
+                        itemsInFridge.remove(key);
+                        itemsInFridge.put(name + " (" + actualCount + ")", value);
+                    } else {
+                        String newKey = name + " (" + Integer.parseInt(countStr) + ") ";
+                        itemsInFridge.put(newKey, value);
+                    }
+                } else {
+                    itemsInFridge.put(key, value);
+                }
+                toWhatsInFridge(view);
+            }
+
+        }
+
+        if (!day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}\\s*$")) {
+            //delete anything in the edit text field
+            dayText.getText().clear();
+        }
+
+        if (Integer.parseInt(countStr) <= 0) {
+            //delete anything in the edit text field
+            countText.getText().clear();
         }
 
     }
