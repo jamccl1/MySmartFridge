@@ -45,8 +45,8 @@
     <string name="recipes_no_ingredients">You do not have all the\ningredients for this recipe!</string>
     <string name="recipes_have_ingredients_line">You have this ingredient!</string>
     <string name="recipes_expired_ingredients_line">This ingredient is expired.</string>
-    <string name="recipes_no_ingredients_line">You do not have this ingredient</string>
-    <string name="recipes_not_enough_line">You don\'t have enough of this ingredient!</string>
+    <string name="recipes_no_ingredients_line">You do not have this ingredient!</string>
+    <string name="recipes_not_enough_line">You don\'t have enough of this ingredient.</string>
     <string name="recipes_cooking_time_label">Cooking Time:</string>
     <string name="recipes_serves_label">Serves:</string>
     <string name="recipes_experience_label">Experience Level:</string>

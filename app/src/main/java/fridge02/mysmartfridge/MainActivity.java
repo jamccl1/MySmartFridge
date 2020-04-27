@@ -737,7 +737,7 @@ public class MainActivity extends AppCompatActivity {
                 ImageView alertIcon = new ImageView(this);
                 if (isExpired) {
                     alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
-                } else if (!isEnough) {
+                } else if (!isEnough && inFridge) {
                     alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_offline));
                 } else {
                     alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
@@ -753,7 +753,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isExpired) {
                     alertText.setText(R.string.recipes_expired_ingredients_line);
                     alertText.setTextColor(getResources().getColor(R.color.orange));
-                } else if (!isEnough) {
+                } else if (!isEnough && inFridge) {
                     alertText.setText(R.string.recipes_not_enough_line);
                     alertText.setTextColor(Color.GRAY);
                 } else {
