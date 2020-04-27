@@ -45,6 +45,7 @@ import android.view.View;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -117,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
         cartTotal = 0;
         checkoutFieldsComplete = 0;
         passwordFieldsComplete = 0;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        String[] timeStr = formatter.format(new Date()).split(":");
+        int hours = Integer.parseInt(timeStr[0]) % 12;
+        int minutes = Integer.parseInt(timeStr[1]);
+        int seconds = Integer.parseInt(timeStr[2]);
+        TextView time = findViewById(R.id.time);
+        time.setText(getString(R.string.time, hours, minutes, seconds));
     }
 
 
@@ -881,6 +890,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button orderOnlineButton = findViewById(R.id.orderOnlineButton);
         orderOnlineButton.setEnabled(!inSafeMode);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String[] timeStr = formatter.format(new Date()).split(":");
+        int hours = Integer.parseInt(timeStr[0]) % 12;
+        int minutes = Integer.parseInt(timeStr[1]);
+        TextView time = findViewById(R.id.time);
+        time.setText(getString(R.string.time, hours, minutes));
     }
 
     // RECIPES METHODS //
