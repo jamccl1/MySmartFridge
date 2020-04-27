@@ -6,6 +6,7 @@
     <dimen name="button_text_size">24sp</dimen>
     <dimen name="normal_text_size">18sp</dimen>
     <dimen name="small_text_size">14sp</dimen>
+    <dimen name="smaller_text_size">12sp</dimen>
     <dimen name="extreme_text_size">100sp</dimen>
     <dimen name="menu_button_width">350dp</dimen>
     <dimen name="menu_button_height">75dp</dimen>
@@ -29,7 +30,7 @@
     <dimen name="recipes_indv_image_padding">5dp</dimen>
     <dimen name="recipes_indv_scroll_width">350dp</dimen>
 
-    <dimen name="what_in_fridge_remove">10dp</dimen>
+    <dimen name="what_in_fridge_remove">8dp</dimen>
 
     <!-- Order online items -->
     <dimen name="add_dialog_width">350dp</dimen>
