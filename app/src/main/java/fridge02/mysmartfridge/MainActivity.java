@@ -96,6 +96,47 @@ public class MainActivity extends AppCompatActivity {
         temperature = 35; // Default to 35 degrees F.
         setHomeScreenTemperature(temperature);
 
+        if (!isTablet) {
+            final TextView tempText = findViewById(R.id.temperature);
+            SeekBar tempBar = findViewById(R.id.homeTempBar);
+            tempBar.setProgress(temperature - LOW_TEMP);
+            tempBar.setMax(HIGH_TEMP - LOW_TEMP);
+
+            tempText.setOnClickListener(new TextView.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isCelcius = !isCelcius;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+            });
+
+            tempBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    temperature = LOW_TEMP + i;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
+        }
+
         // Set current displayed recipes to an empty list;
         recipesInList = new ArrayList<>();
         orderableItemsInList = new ArrayList<>();
@@ -132,16 +173,18 @@ public class MainActivity extends AppCompatActivity {
         checkoutFieldsComplete = 0;
         passwordFieldsComplete = 0;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-        String[] timeStr = formatter.format(new Date()).split(":");
-        int hours = Integer.parseInt(timeStr[0]) % 12;
-        int minutes = Integer.parseInt(timeStr[1]);
-        TextView time = findViewById(R.id.time);
-        time.setText(getString(R.string.time, hours, minutes));
+        if (isTablet) {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            String[] timeStr = formatter.format(new Date()).split(":");
+            int hours = Integer.parseInt(timeStr[0]) % 12;
+            int minutes = Integer.parseInt(timeStr[1]);
+            TextView time = findViewById(R.id.time);
+            time.setText(getString(R.string.time, hours, minutes < 10 ? "0" : "", minutes));
 
-        // There won't be anything in the fridge yet, so nothing is expired!
-        ImageView expiredIcon = findViewById(R.id.expiredIcon);
-        expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+            // There won't be anything in the fridge yet, so nothing is expired!
+            ImageView expiredIcon = findViewById(R.id.expiredIcon);
+            expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+        }
     }
 
 
@@ -646,6 +689,7 @@ public class MainActivity extends AppCompatActivity {
 
         final SeekBar temperatureBar = findViewById(R.id.settingsTempBar);
         temperatureBar.setProgress(temperature - LOW_TEMP);
+        temperatureBar.setMax(HIGH_TEMP - LOW_TEMP);
 
         temperatureBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -957,14 +1001,14 @@ public class MainActivity extends AppCompatActivity {
         Button orderOnlineButton = findViewById(R.id.orderOnlineButton);
         orderOnlineButton.setEnabled(!inSafeMode);
 
-        SimpleDateFormat clockFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String[] timeStr = clockFormatter.format(new Date()).split(":");
-        int hours = Integer.parseInt(timeStr[0]) % 12;
-        int minutes = Integer.parseInt(timeStr[1]);
-        TextView time = findViewById(R.id.time);
-        time.setText(getString(R.string.time, hours, minutes));
-
         if (isTablet) {
+            SimpleDateFormat clockFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            String[] timeStr = clockFormatter.format(new Date()).split(":");
+            int hours = Integer.parseInt(timeStr[0]) % 12;
+            int minutes = Integer.parseInt(timeStr[1]);
+            TextView time = findViewById(R.id.time);
+            time.setText(getString(R.string.time, hours, minutes < 10 ? "0" : "", minutes));
+
             boolean somethingIsExpired = false;
 
             for (String value : itemsInFridge.values()) {
@@ -988,6 +1032,43 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
             }
+        } else {
+            final TextView tempText = findViewById(R.id.temperature);
+            SeekBar tempBar = findViewById(R.id.homeTempBar);
+            tempBar.setProgress(temperature - LOW_TEMP);
+            tempBar.setMax(HIGH_TEMP - LOW_TEMP);
+
+            tempText.setOnClickListener(new TextView.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isCelcius = !isCelcius;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+            });
+
+            tempBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    temperature = LOW_TEMP + i;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
         }
     }
 

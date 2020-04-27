@@ -7,7 +7,7 @@
     <dimen name="normal_text_size">18sp</dimen>
     <dimen name="small_text_size">14sp</dimen>
     <dimen name="smaller_text_size">12sp</dimen>
-    <dimen name="extreme_text_size">100sp</dimen>
+    <dimen name="extreme_text_size">86sp</dimen>
     <dimen name="menu_button_width">350dp</dimen>
     <dimen name="menu_button_height">75dp</dimen>
     <dimen name="small_horizontal_space">30dp</dimen>
@@ -17,6 +17,9 @@
     <color name="green">#00CC66</color>
     <color name="orange">#FFAA00</color>
     <color name="red">#E60000</color>
+
+    <!-- Homescreen items -->
+    <dimen name="temperature_width">250dp</dimen>
 
     <!-- Recipes related items -->
     <dimen name="recipes_item_width">350dp</dimen>

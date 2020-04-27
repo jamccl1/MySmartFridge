@@ -7,7 +7,7 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="number">%1$d</string>
-    <string name="time">%1$d:%2$d</string>
+    <string name="time">%1$d:%2$s%3$d</string>
 
     <!-- Home screen strings -->
     <string name="homescreen_title">MY SMART FRIDGE</string>
