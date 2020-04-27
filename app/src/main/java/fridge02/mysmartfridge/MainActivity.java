@@ -802,7 +802,11 @@ public class MainActivity extends AppCompatActivity {
     private void alertDialog() {
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("The grocery items you add can be removed when the check box to the left of them are selected.");
-        dialog.setTitle("How to Remove a Grocery List Item:");
+
+        TextView myView = new TextView(this);
+        myView.setText("How To Remove A Grocery List Item");
+        myView.setTextSize(STP(R.dimen.normal_text_size));
+        dialog.setCustomTitle(myView);
 
         dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
             @Override
@@ -812,6 +816,12 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog=dialog.create();
         alertDialog.show();
+
+
+        TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+        textView.setTextSize(STP(R.dimen.normal_text_size));
+
+
     }
     public void addToGroceryList(View view){
 
