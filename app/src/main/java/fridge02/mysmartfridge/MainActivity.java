@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         TextView expirationDate = new TextView(this);
         expirationDate.setText(expiration);
         expirationDate.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
-        expirationDate.setGravity(Gravity.LEFT);
+        expirationDate.setGravity(Gravity.CENTER);
         expirationDate.setTextSize(STP(R.dimen.smaller_text_size));
         //expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
         //expirationDate.setGravity(Gravity.CENTER);
