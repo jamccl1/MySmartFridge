@@ -17,6 +17,229 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/settingsTempLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/settings_temp_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/settingsCenterPoint"
+        app:layout_constraintStart_toStartOf="@+id/settingsBackButton"
+        app:layout_constraintTop_toBottomOf="@+id/settingsTitle" />
+
+    <LinearLayout
+        android:id="@+id/settingsTempLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/settingsTempLabel"
+        app:layout_constraintStart_toStartOf="@+id/settingsTempLabel"
+        app:layout_constraintTop_toBottomOf="@+id/settingsTempLabel">
+
+        <TextView
+            android:id="@+id/settingsTempText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.35"
+            android:text="@string/temperature_far"
+            android:textSize="@dimen/button_text_size" />
+
+        <SeekBar
+            android:id="@+id/settingsTempBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="18" />
+
+        <Button
+            android:id="@+id/settingsDegreeButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.35"
+            android:text="@string/settings_dg_btn_to_celcius"
+            android:textAllCaps="false"
+            android:textSize="@dimen/small_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/settingsOptionsLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/settings_options_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/settingsCenterPoint"
+        app:layout_constraintStart_toStartOf="@+id/settingsBackButton"
+        app:layout_constraintTop_toBottomOf="@+id/settingsTempLayout" />
+
+    <Switch
+        android:id="@+id/settingsCoolingSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:checked="true"
+        android:text="@string/settings_cooling_label"
+        android:textColor="#6E6E6E"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/settingsOptionsLabel"
+        app:layout_constraintStart_toStartOf="@+id/settingsOptionsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/settingsOptionsLabel" />
+
+    <Switch
+        android:id="@+id/settingsFilterSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:checked="true"
+        android:text="@string/settings_filter_label"
+        android:textColor="#6E6E6E"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/settingsCoolingSwitch"
+        app:layout_constraintStart_toStartOf="@+id/settingsCoolingSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/settingsCoolingSwitch" />
+
+    <Switch
+        android:id="@+id/settingsLightSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:checked="true"
+        android:text="@string/settings_light_label"
+        android:textColor="#6E6E6E"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/settingsFilterSwitch"
+        app:layout_constraintStart_toStartOf="@+id/settingsFilterSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/settingsFilterSwitch" />
+
+    <TextView
+        android:id="@+id/settingsLanguageLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings_language_label"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintStart_toStartOf="@+id/settingsLightSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/settingsLightSwitch" />
+
+    <Spinner
+        android:id="@+id/settingsLanguageSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:entries="@array/languages"
+        app:layout_constraintBottom_toBottomOf="@+id/settingsLanguageLabel"
+        app:layout_constraintEnd_toEndOf="@+id/settingsLightSwitch"
+        app:layout_constraintStart_toEndOf="@+id/settingsLanguageLabel"
+        app:layout_constraintTop_toTopOf="@+id/settingsLanguageLabel" />
+
+    <TextView
+        android:id="@+id/settingsWifiLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/settings_connections_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/settingsBackButton"
+        app:layout_constraintStart_toEndOf="@+id/settingsCenterPoint"
+        app:layout_constraintTop_toBottomOf="@+id/settingsTitle" />
+
+    <TextView
+        android:id="@+id/settingsRouterLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings_router_label"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintStart_toStartOf="@+id/settingsWifiLabel"
+        app:layout_constraintTop_toBottomOf="@+id/settingsWifiLabel" />
+
+    <Spinner
+        android:id="@+id/settingsRouterSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:entries="@array/routers"
+        app:layout_constraintBottom_toBottomOf="@+id/settingsRouterLabel"
+        app:layout_constraintEnd_toEndOf="@+id/settingsWifiLabel"
+        app:layout_constraintStart_toEndOf="@+id/settingsRouterLabel"
+        app:layout_constraintTop_toTopOf="@+id/settingsRouterLabel" />
+
+    <TextView
+        android:id="@+id/settingsRouterPasswordLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings_router_password_label"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintStart_toStartOf="@+id/settingsRouterLabel"
+        app:layout_constraintTop_toBottomOf="@+id/settingsRouterLabel" />
+
+    <EditText
+        android:id="@+id/settingsRouterPasswordField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/settingsRouterPasswordLabel"
+        app:layout_constraintEnd_toEndOf="@+id/settingsRouterSpinner"
+        app:layout_constraintStart_toEndOf="@+id/settingsRouterPasswordLabel"
+        app:layout_constraintTop_toTopOf="@+id/settingsRouterPasswordLabel"
+        android:autofillHints=""
+        tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/settingsSafeModeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/settings_safe_mode_label"
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/settingsCenterPoint"
+        app:layout_constraintTop_toBottomOf="@+id/settingsRouterPasswordLabel" />
+
+    <TextView
+        android:id="@+id/settingsSafeModeMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_safe_mode_message"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/settingsBackButton"
+        app:layout_constraintStart_toStartOf="@+id/settingsSafeModeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/settingsSafeModeLabel" />
+
+    <Switch
+        android:id="@+id/settingsSafeModeSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings_safe_mode_enable_label"
+        android:textColor="#6E6E6E"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/settingsSafeModeMessage"
+        app:layout_constraintStart_toStartOf="@+id/settingsSafeModeMessage"
+        app:layout_constraintTop_toBottomOf="@+id/settingsSafeModeMessage" />
+
+    <Button
+        android:id="@+id/settingsSafeModeButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings_safe_mode_password_create"
+        android:textAllCaps="false"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/settingsSafeModeSwitch"
+        app:layout_constraintStart_toStartOf="@+id/settingsSafeModeSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/settingsSafeModeSwitch" />
+
     <Button
         android:id="@+id/settingsBackButton"
         android:layout_width="@dimen/menu_button_width"
@@ -30,13 +253,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/settingsPlaceholderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/placeholder"
+    <Space
+        android:id="@+id/settingsCenterPoint"
+        android:layout_width="40dp"
+        android:layout_height="10dp"
         app:layout_constraintBottom_toTopOf="@+id/settingsBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsTitle" />
+
+    <TextView
+        android:id="@+id/settingsBlur"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#BF424242"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
+
 </android.support.constraint.ConstraintLayout>

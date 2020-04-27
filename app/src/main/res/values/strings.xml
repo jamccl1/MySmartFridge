@@ -7,6 +7,7 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="number">%1$d</string>
+    <string name="time">%1$d:%2$s%3$d</string>
 
     <!-- Home screen strings -->
     <string name="homescreen_title">MY SMART FRIDGE</string>
@@ -18,7 +19,8 @@
     <string name="look_inside_home_button">Look Inside</string>
     <string name="settings_home_button">Settings</string>
     <string name="home_temp_widget_desc">Temperature widget goes here.</string>
-    <string name="temperature">%1$d°F</string>
+    <string name="temperature_far">%1$d°F</string>
+    <string name="temperature_cel">%1$d°C</string>
 
     <!-- What's In My Fridge screen strings -->
     <string name="wimf_title">What\'s In My Fridge?</string>
@@ -62,6 +64,44 @@
 
     <!-- Settings screen strings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_dg_btn_to_celcius">To °C</string>
+    <string name="settings_dg_btn_to_far">To °F</string>
+    <string name="settings_temp_label">Target Temperature:</string>
+    <string name="settings_options_label">Device Options:</string>
+    <string name="settings_cooling_label">Cooling Systems</string>
+    <string name="settings_filter_label">Water Filter Warnings:</string>
+    <string name="settings_light_label">Inside Light Turns On:</string>
+    <string name="settings_language_label">Language:</string>
+    <string name="settings_connections_label">Connectivity Settings:</string>
+    <string name="settings_router_label">Router:</string>
+    <string name="settings_router_password_label">Password:</string>
+    <string name="settings_safe_mode_label">Safe Mode:</string>
+    <string name="settings_safe_mode_message">Enable Safe Mode to disable purchases on this device.</string>
+    <string name="settings_safe_mode_enable_label">Enable Safe Mode:</string>
+    <string name="settings_safe_mode_password_create">Create Safe Mode Password</string>
+    <string name="settings_safe_mode_password_change">Change Safe Mode Password</string>
+    <string name="enter_password_title">Please Enter Your Password</string>
+    <string name="enter_password_warning">Please Create a Safe Mode Password!</string>
+    <string name="enter_password_continue_button">Continue</string>
+    <string name="create_password_create_title">Create Safe Mode Password</string>
+    <string name="create_password_change_title">Change Safe Mode Password</string>
+    <string name="create_password_current_label">Current:</string>
+    <string name="create_password_new_label">New:</string>
+    <string name="create_password_input_label">Password:</string>
+    <string name="create_password_confirm_label">Confirm:</string>
+    <string name="create_password_incorrect">Your Current Password is Incorrect!</string>
+    <string name="create_password_mismatch">Passwords Do Not Match!</string>
+    <string name="create_password_set_button">Set Password</string>
+    <string-array name="languages">
+        <item>English</item>
+        <item>François</item>
+        <item>Español</item>
+    </string-array>
+    <string-array name="routers">
+        <item>Pretend_Router</item>
+        <item>Imaginary_RTR_325</item>
+        <item>PrototypeRouter_W.11</item>
+    </string-array>
 
     <!-- Order Online screen strings -->
     <string name="order_title">Order Online</string>

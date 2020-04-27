@@ -36,8 +36,10 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SearchView;
+import android.widget.SeekBar;
 import android.widget.Space;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
@@ -50,6 +52,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -64,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<LinearLayout> recipesInList, orderableItemsInList,  groceriesInList;
     private ArrayList<String> itemsInCart, groceryItemNames;
     private String[] paymentInfo, currentRecipe;
-    private String lastRecipeSearch, lastOnlineOrderSearch;
-    private int checkoutFieldsComplete;
+    private String lastRecipeSearch, lastOnlineOrderSearch, safeModePassword, routerPassword;
+    private int checkoutFieldsComplete, passwordFieldsComplete, temperature, selectedLanguage, selectedRouter;
+    private final int LOW_TEMP = 32, HIGH_TEMP = 50;
     private float cartTotal;
-    private boolean isTablet, saveCheckoutInfo, useExpressShipping;
+    private boolean isTablet, saveCheckoutInfo, useExpressShipping, isCelcius, inSafeMode;
+    private boolean[] systemsOptions;
     private HashMap<String, String> itemsInFridge;
     private boolean groceriesAdded = false;
 
@@ -83,10 +88,53 @@ public class MainActivity extends AppCompatActivity {
         // you lock the orientation (which I think we want to do), hence the suppression above
         if (isTablet) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            setHomeScreenTemperatureDevice(75);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            setHomeScreenTemperature(75);
+        }
+
+        // Set temperature
+        temperature = 35; // Default to 35 degrees F.
+        setHomeScreenTemperature(temperature);
+
+        if (!isTablet) {
+            final TextView tempText = findViewById(R.id.temperature);
+            SeekBar tempBar = findViewById(R.id.homeTempBar);
+            tempBar.setProgress(temperature - LOW_TEMP);
+            tempBar.setMax(HIGH_TEMP - LOW_TEMP);
+
+            tempText.setOnClickListener(new TextView.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isCelcius = !isCelcius;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+            });
+
+            tempBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    temperature = LOW_TEMP + i;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
         }
 
         // Set current displayed recipes to an empty list;
@@ -95,27 +143,48 @@ public class MainActivity extends AppCompatActivity {
         itemsInCart = new ArrayList<>();
         paymentInfo = new String[9];
         itemsInFridge = new HashMap<>();
+        systemsOptions = new boolean[] {true, true, true};
         currentRecipe = null;
 
         // Set last searched recipe/online order
         lastRecipeSearch = "";
-
+        lastOnlineOrderSearch = "";
 
         //Set groceries shopping list to be empty list
         groceriesInList = new ArrayList<>();
         groceryItemNames = new ArrayList<>();
 
+        // Settings menu spinner storage
+        selectedLanguage = 0;
+        selectedRouter = 0;
 
-        lastOnlineOrderSearch = "";
+        // Initial passwords
+        safeModePassword = null;
+        routerPassword = "";
 
         // Set booleans
         saveCheckoutInfo = false;
         useExpressShipping = false;
+        isCelcius = false;
+        inSafeMode = false;
 
         // Set numbers
         cartTotal = 0;
         checkoutFieldsComplete = 0;
+        passwordFieldsComplete = 0;
 
+        if (isTablet) {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            String[] timeStr = formatter.format(new Date()).split(":");
+            int hours = Integer.parseInt(timeStr[0]) % 12;
+            int minutes = Integer.parseInt(timeStr[1]);
+            TextView time = findViewById(R.id.time);
+            time.setText(getString(R.string.time, hours, minutes < 10 ? "0" : "", minutes));
+
+            // There won't be anything in the fridge yet, so nothing is expired!
+            ImageView expiredIcon = findViewById(R.id.expiredIcon);
+            expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+        }
     }
 
 
@@ -428,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
             String[] states = getResources().getStringArray(R.array.checkout_states);
             for (int i = 0; i < states.length; i++) {
                 if (states[i].equals(paymentInfo[5])) {
-                    state.setSelection(i);
+                    state.setSelection(i, true);
                 }
             }
 
@@ -601,15 +670,405 @@ public class MainActivity extends AppCompatActivity {
 
     public void toSettings(View view) {
         setContentView(R.layout.settings);
+
+        // Make spinner text size normal
+        final Spinner languageSpinner = findViewById(R.id.settingsLanguageSpinner);
+        ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.createFromResource(this, R.array.languages, R.layout.custom_spinner);
+        languageAdapter.setDropDownViewResource(R.layout.custom_spinner);
+        languageSpinner.setAdapter(languageAdapter);
+        languageSpinner.setSelection(selectedLanguage, true);
+
+        final Spinner routerSpinner = findViewById(R.id.settingsRouterSpinner);
+        ArrayAdapter<CharSequence> routerAdapter = ArrayAdapter.createFromResource(this, R.array.routers, R.layout.custom_spinner);
+        routerAdapter.setDropDownViewResource(R.layout.custom_spinner);
+        routerSpinner.setAdapter(routerAdapter);
+        routerSpinner.setSelection(selectedRouter, true);
+
+        final TextView temperatureText = findViewById(R.id.settingsTempText);
+        temperatureText.setText(getString(R.string.temperature_far, isCelcius ? toCelcius(temperature) : temperature));
+
+        final SeekBar temperatureBar = findViewById(R.id.settingsTempBar);
+        temperatureBar.setProgress(temperature - LOW_TEMP);
+        temperatureBar.setMax(HIGH_TEMP - LOW_TEMP);
+
+        temperatureBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                temperature = LOW_TEMP + i;
+
+                if (isCelcius) {
+                    temperatureText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                } else {
+                    temperatureText.setText(getString(R.string.temperature_far, temperature));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        final Button toCelciusButton = findViewById(R.id.settingsDegreeButton);
+        toCelciusButton.setText(isCelcius ? R.string.settings_dg_btn_to_far : R.string.settings_dg_btn_to_celcius);
+        toCelciusButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isCelcius) {
+                    toCelciusButton.setText(R.string.settings_dg_btn_to_celcius);
+                    temperatureText.setText(getString(R.string.temperature_far, temperature));
+                    isCelcius = false;
+                } else {
+                    toCelciusButton.setText(R.string.settings_dg_btn_to_far);
+                    temperatureText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    isCelcius = true;
+                }
+            }
+        });
+
+        Switch coolSwitch = findViewById(R.id.settingsCoolingSwitch);
+        Switch filterSwitch = findViewById(R.id.settingsFilterSwitch);
+        Switch lightSwitch = findViewById(R.id.settingsLightSwitch);
+
+        coolSwitch.setChecked(systemsOptions[0]);
+        filterSwitch.setChecked(systemsOptions[1]);
+        lightSwitch.setChecked(systemsOptions[2]);
+
+        coolSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                systemsOptions[0] = b;
+            }
+        });
+
+        filterSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                systemsOptions[1] = b;
+            }
+        });
+
+        lightSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                systemsOptions[2] = b;
+            }
+        });
+
+        final EditText routerPasswordField = findViewById(R.id.settingsRouterPasswordField);
+        routerPasswordField.setText(routerPassword);
+
+        Button backButton = findViewById(R.id.settingsBackButton);
+        backButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedLanguage = languageSpinner.getSelectedItemPosition();
+                selectedRouter = routerSpinner.getSelectedItemPosition();
+                routerPassword = routerPasswordField.getText().toString();
+
+                toHome(view);
+            }
+        });
+
+        Button safeModeButton = findViewById(R.id.settingsSafeModeButton);
+
+        if (safeModePassword == null) {
+            safeModeButton.setText(R.string.settings_safe_mode_password_create);
+        } else {
+            safeModeButton.setText(R.string.settings_safe_mode_password_change);
+        }
+
+        final TextView blur = findViewById(R.id.settingsBlur);
+        blur.setVisibility(View.INVISIBLE);
+
+        safeModeButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                blur.setVisibility(View.VISIBLE);
+                createSetPasswordDialog(view);
+            }
+        });
+
+        final Switch safeModeSwitch = findViewById(R.id.settingsSafeModeSwitch);
+        safeModeSwitch.setChecked(inSafeMode);
+
+        safeModeSwitch.setOnClickListener(new Switch.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                safeModeSwitch.setChecked(!safeModeSwitch.isChecked());
+                blur.setVisibility(View.VISIBLE);
+                createEnterPasswordDialog(view);
+            }
+        });
+    }
+
+    private void createEnterPasswordDialog(View view) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        if (inflater != null) {
+            View dialogView = inflater.inflate(R.layout.enter_password_dialog, null);
+            int width = DTP(R.dimen.enter_password_dialog_width);
+            int height = DTP(R.dimen.enter_password_dialog_height);
+            final PopupWindow dialog = new PopupWindow(dialogView, width, height, true);
+            dialog.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            final TextView warningText = dialogView.findViewById(R.id.enterPasswordWarning);
+            if (safeModePassword == null) {
+                warningText.setText(R.string.enter_password_warning);
+            } else {
+                warningText.setVisibility(View.INVISIBLE);
+            }
+
+            final Button continueButton = dialogView.findViewById(R.id.enterPasswordContinueButton);
+            continueButton.setEnabled(false);
+
+            TextWatcher textChangedListener = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String currStr = charSequence.toString();
+                    continueButton.setEnabled(!currStr.equals("") && safeModePassword != null);
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {}
+            };
+
+            final EditText passwordField = dialogView.findViewById(R.id.enterPasswordField);
+            passwordField.addTextChangedListener(textChangedListener);
+
+            continueButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String password = passwordField.getText().toString();
+
+                    if (password.equals(safeModePassword)) {
+                        inSafeMode = !inSafeMode;
+
+                        Switch safeModeSwitch = findViewById(R.id.settingsSafeModeSwitch);
+                        safeModeSwitch.setChecked(inSafeMode);
+
+                        TextView blur = findViewById(R.id.settingsBlur);
+                        blur.setVisibility(View.INVISIBLE);
+
+                        dialog.dismiss();
+                    } else {
+                        warningText.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            Button backButton = dialogView.findViewById(R.id.enterPasswordBackButton);
+            backButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TextView blur = findViewById(R.id.settingsBlur);
+                    blur.setVisibility(View.INVISIBLE);
+                    dialog.dismiss();
+                }
+            });
+        }
+    }
+
+    private void createSetPasswordDialog(View view) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        if (inflater != null) {
+            View dialogView = inflater.inflate(R.layout.create_password_dialog, null);
+            int width = DTP(R.dimen.create_password_dialog_width);
+            int height = DTP(R.dimen.create_password_dialog_height);
+            final PopupWindow dialog = new PopupWindow(dialogView, width, height, true);
+            dialog.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            final TextView warningText = dialogView.findViewById(R.id.setPasswordWarning);
+            warningText.setVisibility(View.INVISIBLE);
+
+            if (safeModePassword != null) {
+                TextView title = dialogView.findViewById(R.id.setPasswordTitle);
+                title.setText(R.string.create_password_change_title);
+
+                TextView passwordLabel = dialogView.findViewById(R.id.setPasswordLabel);
+                passwordLabel.setText(R.string.create_password_current_label);
+
+                TextView confirmLabel = dialogView.findViewById(R.id.setPasswordConfirmLabel);
+                confirmLabel.setText(R.string.create_password_new_label);
+
+                warningText.setText(R.string.create_password_incorrect);
+            }
+
+            final Button setButton = dialogView.findViewById(R.id.setPasswordButton);
+            setButton.setEnabled(false);
+
+            TextWatcher textChangedListener = new TextWatcher() {
+                private String prevText;
+
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    prevText = charSequence.toString();
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String currStr = charSequence.toString();
+
+                    if (prevText.equals("") && !currStr.equals("")) {
+                        passwordFieldsComplete++;
+
+                        if (passwordFieldsComplete >= 2) {
+                            setButton.setEnabled(true);
+                        }
+                    } else if (!prevText.equals("") && currStr.equals("")) {
+                        passwordFieldsComplete--;
+
+                        if (passwordFieldsComplete < 2) {
+                            setButton.setEnabled(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {}
+            };
+
+            final EditText passwordField = dialogView.findViewById(R.id.setPasswordField);
+            final EditText confirmField = dialogView.findViewById(R.id.setPasswordConfirmField);
+            passwordField.addTextChangedListener(textChangedListener);
+            confirmField.addTextChangedListener(textChangedListener);
+
+            setButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean initial = safeModePassword == null;
+                    String password = passwordField.getText().toString();
+                    String confirm = confirmField.getText().toString();
+
+                    if (initial) {
+                        if (password.equals(confirm)) {
+                            Button setButton = findViewById(R.id.settingsSafeModeButton);
+                            setButton.setText(R.string.settings_safe_mode_password_change);
+
+                            TextView blur = findViewById(R.id.settingsBlur);
+                            blur.setVisibility(View.INVISIBLE);
+
+                            safeModePassword = password;
+                            passwordFieldsComplete = 0;
+                            dialog.dismiss();
+                        } else {
+                            warningText.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (password.equals(safeModePassword)) {
+                            TextView blur = findViewById(R.id.settingsBlur);
+                            blur.setVisibility(View.INVISIBLE);
+
+                            safeModePassword = confirm;
+                            passwordFieldsComplete = 0;
+                            dialog.dismiss();
+                        } else {
+                            warningText.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+
+            Button backButton = dialogView.findViewById(R.id.setPasswordBackButton);
+            backButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TextView blur = findViewById(R.id.settingsBlur);
+                    blur.setVisibility(View.INVISIBLE);
+
+                    passwordFieldsComplete = 0;
+                    dialog.dismiss();
+                }
+            });
+        }
+    }
+
+    private int toCelcius(int tempf) {
+        float sub = tempf - 32;
+        float tempc = sub * (5f / 9f);
+        return Math.round(tempc);
     }
 
     public void toHome(View view) {
         setContentView(R.layout.home);
+        setHomeScreenTemperature(temperature);
+
+        Button orderOnlineButton = findViewById(R.id.orderOnlineButton);
+        orderOnlineButton.setEnabled(!inSafeMode);
 
         if (isTablet) {
-            setHomeScreenTemperatureDevice(75);
+            SimpleDateFormat clockFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            String[] timeStr = clockFormatter.format(new Date()).split(":");
+            int hours = Integer.parseInt(timeStr[0]) % 12;
+            int minutes = Integer.parseInt(timeStr[1]);
+            TextView time = findViewById(R.id.time);
+            time.setText(getString(R.string.time, hours, minutes < 10 ? "0" : "", minutes));
+
+            boolean somethingIsExpired = false;
+
+            for (String value : itemsInFridge.values()) {
+                SimpleDateFormat expFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+
+                try {
+                    Date expDate = expFormatter.parse(value);
+                    String currentDateStr = expFormatter.format(new Date());
+                    Date currentDate = expFormatter.parse(currentDateStr);
+                    if (currentDate.after(expDate)) {
+                        somethingIsExpired = true;
+                    }
+                } catch (ParseException e) {
+                    System.out.println("Could not parse date");
+                }
+            }
+
+            ImageView expiredIcon = findViewById(R.id.expiredIcon);
+            if (somethingIsExpired) {
+                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_recent_history));
+            } else {
+                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+            }
         } else {
-            setHomeScreenTemperature(75);
+            final TextView tempText = findViewById(R.id.temperature);
+            SeekBar tempBar = findViewById(R.id.homeTempBar);
+            tempBar.setProgress(temperature - LOW_TEMP);
+            tempBar.setMax(HIGH_TEMP - LOW_TEMP);
+
+            tempText.setOnClickListener(new TextView.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isCelcius = !isCelcius;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+            });
+
+            tempBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    temperature = LOW_TEMP + i;
+
+                    if (isCelcius) {
+                        tempText.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+                    } else {
+                        tempText.setText(getString(R.string.temperature_far, temperature));
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
         }
     }
 
@@ -764,6 +1223,7 @@ public class MainActivity extends AppCompatActivity {
                 ingredientButton.setText(R.string.recipes_order_button);
                 ingredientButton.setTextSize(STP(R.dimen.small_text_size));
                 ingredientButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
+                ingredientButton.setEnabled(!inSafeMode);
                 String tag = i.split(" [(]")[0]; // Name of the ingredient, in a string
                 ingredientButton.setTag(tag);
 
@@ -946,12 +1406,12 @@ public class MainActivity extends AppCompatActivity {
     // Adjusts the temperature on the home screen.
     private void setHomeScreenTemperature(int temperature) {
         TextView uiTemperature = findViewById(R.id.temperature);
-        uiTemperature.setText(getString(R.string.temperature, temperature));
-    }
 
-    private void setHomeScreenTemperatureDevice(int temperature) {
-        TextView uiTemperature = findViewById(R.id.temperature);
-        uiTemperature.setText(getString(R.string.temperature, temperature));
+        if (isCelcius) {
+            uiTemperature.setText(getString(R.string.temperature_cel, toCelcius(temperature)));
+        } else {
+            uiTemperature.setText(getString(R.string.temperature_far, temperature));
+        }
     }
 
 

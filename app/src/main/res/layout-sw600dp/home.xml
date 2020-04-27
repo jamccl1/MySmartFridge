@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:text="3:42"
+        android:text="@string/time"
         android:textAlignment="center"
         android:textSize="@dimen/button_text_size"
         android:textStyle="bold"
@@ -67,7 +67,7 @@
             android:layout_height="@dimen/temperature_text_height"
             android:layout_weight="0.85"
             android:gravity="center"
-            android:text="@string/temperature"
+            android:text="@string/temperature_far"
             android:textAlignment="center"
             android:textSize="100sp" />
 
