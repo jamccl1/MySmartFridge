@@ -847,8 +847,7 @@ public class MainActivity extends AppCompatActivity {
             userItemQuantityString = "1";
         }
 
-        if (!userItemString.equals("")) {
-
+        if (!userItemString.equals("") && Integer.parseInt(userItemQuantityString)>=1) {
 
             LinearLayout col = new LinearLayout(getApplicationContext());
             LinearLayout.LayoutParams layoutParamsCol= new  LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
