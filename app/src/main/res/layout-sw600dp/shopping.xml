@@ -8,12 +8,12 @@
 
     <ScrollView
         android:id="@+id/groceryListScrollView"
-        android:layout_width="530dp"
-        android:layout_height="324dp"
+        android:layout_width="795dp"
+        android:layout_height="367dp"
         android:layout_marginTop="45dp"
         app:layout_constraintBottom_toTopOf="@+id/new_item_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.365"
+        app:layout_constraintHorizontal_bias="0.369"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shoppingTitle"
         app:layout_constraintVertical_bias="0.0">
@@ -29,7 +29,7 @@
         android:id="@+id/new_item_input"
         android:layout_width="383dp"
         android:layout_height="52dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="2dp"
         android:hint="@string/shopping_add_hint"
         android:inputType="text"
         android:textAlignment="center"
@@ -41,8 +41,8 @@
 
     <EditText
         android:id="@+id/new_item_quantity"
-        android:layout_width="295dp"
-        android:layout_height="75dp"
+        android:layout_width="191dp"
+        android:layout_height="67dp"
         android:layout_marginBottom="12dp"
         android:hint="@string/shopping_add_quantity"
         android:inputType="number"

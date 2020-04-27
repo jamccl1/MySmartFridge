@@ -1,6 +1,8 @@
 package fridge02.mysmartfridge;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -42,8 +44,13 @@ import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
 
+import android.widget.Toast;
+
+
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ArrayList<LinearLayout> recipesInList, orderableItemsInList,  groceriesInList;
-    private ArrayList<String> itemsInCart;
+    private ArrayList<String> itemsInCart, groceryItemNames;
     private String[] paymentInfo, currentRecipe;
     private String lastRecipeSearch, lastOnlineOrderSearch, safeModePassword, routerPassword;
     private int checkoutFieldsComplete, passwordFieldsComplete, temperature, selectedLanguage, selectedRouter;
@@ -64,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTablet, saveCheckoutInfo, useExpressShipping, isCelcius, inSafeMode;
     private boolean[] systemsOptions;
     private HashMap<String, String> itemsInFridge;
+    private boolean groceriesAdded = false;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -99,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Set groceries shopping list to be empty list
         groceriesInList = new ArrayList<>();
+        groceryItemNames = new ArrayList<>();
 
         // Settings menu spinner storage
         selectedLanguage = 0;
@@ -1243,6 +1252,55 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Grocery List Methods
+    private void alertDialogDuplicate(String item) {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("The item " + item +" is already in your grocery shopping list!");
+
+        TextView myView = new TextView(this);
+        myView.setText("Duplicate item:");
+        myView.setTextSize(STP(R.dimen.normal_text_size));
+        myView.setGravity(Gravity.CENTER);
+        dialog.setCustomTitle(myView);
+
+        dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"Pop-up closed",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog=dialog.create();
+        alertDialog.show();
+
+
+        TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+        textView.setTextSize(STP(R.dimen.normal_text_size));
+        textView.setGravity(Gravity.CENTER);
+    }
+
+    private void alertDialogFirst() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("The grocery items you add can be removed when the check box to the left of them are selected.");
+
+        TextView myView = new TextView(this);
+        myView.setText("How To Remove A Grocery List Item");
+        myView.setTextSize(STP(R.dimen.normal_text_size));
+        myView.setGravity(Gravity.CENTER);
+        dialog.setCustomTitle(myView);
+
+        dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"Pop-up closed",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog=dialog.create();
+        alertDialog.show();
+
+
+        TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+        textView.setTextSize(STP(R.dimen.normal_text_size));
+        textView.setGravity(Gravity.CENTER);
+    }
 
     public void addToGroceryList(View view){
 
@@ -1265,19 +1323,22 @@ public class MainActivity extends AppCompatActivity {
             userItemQuantityString = "1";
         }
 
-        if (!userItemString.equals("")) {
+        if(groceryItemNames.contains(userItemString.toUpperCase())){
+            alertDialogDuplicate(userItemString);
+        }
 
+        else if (!userItemString.equals("") && Integer.parseInt(userItemQuantityString)>=1) {
 
             LinearLayout col = new LinearLayout(getApplicationContext());
-            col.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            col.setOrientation(LinearLayout.HORIZONTAL);
-            col.setGravity(Gravity.LEFT);
+            LinearLayout.LayoutParams layoutParamsCol= new  LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
+            col.setLayoutParams(layoutParamsCol);
+            col.setOrientation(LinearLayout.HORIZONTAL);
+            col.setGravity(Gravity.FILL);
 
             linearLay.addView(col);
 
-            LinearLayout.LayoutParams layoutParamsQuantity = new  LinearLayout.LayoutParams(100, 100);
-            layoutParamsQuantity.setMargins(10, 0, 0, 0);
+            LinearLayout.LayoutParams layoutParamsQuantity = new  LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, .3f);
 
 
             final TextView quant = new TextView(getApplicationContext());
@@ -1287,11 +1348,15 @@ public class MainActivity extends AppCompatActivity {
             quant.setLayoutParams(layoutParamsQuantity);
 
 
+            LinearLayout.LayoutParams layoutParamsCheckBox = new  LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.1f);
+
+
             CheckBox newCheckBox = new CheckBox(getApplicationContext());
             newCheckBox.setText(userItemString);
             newCheckBox.setTextColor(Color.BLACK);
             newCheckBox.setButtonDrawable(id);
             newCheckBox.setTextSize(STP(R.dimen.normal_text_size));
+            newCheckBox.setLayoutParams(layoutParamsCheckBox);
 
 
             Button incrementButton = new Button(this);
@@ -1321,7 +1386,7 @@ public class MainActivity extends AppCompatActivity {
             decrementButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Integer curr = Integer.parseInt(quant.getText().subSequence(2,quant.length()-1).toString());
-                    if(!curr.equals(0)) {
+                    if(!curr.equals(1)) {
                         curr--;
                     }
                     quant.setText(" (" + curr.toString() + ")");
@@ -1329,27 +1394,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            LinearLayout.LayoutParams layoutParamsButton = new  LinearLayout.LayoutParams(150, 100);
+            LinearLayout.LayoutParams layoutParamsButton = new  LinearLayout.LayoutParams(0, 100, .40f);
+
             layoutParamsButton.setMargins(10, 10, 0, 0);
 
             incrementButton.setLayoutParams(layoutParamsButton);
             decrementButton.setLayoutParams(layoutParamsButton);
 
-            LinearLayout.LayoutParams tex = new  LinearLayout.LayoutParams(0, 0);
-            tex.weight =1;
-
-            final TextView t = new TextView(getApplicationContext());
-            t.setLayoutParams(tex);
-
-
             col.addView(newCheckBox);
             col.addView(quant);
-            col.addView(t);
             col.addView(incrementButton);
             col.addView(decrementButton);
 
             groceriesInList.add(col);
-        }
+            groceryItemNames.add(userItemString.toUpperCase());
+
+            if (!groceriesAdded){
+                alertDialogFirst();
+            }
+            groceriesAdded = true;
+            }
 
     }
 
@@ -1366,6 +1430,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(checkBox.isChecked() || curr.equals(0)){
                 viewsToDelete.add(x);
+                groceryItemNames.remove(checkBox.getText().toString().toUpperCase());
             }
         }
 
