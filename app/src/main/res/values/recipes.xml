@@ -19,7 +19,8 @@
 
     <string-array name="recipe_data_hamburger">
         <item>Hamburger</item>
-        <item>Buns (1 bag),Burger Patties (4),Lettuce (1 head),Tomatoes (1),Cheese (¼ lb)</item>
+        <item>Burger Buns (4),Burger Patties (4),Lettuce (1 head),Tomatoes (1),Cheese (1 bag)</item>
+        <item>4,4,1,1,1</item>
         <item>5 minutes</item>
         <item>Four</item>
         <item>Beginner</item>
@@ -31,6 +32,7 @@
     <string-array name="recipe_data_lasagna">
         <item>Lasagna</item>
         <item>Noodles (2 boxes),Tomato Sauce (1 can),Cheese (2 bags)</item>
+        <item>2,1,2</item>
         <item>45 minutes</item>
         <item>Six</item>
         <item>Intermediate</item>
@@ -41,6 +43,7 @@
     <string-array name="recipe_data_salad">
         <item>Salad</item>
         <item>Lettuce (1 head),Tomatoes (2),Cucumbers (1),Onions (1),Olives (1 bottle),Dressing (1 bottle)</item>
+        <item>1,2,1,1,1,1</item>
         <item>10 minutes</item>
         <item>Four</item>
         <item>Beginner</item>
@@ -50,7 +53,8 @@
 
     <string-array name="recipe_data_spaghetti">
         <item>Spaghetti</item>
-        <item>Noodles (1 box),Tomato Sauce (½ cup),Meatballs (6)</item>
+        <item>Noodles (1 box),Tomato Sauce (1 can),Meatballs (6)</item>
+        <item>1,1,6</item>
         <item>15 minutes</item>
         <item>Three</item>
         <item>Beginner</item>

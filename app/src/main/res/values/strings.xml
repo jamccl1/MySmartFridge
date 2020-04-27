@@ -46,6 +46,7 @@
     <string name="recipes_have_ingredients_line">You have this ingredient!</string>
     <string name="recipes_expired_ingredients_line">This ingredient is expired.</string>
     <string name="recipes_no_ingredients_line">You do not have this ingredient</string>
+    <string name="recipes_not_enough_line">You don\'t have enough of this ingredient!</string>
     <string name="recipes_cooking_time_label">Cooking Time:</string>
     <string name="recipes_serves_label">Serves:</string>
     <string name="recipes_experience_label">Experience Level:</string>
@@ -97,10 +98,10 @@
     <string name="chkt_zip_code_label">Zip Code</string>
     <string name="chkt_credit_header">Credit Card Info:</string>
     <string name="chkt_credit_card_label">Credit Card No.</string>
-    <string name="chkt_svc_label">SVC</string>
+    <string name="chkt_cvc_label">CVC</string>
     <string name="chkt_options_header">Options:</string>
     <string name="chkt_save_option">Save my info for next time</string>
-    <string name="chkt_express_option">One-Day Delivery (+$%1$s)</string>
+    <string name="chkt_express_option">Three-Hour Delivery (+$%1$s)</string>
     <string name="chkt_fillout_warning">Please fill out all fields to continue.</string>
     <string name="chkt_pay_button_text">Pay $%1$s</string>
     <string name="chkt_thank_you">Thank You!</string>
