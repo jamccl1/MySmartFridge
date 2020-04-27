@@ -122,28 +122,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addFridgeItem(String name, String expiration) {
+        float[] phoneWeights = {2.5f, 2.5f, 1.5f};
+        float[] tabletWeights = {2.5f, 2.5f, 1.5f};
+        float[] weights = isTablet ? tabletWeights : phoneWeights;
+
         LinearLayout fridgeScrollLayout = findViewById(R.id.fridgeScrollLayout);
 
         TextView itemName = new TextView(this);
         itemName.setText(name);
-        itemName.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_image_width), DTP(R.dimen.recipes_image_height)));
+        itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[0]));
         itemName.setGravity(Gravity.CENTER);
-        itemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        itemName.setTextSize(STP(R.dimen.small_text_size));
+        itemName.setTextColor(Color.BLACK);
+        //itemName.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_image_width), DTP(R.dimen.recipes_image_height)));
+        //itemName.setGravity(Gravity.CENTER);
+        //itemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
 
         TextView expirationDate = new TextView(this);
         expirationDate.setText(expiration);
-        expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
-        expirationDate.setGravity(Gravity.CENTER);
-        expirationDate.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        expirationDate.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
+        expirationDate.setGravity(Gravity.LEFT);
+        expirationDate.setTextSize(STP(R.dimen.smaller_text_size));
+        //expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
+        //expirationDate.setGravity(Gravity.CENTER);
+        //expirationDate.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
 
         Button button = new Button(this);
         button.setText(R.string.fridge_item_remove);
-        button.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_select_button_width), DTP(R.dimen.recipes_select_button_height)));
+        button.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_button_height), weights[2]));
+        //button.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_select_button_width), DTP(R.dimen.recipes_select_button_height)));
         button.setAllCaps(true);
         button.setGravity(Gravity.CENTER);
         button.setTextSize(STP(R.dimen.what_in_fridge_remove));
 
+
         LinearLayout inFridge = new LinearLayout(this);
+        inFridge.setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
+        inFridge.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
+        //inFridge.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
         inFridge.setOrientation(LinearLayout.HORIZONTAL);
         inFridge.setGravity(Gravity.CENTER_VERTICAL);
         inFridge.addView(itemName);
@@ -166,6 +182,135 @@ public class MainActivity extends AppCompatActivity {
         });
 
         fridgeScrollLayout.addView(inFridge);
+
+
+
+
+
+
+//        LinearLayout scrollLayout = findViewById(R.id.orderScrollLayout);
+//        Resources r = getResources();
+//        String[] foods = r.getStringArray(R.array.food_list);
+//
+//        // Weights for the image, item name, item price, and add button (respectively) in each layout
+//        float[] phoneWeights = {1.4f, 3.4f, 2.6f, 1.2f};
+//        float[] tabletWeights = {1.4f, 3.8f, 3f, 1.2f};
+//        float[] weights = isTablet ? tabletWeights : phoneWeights;
+//
+//        for (String foodId : foods) {
+//            int id = r.getIdentifier(foodId, "array", getPackageName());
+//            String[] foodInfo = r.getStringArray(id);
+//
+//            if (foodInfo[0].toLowerCase().contains(searchString.toLowerCase())) {
+//                LinearLayout orderableItem = new LinearLayout(this);
+//                orderableItem.setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));
+//                orderableItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DTP(R.dimen.order_item_height)));
+//                orderableItem.setOrientation(LinearLayout.HORIZONTAL);
+//                orderableItem.setGravity(Gravity.CENTER_VERTICAL);
+//
+//                ImageView itemPicture = new ImageView(this);
+//                String imageIdString = foodInfo[0].toLowerCase().replaceAll(" ", "_") + "_image";
+//                int imageId = r.getIdentifier(imageIdString, "drawable", getPackageName());
+//                itemPicture.setImageDrawable(r.getDrawable(imageId));
+//                itemPicture.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_image_height), weights[0]));
+//
+//                TextView itemName = new TextView(this);
+//                itemName.setText(foodInfo[0]);
+//                itemName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
+//                itemName.setGravity(Gravity.CENTER);
+//                itemName.setTextSize(STP(R.dimen.normal_text_size));
+//
+//                orderableItem.addView(itemPicture);
+//                orderableItem.addView(itemName);
+//
+//                if (isTablet) {
+//                    // For whether the item is in the fridge, is expired, or isn't in, resp.
+//                    float[] fridgeIconWeights = {1f, 1.1f, 0.7f};
+//                    float [] fridgeTextWeights = {2.2f, 2.1f, 2.5f};
+//
+//                    // Info about the food item
+//                    boolean[] fridgeInfo = fridgeHasFood(foodInfo[0], null);
+//                    boolean inFridge = fridgeInfo[0];
+//                    boolean isExpired = fridgeInfo[1];
+//
+//                    ImageView inFridgeIcon = new ImageView(this);
+//                    inFridgeIcon.setScaleType(ImageView.ScaleType.FIT_END);
+//
+//                    TextView inFridgeText = new TextView(this);
+//                    inFridgeText.setTextSize(STP(R.dimen.normal_text_size));
+//
+//                    if (inFridge && !isExpired) {
+//                        inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_online));
+//                        inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[0]));
+//
+//                        inFridgeText.setText(getString(R.string.order_in_fridge_text, " "));
+//                        inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[0]));
+//                    } else if (inFridge) {
+//                        inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_away));
+//                        inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[1]));
+//
+//                        inFridgeText.setText(getString(R.string.order_expired_text, " "));
+//                        inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[1]));
+//                    } else {
+//                        inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_busy));
+//                        inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[2]));
+//
+//                        inFridgeText.setText(getString(R.string.order_not_in_fridge_text, " "));
+//                        inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[2]));
+//                    }
+//
+//                    orderableItem.addView(inFridgeIcon);
+//                    orderableItem.addView(inFridgeText);
+//                }
+//
+//                TextView itemPrice = new TextView(this);
+//                if (isTablet) {
+//                    String priceString = getString(R.string.order_price_t, foodInfo[1], foodInfo[2]);
+//                    priceString = priceString.replace("[", "<b>").replace("]", "</b>").replace("\n", "<br>");
+//                    itemPrice.setText(Html.fromHtml(priceString));
+//                } else {
+//                    itemPrice.setText(getString(R.string.order_price, foodInfo[1]));
+//                }
+//                itemPrice.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[2]));
+//                itemPrice.setGravity(Gravity.CENTER);
+//                itemPrice.setTextSize(STP(R.dimen.normal_text_size));
+//
+//                ImageButton itemAdd = new ImageButton(this);
+//                itemAdd.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//                itemAdd.setImageDrawable(r.getDrawable(R.drawable.cart));
+//                itemAdd.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_button_height), weights[3]));
+//                itemAdd.setTag(foodInfo);
+//
+//                itemAdd.setOnClickListener(new ImageButton.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        createDialog(view, (String[]) view.getTag());
+//                    }
+//                });
+//
+//                orderableItem.addView(itemPrice);
+//                orderableItem.addView(itemAdd);
+//
+//                Space test = new Space(this);
+//                test.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.1f));
+//                orderableItem.addView(test);
+//
+//                scrollLayout.addView(orderableItem);
+//                orderableItemsInList.add(orderableItem);
+//            }
+//        }
+//
+//        final ScrollView scrollView = findViewById(R.id.orderScrollView);
+//        final ImageView canScrollUp = findViewById(R.id.orderCanScrollUp);
+//        final ImageView canScrollDown = findViewById(R.id.orderCanScrollDown);
+//
+//        scrollView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
+//                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+//            }
+//        });
     }
 
     private void remove(LinearLayout inFridge, String key) {
@@ -201,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                 dayText.getText().clear();
             } else {
                 String key = name + " (" + Integer.parseInt(countStr) + ")";
-                String value = day;
+                String value = "exp: " + day;
 
                 if (itemsInFridge.get(key) != null) {
                     if (itemsInFridge.get(key).equals(value)) {
@@ -225,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
             dayText.getText().clear();
         }
 
-        if (Integer.parseInt(countStr) <= 0) {
+        if ((!countStr.equals("")) && (Integer.parseInt(countStr) <= 0)) {
             //delete anything in the edit text field
             countText.getText().clear();
         }
