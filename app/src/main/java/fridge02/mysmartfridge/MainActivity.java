@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ArrayList<LinearLayout> recipesInList, orderableItemsInList,  groceriesInList;
-    private ArrayList<String> itemsInCart;
+    private ArrayList<String> itemsInCart, groceryItemNames;
     private String[] paymentInfo, currentRecipe;
     private String lastRecipeSearch, lastOnlineOrderSearch;
     private int checkoutFieldsComplete;
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Set groceries shopping list to be empty list
         groceriesInList = new ArrayList<>();
+        groceryItemNames = new ArrayList<>();
 
 
         lastOnlineOrderSearch = "";
@@ -847,7 +848,11 @@ public class MainActivity extends AppCompatActivity {
             userItemQuantityString = "1";
         }
 
-        if (!userItemString.equals("") && Integer.parseInt(userItemQuantityString)>=1) {
+        if(groceryItemNames.contains(userItemString.toUpperCase())){
+            // Dialog Message
+        }
+
+        else if (!userItemString.equals("") && Integer.parseInt(userItemQuantityString)>=1) {
 
             LinearLayout col = new LinearLayout(getApplicationContext());
             LinearLayout.LayoutParams layoutParamsCol= new  LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -927,6 +932,7 @@ public class MainActivity extends AppCompatActivity {
             col.addView(decrementButton);
 
             groceriesInList.add(col);
+            groceryItemNames.add(userItemString.toUpperCase());
 
             if (!groceriesAdded){
                        alertDialog();
@@ -949,6 +955,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(checkBox.isChecked() || curr.equals(0)){
                 viewsToDelete.add(x);
+                groceryItemNames.remove(checkBox.getText().toString().toUpperCase());
             }
         }
 
