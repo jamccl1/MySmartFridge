@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             dayText.getText().clear();
         }
 
-        if (Integer.parseInt(countStr) <= 0) {
+        if ((!countStr.equals("")) && (Integer.parseInt(countStr) <= 0)) {
             //delete anything in the edit text field
             countText.getText().clear();
         }
