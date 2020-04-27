@@ -851,15 +851,15 @@ public class MainActivity extends AppCompatActivity {
 
 
             LinearLayout col = new LinearLayout(getApplicationContext());
-            col.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            col.setOrientation(LinearLayout.HORIZONTAL);
-            col.setGravity(Gravity.LEFT);
+            LinearLayout.LayoutParams layoutParamsCol= new  LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
+            col.setLayoutParams(layoutParamsCol);
+            col.setOrientation(LinearLayout.HORIZONTAL);
+            col.setGravity(Gravity.FILL);
 
             linearLay.addView(col);
 
-            LinearLayout.LayoutParams layoutParamsQuantity = new  LinearLayout.LayoutParams(100, 100);
-            layoutParamsQuantity.setMargins(10, 0, 0, 0);
+            LinearLayout.LayoutParams layoutParamsQuantity = new  LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, .3f);
 
 
             final TextView quant = new TextView(getApplicationContext());
@@ -869,11 +869,15 @@ public class MainActivity extends AppCompatActivity {
             quant.setLayoutParams(layoutParamsQuantity);
 
 
+            LinearLayout.LayoutParams layoutParamsCheckBox = new  LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.1f);
+
+
             CheckBox newCheckBox = new CheckBox(getApplicationContext());
             newCheckBox.setText(userItemString);
             newCheckBox.setTextColor(Color.BLACK);
             newCheckBox.setButtonDrawable(id);
             newCheckBox.setTextSize(STP(R.dimen.normal_text_size));
+            newCheckBox.setLayoutParams(layoutParamsCheckBox);
 
 
             Button incrementButton = new Button(this);
@@ -911,22 +915,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            LinearLayout.LayoutParams layoutParamsButton = new  LinearLayout.LayoutParams(150, 100);
+            LinearLayout.LayoutParams layoutParamsButton = new  LinearLayout.LayoutParams(0, 100, .40f);
+
             layoutParamsButton.setMargins(10, 10, 0, 0);
 
             incrementButton.setLayoutParams(layoutParamsButton);
             decrementButton.setLayoutParams(layoutParamsButton);
 
-            LinearLayout.LayoutParams tex = new  LinearLayout.LayoutParams(0, 0);
-            tex.weight =1;
-
-            final TextView t = new TextView(getApplicationContext());
-            t.setLayoutParams(tex);
-
-
             col.addView(newCheckBox);
             col.addView(quant);
-            col.addView(t);
             col.addView(incrementButton);
             col.addView(decrementButton);
 
