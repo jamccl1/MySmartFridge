@@ -798,9 +798,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Grocery List Methods
+    private void alertDialogDuplicate(String item) {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("The item " + item +" is already in your grocery shopping list!");
+
+        TextView myView = new TextView(this);
+        myView.setText("Duplicate item:");
+        myView.setTextSize(STP(R.dimen.normal_text_size));
+        myView.setGravity(Gravity.CENTER);
+        dialog.setCustomTitle(myView);
+
+        dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"Pop-up closed",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog=dialog.create();
+        alertDialog.show();
 
 
-    private void alertDialog() {
+        TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+        textView.setTextSize(STP(R.dimen.normal_text_size));
+        textView.setGravity(Gravity.CENTER);
+    }
+
+    private void alertDialogFirst() {
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("The grocery items you add can be removed when the check box to the left of them are selected.");
 
@@ -823,10 +846,8 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
         textView.setTextSize(STP(R.dimen.normal_text_size));
         textView.setGravity(Gravity.CENTER);
-
-
-
     }
+
     public void addToGroceryList(View view){
 
         //Check for empty string
@@ -849,7 +870,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(groceryItemNames.contains(userItemString.toUpperCase())){
-            // Dialog Message
+            alertDialogDuplicate(userItemString);
         }
 
         else if (!userItemString.equals("") && Integer.parseInt(userItemQuantityString)>=1) {
@@ -935,7 +956,7 @@ public class MainActivity extends AppCompatActivity {
             groceryItemNames.add(userItemString.toUpperCase());
 
             if (!groceriesAdded){
-                       alertDialog();
+                alertDialogFirst();
             }
             groceriesAdded = true;
             }
