@@ -1,6 +1,8 @@
 package fridge02.mysmartfridge;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -39,6 +41,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private float cartTotal;
     private boolean isTablet, saveCheckoutInfo, useExpressShipping;
     private HashMap<String, String> itemsInFridge;
+    private boolean groceriesAdded = false;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -793,6 +798,21 @@ public class MainActivity extends AppCompatActivity {
 
     // Grocery List Methods
 
+
+    private void alertDialog() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("The grocery items you add can be removed when the check box to the left of them are selected.");
+        dialog.setTitle("How to Remove a Grocery List Item:");
+
+        dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"Pop-up closed",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog=dialog.create();
+        alertDialog.show();
+    }
     public void addToGroceryList(View view){
 
         //Check for empty string
@@ -898,7 +918,12 @@ public class MainActivity extends AppCompatActivity {
             col.addView(decrementButton);
 
             groceriesInList.add(col);
-        }
+
+            if (!groceriesAdded){
+                       alertDialog();
+            }
+            groceriesAdded = true;
+            }
 
     }
 
