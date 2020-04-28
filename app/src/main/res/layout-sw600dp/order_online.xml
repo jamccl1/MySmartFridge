@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/orderOnlineLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#D9EBED">
 
     <TextView
         android:id="@+id/orderTitle"
@@ -139,7 +140,6 @@
         android:id="@+id/orderBlur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D9EBED"
         tools:layout_editor_absoluteY="10dp" />
 
 </android.support.constraint.ConstraintLayout>
