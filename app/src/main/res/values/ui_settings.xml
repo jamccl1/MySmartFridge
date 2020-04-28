@@ -44,7 +44,7 @@
 
     <!-- Order online items -->
     <dimen name="add_dialog_width">350dp</dimen>
-    <dimen name="add_dialog_height">220dp</dimen>
+    <dimen name="add_dialog_height">250dp</dimen>
     <dimen name="add_dialog_button_width">200dp</dimen>
     <dimen name="add_dialog_widget_height">48dp</dimen>
     <dimen name="order_item_height">70dp</dimen>
@@ -58,7 +58,7 @@
     <dimen name="create_password_dialog_width">700dp</dimen>
     <dimen name="create_password_dialog_height">480dp</dimen>
     <dimen name="enter_password_dialog_width">700dp</dimen>
-    <dimen name="enter_password_dialog_height">320dp</dimen>
+    <dimen name="enter_password_dialog_height">350dp</dimen>
     <dimen name="enter_password_field_width">500dp</dimen>
 
     <!-- Items used for tablet mode. Note these are overwritten in the sw600dp version of ui_settings.xml;

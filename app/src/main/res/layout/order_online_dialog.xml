@@ -100,7 +100,7 @@
     <LinearLayout
         android:id="@+id/orderDialogButtonsLayout"
         android:layout_width="@dimen/add_dialog_button_width"
-        android:layout_height="@dimen/add_dialog_widget_height"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -108,22 +108,31 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/orderDialogCancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/blue_button"
+            android:text="@string/order_back_button_text"
+            android:textAllCaps="false"
+            android:textSize="@dimen/normal_text_size" />
+
+        <Space
+            android:id="@+id/orderDialogButtonSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
+
+        <Button
             android:id="@+id/orderDialogOkButton"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/green_button"
             android:text="@string/order_add_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/normal_text_size" />
 
-        <Button
-            android:id="@+id/orderDialogCancelButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/order_back_button_text"
-            android:textAllCaps="false"
-            android:textSize="@dimen/normal_text_size" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

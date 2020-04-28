@@ -1273,7 +1273,6 @@ public class MainActivity extends AppCompatActivity {
             ingredientLayout.addView(bullet);
             ingredientLayout.addView(ingredientName);
 
-            //if (!inFridge || isExpired || !isEnough) {
             if (!inFridge || !isEnoughFresh) {
                 Button ingredientButton = new Button(this);
                 ingredientButton.setText(R.string.recipes_order_button);
@@ -1306,7 +1305,6 @@ public class MainActivity extends AppCompatActivity {
 
             recipeScrollLayout.addView(ingredientLayout);
 
-            //if (!inFridge || isExpired || !isEnough) {
             if (!inFridge || !isEnoughFresh) {
                 LinearLayout alertLayout = new LinearLayout(this);
                 alertLayout.setOrientation(LinearLayout.HORIZONTAL);
