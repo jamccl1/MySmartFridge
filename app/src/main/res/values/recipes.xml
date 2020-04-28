@@ -53,12 +53,8 @@
 
     <string-array name="recipe_data_spaghetti">
         <item>Spaghetti</item>
-        <!--
-        <item>Noodles (1 box),Tomato Sauce (1 can),Meatballs (6)</item>
-        <item>1,1,6</item>
-        -->
-        <item>Noodles (1 box),Meatballs (6)</item>
-        <item>1,6</item>
+        <item>Noodles (1 box),Tomato Sauce (1 can),Meatballs (12)</item>
+        <item>1,1,12</item>
         <item>15 minutes</item>
         <item>Three</item>
         <item>Beginner</item>
