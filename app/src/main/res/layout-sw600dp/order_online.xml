@@ -121,20 +121,22 @@
         android:id="@+id/orderCanScrollDown"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/orderScrollView"
         app:layout_constraintStart_toEndOf="@+id/orderScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/orderCanScrollUp"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         android:rotation="180"
         app:layout_constraintStart_toEndOf="@+id/orderScrollView"
         app:layout_constraintTop_toTopOf="@+id/orderScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <TextView
         android:id="@+id/orderBlur"

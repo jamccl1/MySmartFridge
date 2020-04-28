@@ -234,8 +234,8 @@
         android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/cartScrollView"
-        app:layout_constraintEnd_toStartOf="@+id/cartScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:layout_constraintStart_toEndOf="@+id/cartScrollView"
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/cartCanScrollUp"
@@ -245,8 +245,8 @@
         android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         android:rotation="180"
-        app:layout_constraintEnd_toStartOf="@+id/cartScrollView"
+        app:layout_constraintStart_toEndOf="@+id/cartTableLabelLayout"
         app:layout_constraintTop_toTopOf="@+id/cartTableLabelLayout"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
 </android.support.constraint.ConstraintLayout>

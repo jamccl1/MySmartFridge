@@ -345,8 +345,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                canScrollDown.setAlpha(scrollView.canScrollHorizontally(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollHorizontally(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollHorizontally(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollHorizontally(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
 
@@ -397,8 +410,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
 
@@ -1351,16 +1377,42 @@ public class MainActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
 
         scrollView.post(new Runnable() {
             @Override
             public void run() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
     }
@@ -1722,9 +1774,9 @@ public class MainActivity extends AppCompatActivity {
                     float [] fridgeTextWeights = {2.2f, 2.1f, 2.5f};
 
                     // Info about the food item
-                    boolean[] fridgeInfo = fridgeHasFood(foodInfo[0], null);
-                    boolean inFridge = fridgeInfo[0];
-                    boolean isExpired = fridgeInfo[1];
+                    boolean[] fridgeInfo = fridgeHasFood(foodInfo[0], "1");
+                    boolean anyExpired = fridgeInfo[1];
+                    boolean anyFresh = fridgeInfo[3];
 
                     ImageView inFridgeIcon = new ImageView(this);
                     inFridgeIcon.setScaleType(ImageView.ScaleType.FIT_END);
@@ -1732,13 +1784,13 @@ public class MainActivity extends AppCompatActivity {
                     TextView inFridgeText = new TextView(this);
                     inFridgeText.setTextSize(STP(R.dimen.normal_text_size));
 
-                    if (inFridge && !isExpired) {
+                    if (anyFresh) {
                         inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_online));
                         inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[0]));
 
                         inFridgeText.setText(getString(R.string.order_in_fridge_text, " "));
                         inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[0]));
-                    } else if (inFridge) {
+                    } else if (anyExpired) {
                         inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_away));
                         inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[1]));
 
@@ -1800,8 +1852,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.post(new Runnable() {
             @Override
             public void run() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
     }
@@ -1886,7 +1951,7 @@ public class MainActivity extends AppCompatActivity {
                         if (item.contains(foodString)) {
                             indexInCart = itemsInCart.indexOf(item);
 
-                            String numInCartStr = item.split(",")[2];
+                            String numInCartStr = item.split(",")[3];
                             numberInCart = Integer.parseInt(numInCartStr);
                         }
                     }
@@ -2015,6 +2080,7 @@ public class MainActivity extends AppCompatActivity {
                         float newPrice =  individualPrice * num;
                         itemPrice.setText(getString(R.string.order_price, getPriceString(newPrice)));
                         removeButton.setTag(newCartElement);
+                        cartTotal -= individualPrice;
 
                         float total = Float.parseFloat(totalText.getText().toString().replace("$", ""));
                         totalText.setText(getString(R.string.order_price, getPriceString(total - individualPrice)));
@@ -2046,6 +2112,7 @@ public class MainActivity extends AppCompatActivity {
                         float newPrice = individualPrice * num;
                         itemPrice.setText(getString(R.string.order_price, getPriceString(newPrice)));
                         removeButton.setTag(newCartElement);
+                        cartTotal += individualPrice;
 
                         float total = Float.parseFloat(totalText.getText().toString().replace("$", ""));
                         totalText.setText(getString(R.string.order_price, getPriceString(total + individualPrice)));
@@ -2094,8 +2161,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.post(new Runnable() {
             @Override
             public void run() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
     }
