@@ -1526,7 +1526,8 @@ public class MainActivity extends AppCompatActivity {
             Button incrementButton = new Button(this);
             incrementButton.setText("+1");
             incrementButton.setGravity(Gravity.CENTER);
-            incrementButton.setBackgroundColor(0xFF008000);
+            //incrementButton.setBackgroundColor(0xFF008000);
+            incrementButton.setBackgroundColor(0xFFA4C639);
 
 
             incrementButton.setOnClickListener(new View.OnClickListener() {
@@ -1543,8 +1544,8 @@ public class MainActivity extends AppCompatActivity {
             Button decrementButton = new Button(this);
             decrementButton.setText("-1");
             decrementButton.setGravity(Gravity.CENTER);
-            decrementButton.setBackgroundColor(0xFFFF4040);
-
+            //decrementButton.setBackgroundColor(0xFFFF4040);
+            decrementButton.setBackgroundColor(0xFFDB5A6B);
 
 
             decrementButton.setOnClickListener(new View.OnClickListener() {
