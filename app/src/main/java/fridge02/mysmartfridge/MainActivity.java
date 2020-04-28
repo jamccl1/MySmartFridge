@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         String day = dayText.getText().toString();
 
 
-        if ((!name.equals("")) && (!day.equals("")) && (!countStr.equals("")) && (name.matches("^[a-zA-Z0-9]*$")) && (Integer.parseInt(countStr) > 0) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$"))) {
+        if ((!name.equals("")) && (!day.equals("")) && (!countStr.equals("")) && (Integer.parseInt(countStr) > 0) && (day.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$"))) {
 
             Pattern p = Pattern.compile("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/([0-9]{4})\\s*$");
             Matcher m = p.matcher(day);
