@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,12 +7,12 @@
 
     <ScrollView
         android:id="@+id/groceryListScrollView"
-        android:layout_width="795dp"
-        android:layout_height="367dp"
-        android:layout_marginTop="45dp"
+        android:layout_width="1001dp"
+        android:layout_height="374dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/new_item_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.369"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shoppingTitle"
         app:layout_constraintVertical_bias="0.0">
@@ -27,37 +26,37 @@
 
     <EditText
         android:id="@+id/new_item_input"
-        android:layout_width="383dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="2dp"
+        android:layout_width="374dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
         android:hint="@string/shopping_add_hint"
         android:inputType="text"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/new_item_quantity"
         app:layout_constraintEnd_toStartOf="@+id/groceryListAddButton"
-        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/new_item_quantity"
-        android:layout_width="191dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="167dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="36dp"
         android:hint="@string/shopping_add_quantity"
         android:inputType="number"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
         app:layout_constraintEnd_toStartOf="@+id/groceryListAddButton"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/groceryListAddButton"
-        android:layout_width="98dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginEnd="44dp"
+        android:layout_width="105dp"
+        android:layout_height="95dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="44dp"
         android:onClick="addToGroceryList"
         app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
@@ -67,13 +66,13 @@
 
     <TextView
         android:id="@+id/shoppingTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_width="985dp"
+        android:layout_height="89dp"
+        android:layout_marginTop="32dp"
         android:text="@string/shopping_title"
+        android:textAlignment="center"
         android:textSize="@dimen/title_text_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,5 +87,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="140dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="1140dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="193dp" />
 
 </android.support.constraint.ConstraintLayout>
