@@ -1014,7 +1014,7 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat expFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
 
                 try {
-                    Date expDate = expFormatter.parse(value);
+                    Date expDate = expFormatter.parse(value.replace("exp: ", ""));
                     String currentDateStr = expFormatter.format(new Date());
                     Date currentDate = expFormatter.parse(currentDateStr);
                     if (currentDate.after(expDate)) {
@@ -1027,9 +1027,9 @@ public class MainActivity extends AppCompatActivity {
 
             ImageView expiredIcon = findViewById(R.id.expiredIcon);
             if (somethingIsExpired) {
-                expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.fresh_food));
-            } else {
                 expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.expired_food));
+            } else {
+                expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.fresh_food));
             }
         } else {
             final TextView tempText = findViewById(R.id.temperature);
@@ -1134,12 +1134,41 @@ public class MainActivity extends AppCompatActivity {
         recipeName.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
         recipeName.setTextSize(STP(R.dimen.normal_text_size));
 
+        boolean hasAllFoods = true;
+        boolean someFoodExpired = false;
+        boolean hasEnoughFood = true;
+        boolean hasEnoughFreshFood = true;
+        String[] ingredientsList = recipeInfo[1].split(",");
+        String[] ingredientsNumbers = recipeInfo[2].split(",");
+
+        for (int i = 0; i < ingredientsList.length; i++) {
+            String ingredientName = ingredientsList[i].substring(0, ingredientsList[i].lastIndexOf("(") - 1);
+            boolean[] foodStatus = fridgeHasFood(ingredientName, ingredientsNumbers[i]);
+
+            hasAllFoods = hasAllFoods && foodStatus[0];
+            someFoodExpired = someFoodExpired || foodStatus[1];
+            hasEnoughFood = hasEnoughFood && foodStatus[2];
+            hasEnoughFreshFood = hasEnoughFreshFood && foodStatus[3];
+        }
+
         TextView haveIngredients = new TextView(this);
-        haveIngredients.setText(R.string.recipes_have_ingredients);
         haveIngredients.setGravity(Gravity.CENTER);
         haveIngredients.setTextSize(STP(R.dimen.small_text_size));
-        haveIngredients.setTextColor(getResources().getColor(R.color.green));
         haveIngredients.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.3f));
+
+        if (!hasAllFoods) {
+            haveIngredients.setText(R.string.recipes_no_ingredients);
+            haveIngredients.setTextColor(getResources().getColor(R.color.red));
+        } else if (!hasEnoughFood) {
+            haveIngredients.setText(R.string.recipes_not_enough);
+            haveIngredients.setTextColor(getResources().getColor(R.color.red));
+        } else if (someFoodExpired && !hasEnoughFreshFood) {
+            haveIngredients.setText(R.string.recipes_expired_ingredients);
+            haveIngredients.setTextColor(getResources().getColor(R.color.orange));
+        } else {
+            haveIngredients.setText(R.string.recipes_have_ingredients);
+            haveIngredients.setTextColor(getResources().getColor(R.color.green));
+        }
 
         recipe.addView(image);
         recipe.addView(recipeName);
@@ -1196,6 +1225,7 @@ public class MainActivity extends AppCompatActivity {
             boolean inFridge = fridgeInfo[0];
             boolean isExpired = fridgeInfo[1];
             boolean isEnough = fridgeInfo[2];
+            boolean isEnoughFresh = fridgeInfo[3];
 
             LinearLayout ingredientLayout = new LinearLayout(this);
             ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -1217,7 +1247,8 @@ public class MainActivity extends AppCompatActivity {
             ingredientLayout.addView(bullet);
             ingredientLayout.addView(ingredientName);
 
-            if (!inFridge || isExpired || !isEnough) {
+            //if (!inFridge || isExpired || !isEnough) {
+            if (!inFridge || !isEnoughFresh) {
                 Button ingredientButton = new Button(this);
                 ingredientButton.setText(R.string.recipes_order_button);
                 ingredientButton.setTextSize(STP(R.dimen.small_text_size));
@@ -1249,19 +1280,20 @@ public class MainActivity extends AppCompatActivity {
 
             recipeScrollLayout.addView(ingredientLayout);
 
-            if (!inFridge || isExpired || !isEnough) {
+            //if (!inFridge || isExpired || !isEnough) {
+            if (!inFridge || !isEnoughFresh) {
                 LinearLayout alertLayout = new LinearLayout(this);
                 alertLayout.setOrientation(LinearLayout.HORIZONTAL);
                 alertLayout.setGravity(Gravity.CENTER);
                 alertLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 ImageView alertIcon = new ImageView(this);
-                if (isExpired) {
-                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
-                } else if (!isEnough && inFridge) {
+                if (!inFridge) {
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+                } else if (!isEnough) {
                     alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_offline));
                 } else {
-                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
                 }
                 alertIcon.setScaleType(ImageView.ScaleType.FIT_END);
                 alertIcon.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.5f));
@@ -1271,15 +1303,15 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView alertText = new TextView(this);
 
-                if (isExpired) {
-                    alertText.setText(R.string.recipes_expired_ingredients_line);
-                    alertText.setTextColor(getResources().getColor(R.color.orange));
-                } else if (!isEnough && inFridge) {
+                if (!inFridge) {
+                    alertText.setText(R.string.recipes_no_ingredients_line);
+                    alertText.setTextColor(getResources().getColor(R.color.red));
+                } else if (!isEnough) {
                     alertText.setText(R.string.recipes_not_enough_line);
                     alertText.setTextColor(Color.GRAY);
                 } else {
-                    alertText.setText(R.string.recipes_no_ingredients_line);
-                    alertText.setTextColor(getResources().getColor(R.color.red));
+                    alertText.setText(R.string.recipes_expired_ingredients_line);
+                    alertText.setTextColor(getResources().getColor(R.color.orange));
                 }
 
                 alertText.setTextSize(STP(R.dimen.small_text_size));
@@ -1335,51 +1367,42 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean[] fridgeHasFood(String name, String number) {
         boolean hasFood = false;
-        boolean isExpired = false;
-        boolean hasEnough = false;
+        int freshIngredients = 0;
+        int expiredIngredients = 0;
+        int numNeeded = Integer.parseInt(number);
 
         for (String key : itemsInFridge.keySet()) {
             boolean thisIsFood = key.toLowerCase().contains(name.toLowerCase());
-            boolean thisIsExpired = false;
-            boolean thisIsEnough;
 
             hasFood = hasFood || thisIsFood;
 
             if (thisIsFood) {
-                String expDateStr = itemsInFridge.get(key);
+                String num = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
+                System.out.println("Key is: " + key);
+                System.out.println("There are " + num + " " + name + "s.");
+                int numInFridge = Integer.parseInt(num);
+
+                String expDateStr = itemsInFridge.get(key).replace("exp: ", "");
                 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+
                 try {
                     Date expDate = formatter.parse(expDateStr);
                     String currentDateStr = formatter.format(new Date());
                     Date currentDate = formatter.parse(currentDateStr);
                     if (currentDate.after(expDate)) {
-                        thisIsExpired = true;
+                        //thisIsExpired = true;
+                        expiredIngredients += numInFridge;
+                    } else {
+                        freshIngredients += numInFridge;
                     }
                 } catch (ParseException e) {
                     System.out.println("Could not parse date");
                 }
 
-                if (number != null) {
-                    String num = key.substring(key.lastIndexOf("(") + 1, key.length() - 1);
-                    int numInFridge = Integer.parseInt(num);
-                    int numNeeded = Integer.parseInt(number);
-
-                    thisIsEnough = (numInFridge >= numNeeded) && (!thisIsExpired);
-                } else {
-                    thisIsEnough = !thisIsExpired;
-                }
-
-                if (thisIsEnough) {
-                    isExpired = false;
-                    hasEnough = true;
-                } else if (!hasEnough) {
-                    isExpired = isExpired || thisIsExpired;
-                }
-
             }
         }
 
-        return new boolean[] {hasFood, isExpired, hasEnough};
+        return new boolean[] {hasFood, expiredIngredients != 0, freshIngredients + expiredIngredients >= numNeeded, freshIngredients >= numNeeded};
     };
 
     // Converts from dp to pixels.
