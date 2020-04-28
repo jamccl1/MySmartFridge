@@ -199,16 +199,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/blue_button"
             android:onClick="toOrderOnline"
             android:text="@string/back_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
+
+        <Space
+            android:id="@+id/cartButtonSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
 
         <Button
             android:id="@+id/cartCheckoutButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/green_button"
             android:onClick="toCheckout"
             android:text="@string/cart_checkout_button_text"
             android:textAllCaps="false"
@@ -234,8 +242,8 @@
         android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/cartScrollView"
-        app:layout_constraintEnd_toStartOf="@+id/cartScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:layout_constraintStart_toEndOf="@+id/cartScrollView"
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/cartCanScrollUp"
@@ -245,8 +253,8 @@
         android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         android:rotation="180"
-        app:layout_constraintEnd_toStartOf="@+id/cartScrollView"
+        app:layout_constraintStart_toEndOf="@+id/cartTableLabelLayout"
         app:layout_constraintTop_toTopOf="@+id/cartTableLabelLayout"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
 </android.support.constraint.ConstraintLayout>

@@ -11,6 +11,7 @@
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="@dimen/menu_button_height"
         android:layout_marginBottom="48dp"
+        android:background="@drawable/blue_button"
         android:onClick="toRecipes"
         android:text="@string/back_button_text"
         android:textAllCaps="false"
@@ -177,7 +178,7 @@
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/recipesIndvScrollView"
         app:layout_constraintStart_toEndOf="@+id/recipesIndvScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/recipesIndvCanScrollUp"
@@ -188,7 +189,7 @@
         android:rotation="180"
         app:layout_constraintStart_toEndOf="@+id/recipesIndvScrollView"
         app:layout_constraintTop_toTopOf="@+id/recipesIndvScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <TextView
         android:id="@+id/textView2"

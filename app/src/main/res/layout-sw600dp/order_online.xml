@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/orderOnlineLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#D9EBED">
 
     <TextView
         android:id="@+id/orderTitle"
@@ -83,15 +84,23 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/menu_button_height"
             android:layout_weight="1"
+            android:background="@drawable/blue_button"
             android:text="@string/back_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
+
+        <Space
+            android:id="@+id/orderButtonSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
 
         <Button
             android:id="@+id/orderCartButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/menu_button_height"
             android:layout_weight="1"
+            android:background="@drawable/green_button"
             android:onClick="toCart"
             android:text="@string/cart_button_text"
             android:textAllCaps="false"
@@ -120,26 +129,27 @@
         android:id="@+id/orderCanScrollDown"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/orderScrollView"
         app:layout_constraintStart_toEndOf="@+id/orderScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/orderCanScrollUp"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         android:rotation="180"
         app:layout_constraintStart_toEndOf="@+id/orderScrollView"
         app:layout_constraintTop_toTopOf="@+id/orderScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <TextView
         android:id="@+id/orderBlur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D9EBED"
         tools:layout_editor_absoluteY="10dp" />
 
 </android.support.constraint.ConstraintLayout>

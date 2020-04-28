@@ -105,15 +105,23 @@
             android:layout_height="@dimen/menu_button_height"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
+            android:background="@drawable/blue_button"
             android:text="@string/back_button_text"
             android:textAllCaps="false"
             android:textSize="@dimen/button_text_size" />
+
+        <Space
+            android:id="@+id/orderButtonSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
 
         <Button
             android:id="@+id/orderCartButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/menu_button_height"
             android:layout_weight="1"
+            android:background="@drawable/green_button"
             android:onClick="toCart"
             android:text="@string/cart_button_text"
             android:textAllCaps="false"
@@ -129,7 +137,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/orderCanScrollUp"
@@ -141,7 +149,7 @@
         app:layout_constraintBottom_toTopOf="@+id/orderScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <TextView
         android:id="@+id/orderBlur"

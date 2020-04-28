@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/look_inside_title"
+        android:textAlignment="center"
         android:textSize="@dimen/title_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +23,7 @@
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="@dimen/menu_button_height"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/blue_button"
         android:onClick="toHome"
         android:text="@string/back_button_text"
         android:textAllCaps="false"
@@ -32,10 +34,12 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="325dp"
-        android:layout_height="161dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="368dp"
+        android:layout_height="167dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
+        android:textAlignment="inherit"
         app:layout_constraintBottom_toTopOf="@+id/lookInsideBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -47,35 +51,40 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:onClick="showInsideFridge"
-            android:text="@string/top_shelf_radio" />
+            android:text="@string/top_shelf_radio"
+            android:textSize="@dimen/normal_text_size" />
 
         <RadioButton
             android:id="@+id/middleShelfRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showInsideFridge"
-            android:text="@string/middle_shelf_radio" />
+            android:text="@string/middle_shelf_radio"
+            android:textSize="@dimen/normal_text_size" />
 
         <RadioButton
             android:id="@+id/bottomSelfRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showInsideFridge"
-            android:text="@string/bottom_shelf_radio" />
+            android:text="@string/bottom_shelf_radio"
+            android:textSize="@dimen/normal_text_size" />
 
         <RadioButton
             android:id="@+id/drawer_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showInsideFridge"
-            android:text="@string/drawer_one" />
+            android:text="@string/drawer_one"
+            android:textSize="@dimen/normal_text_size" />
 
         <RadioButton
             android:id="@+id/drawer_two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showInsideFridge"
-            android:text="@string/drawer_two" />
+            android:text="@string/drawer_two"
+            android:textSize="@dimen/normal_text_size" />
     </RadioGroup>
 
     <ImageView
@@ -89,5 +98,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lookInsideTitle"
         app:layout_constraintVertical_bias="0.055" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="388dp" />
 
 </android.support.constraint.ConstraintLayout>

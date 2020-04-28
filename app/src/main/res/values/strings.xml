@@ -11,7 +11,7 @@
 
     <!-- Home screen strings -->
     <string name="homescreen_title">MY SMART FRIDGE</string>
-    <string name="whats_in_fridge_home_button">What\'s In My Fridge?</string>
+    <string name="whats_in_fridge_home_button">Inventory</string>
     <string name="shopping_home_button">Grocery Shopping</string>
     <string name="d_shopping_home_button">Grocery Shopping List</string>
     <string name="recipes_home_button">Recipes</string>
@@ -21,9 +21,10 @@
     <string name="home_temp_widget_desc">Temperature widget goes here.</string>
     <string name="temperature_far">%1$d°F</string>
     <string name="temperature_cel">%1$d°C</string>
+    <string name="temperature_label">Fridge Temperature:</string>
 
     <!-- What's In My Fridge screen strings -->
-    <string name="wimf_title">What\'s In My Fridge?</string>
+    <string name="wimf_title">Inventory</string>
     <string name="add_item_button">Add New Item</string>
     <string name="fridge_item_remove">Remove</string>
     <string name="fridge_add_item_title">New Food Item</string>
@@ -48,6 +49,7 @@
     <string name="recipes_have_ingredients_line">You have this ingredient!</string>
     <string name="recipes_expired_ingredients_line">This ingredient is expired.</string>
     <string name="recipes_no_ingredients_line">You do not have this ingredient!</string>
+    <string name="recipes_not_enough">You don\'t have enough\ningredients for this recipe!</string>
     <string name="recipes_not_enough_line">You don\'t have enough of this ingredient.</string>
     <string name="recipes_cooking_time_label">Cooking Time:</string>
     <string name="recipes_serves_label">Serves:</string>

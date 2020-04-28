@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             // There won't be anything in the fridge yet, so nothing is expired!
             ImageView expiredIcon = findViewById(R.id.expiredIcon);
-            expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+            expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.fresh_food));
         }
     }
 
@@ -345,8 +345,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                canScrollDown.setAlpha(scrollView.canScrollHorizontally(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollHorizontally(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollHorizontally(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollHorizontally(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
 
@@ -397,8 +410,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
 
@@ -1014,7 +1040,7 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat expFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
 
                 try {
-                    Date expDate = expFormatter.parse(value);
+                    Date expDate = expFormatter.parse(value.replace("exp: ", ""));
                     String currentDateStr = expFormatter.format(new Date());
                     Date currentDate = expFormatter.parse(currentDateStr);
                     if (currentDate.after(expDate)) {
@@ -1027,9 +1053,9 @@ public class MainActivity extends AppCompatActivity {
 
             ImageView expiredIcon = findViewById(R.id.expiredIcon);
             if (somethingIsExpired) {
-                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_recent_history));
+                expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.expired_food));
             } else {
-                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+                expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.fresh_food));
             }
         } else {
             final TextView tempText = findViewById(R.id.temperature);
@@ -1134,12 +1160,41 @@ public class MainActivity extends AppCompatActivity {
         recipeName.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
         recipeName.setTextSize(STP(R.dimen.normal_text_size));
 
+        boolean hasAllFoods = true;
+        boolean someFoodExpired = false;
+        boolean hasEnoughFood = true;
+        boolean hasEnoughFreshFood = true;
+        String[] ingredientsList = recipeInfo[1].split(",");
+        String[] ingredientsNumbers = recipeInfo[2].split(",");
+
+        for (int i = 0; i < ingredientsList.length; i++) {
+            String ingredientName = ingredientsList[i].substring(0, ingredientsList[i].lastIndexOf("(") - 1);
+            boolean[] foodStatus = fridgeHasFood(ingredientName, ingredientsNumbers[i]);
+
+            hasAllFoods = hasAllFoods && foodStatus[0];
+            someFoodExpired = someFoodExpired || foodStatus[1];
+            hasEnoughFood = hasEnoughFood && foodStatus[2];
+            hasEnoughFreshFood = hasEnoughFreshFood && foodStatus[3];
+        }
+
         TextView haveIngredients = new TextView(this);
-        haveIngredients.setText(R.string.recipes_have_ingredients);
         haveIngredients.setGravity(Gravity.CENTER);
         haveIngredients.setTextSize(STP(R.dimen.small_text_size));
-        haveIngredients.setTextColor(getResources().getColor(R.color.green));
         haveIngredients.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.3f));
+
+        if (!hasAllFoods) {
+            haveIngredients.setText(R.string.recipes_no_ingredients);
+            haveIngredients.setTextColor(getResources().getColor(R.color.red));
+        } else if (!hasEnoughFood) {
+            haveIngredients.setText(R.string.recipes_not_enough);
+            haveIngredients.setTextColor(getResources().getColor(R.color.red));
+        } else if (someFoodExpired && !hasEnoughFreshFood) {
+            haveIngredients.setText(R.string.recipes_expired_ingredients);
+            haveIngredients.setTextColor(getResources().getColor(R.color.orange));
+        } else {
+            haveIngredients.setText(R.string.recipes_have_ingredients);
+            haveIngredients.setTextColor(getResources().getColor(R.color.green));
+        }
 
         recipe.addView(image);
         recipe.addView(recipeName);
@@ -1196,6 +1251,7 @@ public class MainActivity extends AppCompatActivity {
             boolean inFridge = fridgeInfo[0];
             boolean isExpired = fridgeInfo[1];
             boolean isEnough = fridgeInfo[2];
+            boolean isEnoughFresh = fridgeInfo[3];
 
             LinearLayout ingredientLayout = new LinearLayout(this);
             ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -1217,7 +1273,7 @@ public class MainActivity extends AppCompatActivity {
             ingredientLayout.addView(bullet);
             ingredientLayout.addView(ingredientName);
 
-            if (!inFridge || isExpired || !isEnough) {
+            if (!inFridge || !isEnoughFresh) {
                 Button ingredientButton = new Button(this);
                 ingredientButton.setText(R.string.recipes_order_button);
                 ingredientButton.setTextSize(STP(R.dimen.small_text_size));
@@ -1240,8 +1296,8 @@ public class MainActivity extends AppCompatActivity {
                 buttonSpace.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
 
                 ImageView checkmark = new ImageView(this);
-                checkmark.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
-                checkmark.setScaleType(ImageView.ScaleType.CENTER);
+                checkmark.setImageDrawable(getResources().getDrawable(R.drawable.check));
+                checkmark.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 checkmark.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 4));
 
                 ingredientLayout.addView(checkmark);
@@ -1249,19 +1305,19 @@ public class MainActivity extends AppCompatActivity {
 
             recipeScrollLayout.addView(ingredientLayout);
 
-            if (!inFridge || isExpired || !isEnough) {
+            if (!inFridge || !isEnoughFresh) {
                 LinearLayout alertLayout = new LinearLayout(this);
                 alertLayout.setOrientation(LinearLayout.HORIZONTAL);
                 alertLayout.setGravity(Gravity.CENTER);
                 alertLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 ImageView alertIcon = new ImageView(this);
-                if (isExpired) {
-                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
-                } else if (!isEnough && inFridge) {
+                if (!inFridge) {
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+                } else if (!isEnough) {
                     alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_offline));
                 } else {
-                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+                    alertIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
                 }
                 alertIcon.setScaleType(ImageView.ScaleType.FIT_END);
                 alertIcon.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.5f));
@@ -1271,15 +1327,15 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView alertText = new TextView(this);
 
-                if (isExpired) {
-                    alertText.setText(R.string.recipes_expired_ingredients_line);
-                    alertText.setTextColor(getResources().getColor(R.color.orange));
-                } else if (!isEnough && inFridge) {
+                if (!inFridge) {
+                    alertText.setText(R.string.recipes_no_ingredients_line);
+                    alertText.setTextColor(getResources().getColor(R.color.red));
+                } else if (!isEnough) {
                     alertText.setText(R.string.recipes_not_enough_line);
                     alertText.setTextColor(Color.GRAY);
                 } else {
-                    alertText.setText(R.string.recipes_no_ingredients_line);
-                    alertText.setTextColor(getResources().getColor(R.color.red));
+                    alertText.setText(R.string.recipes_expired_ingredients_line);
+                    alertText.setTextColor(getResources().getColor(R.color.orange));
                 }
 
                 alertText.setTextSize(STP(R.dimen.small_text_size));
@@ -1319,67 +1375,84 @@ public class MainActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
 
         scrollView.post(new Runnable() {
             @Override
             public void run() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
     }
 
     private boolean[] fridgeHasFood(String name, String number) {
         boolean hasFood = false;
-        boolean isExpired = false;
-        boolean hasEnough = false;
+        int freshIngredients = 0;
+        int expiredIngredients = 0;
+        int numNeeded = Integer.parseInt(number);
 
         for (String key : itemsInFridge.keySet()) {
             boolean thisIsFood = key.toLowerCase().contains(name.toLowerCase());
-            boolean thisIsExpired = false;
-            boolean thisIsEnough;
 
             hasFood = hasFood || thisIsFood;
 
             if (thisIsFood) {
-                String expDateStr = itemsInFridge.get(key);
+                String num = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
+                System.out.println("Key is: " + key);
+                System.out.println("There are " + num + " " + name + "s.");
+                int numInFridge = Integer.parseInt(num);
+
+                String expDateStr = itemsInFridge.get(key).replace("exp: ", "");
                 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+
                 try {
                     Date expDate = formatter.parse(expDateStr);
                     String currentDateStr = formatter.format(new Date());
                     Date currentDate = formatter.parse(currentDateStr);
                     if (currentDate.after(expDate)) {
-                        thisIsExpired = true;
+                        //thisIsExpired = true;
+                        expiredIngredients += numInFridge;
+                    } else {
+                        freshIngredients += numInFridge;
                     }
                 } catch (ParseException e) {
                     System.out.println("Could not parse date");
                 }
 
-                if (number != null) {
-                    String num = key.substring(key.lastIndexOf("(") + 1, key.length() - 1);
-                    int numInFridge = Integer.parseInt(num);
-                    int numNeeded = Integer.parseInt(number);
-
-                    thisIsEnough = (numInFridge >= numNeeded) && (!thisIsExpired);
-                } else {
-                    thisIsEnough = !thisIsExpired;
-                }
-
-                if (thisIsEnough) {
-                    isExpired = false;
-                    hasEnough = true;
-                } else if (!hasEnough) {
-                    isExpired = isExpired || thisIsExpired;
-                }
-
             }
         }
 
-        return new boolean[] {hasFood, isExpired, hasEnough};
+        return new boolean[] {hasFood, expiredIngredients != 0, freshIngredients + expiredIngredients >= numNeeded, freshIngredients >= numNeeded};
     };
 
     // Converts from dp to pixels.
@@ -1699,9 +1772,9 @@ public class MainActivity extends AppCompatActivity {
                     float [] fridgeTextWeights = {2.2f, 2.1f, 2.5f};
 
                     // Info about the food item
-                    boolean[] fridgeInfo = fridgeHasFood(foodInfo[0], null);
-                    boolean inFridge = fridgeInfo[0];
-                    boolean isExpired = fridgeInfo[1];
+                    boolean[] fridgeInfo = fridgeHasFood(foodInfo[0], "1");
+                    boolean anyExpired = fridgeInfo[1];
+                    boolean anyFresh = fridgeInfo[3];
 
                     ImageView inFridgeIcon = new ImageView(this);
                     inFridgeIcon.setScaleType(ImageView.ScaleType.FIT_END);
@@ -1709,13 +1782,13 @@ public class MainActivity extends AppCompatActivity {
                     TextView inFridgeText = new TextView(this);
                     inFridgeText.setTextSize(STP(R.dimen.normal_text_size));
 
-                    if (inFridge && !isExpired) {
+                    if (anyFresh) {
                         inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_online));
                         inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[0]));
 
                         inFridgeText.setText(getString(R.string.order_in_fridge_text, " "));
                         inFridgeText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, fridgeTextWeights[0]));
-                    } else if (inFridge) {
+                    } else if (anyExpired) {
                         inFridgeIcon.setImageDrawable(r.getDrawable(android.R.drawable.presence_away));
                         inFridgeIcon.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.order_fridge_icon_height), fridgeIconWeights[1]));
 
@@ -1777,8 +1850,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.post(new Runnable() {
             @Override
             public void run() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
     }
@@ -1813,8 +1899,8 @@ public class MainActivity extends AppCompatActivity {
             String unit = foodInfo[2].replace("one ", "");
             dialogUnit.setText(getString(R.string.order_unit, foodInfo[1], unit));
 
-            Button decButton = dialogView.findViewById(R.id.orderDialogDecButton);
-            decButton.setOnClickListener(new Button.OnClickListener() {
+            ImageButton decButton = dialogView.findViewById(R.id.orderDialogDecButton);
+            decButton.setOnClickListener(new ImageButton.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
@@ -1826,8 +1912,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            Button incButton = dialogView.findViewById(R.id.orderDialogIncButton);
-            incButton.setOnClickListener(new Button.OnClickListener() {
+            ImageButton incButton = dialogView.findViewById(R.id.orderDialogIncButton);
+            incButton.setOnClickListener(new ImageButton.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
@@ -1863,7 +1949,7 @@ public class MainActivity extends AppCompatActivity {
                         if (item.contains(foodString)) {
                             indexInCart = itemsInCart.indexOf(item);
 
-                            String numInCartStr = item.split(",")[2];
+                            String numInCartStr = item.split(",")[3];
                             numberInCart = Integer.parseInt(numInCartStr);
                         }
                     }
@@ -1894,7 +1980,9 @@ public class MainActivity extends AppCompatActivity {
         float[] weights = isTablet ? tabletWeights : phoneWeights;
 
         // This is only used for the tablet
-        Button minusButton = null;
+        ImageButton minusButton = null, plusButton = null;
+
+        final TextView totalText = findViewById(R.id.cartTotalAmount);
 
         for (String item : itemsInCart) {
             LinearLayout itemLayout = new LinearLayout(this);
@@ -1917,33 +2005,14 @@ public class MainActivity extends AppCompatActivity {
             itemNum.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
 
             if (isTablet) {
-                minusButton = new Button(this);
-                minusButton.setText(R.string.minus);
-                minusButton.setTextSize(STP(R.dimen.small_text_size));
+                minusButton = new ImageButton(this);
+                minusButton.setImageDrawable(getResources().getDrawable(R.drawable.minus_button));
+                minusButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                minusButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 minusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
                 minusButton.setTag(itemNum);
 
                 minusButton.setEnabled(Integer.parseInt(itemInfo[3]) != 1);
-
-                minusButton.setOnClickListener(new Button.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        TextView itemNum = (TextView) view.getTag();
-                        int num = Integer.parseInt(itemNum.getText().toString());
-
-                        itemNum.setText(getString(R.string.number, --num));
-
-                        String cartElement = (String) itemNum.getTag();
-                        int index = itemsInCart.indexOf(cartElement);
-                        String[] cartElements = cartElement.split(",");
-                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num);
-
-                        if (num == 1) {
-                            // If there's only one item left on our checkout list, don't let us remove any more this way
-                            view.setEnabled(false);
-                        }
-                    }
-                });
 
                 itemLayout.addView(minusButton);
             }
@@ -1954,32 +2023,12 @@ public class MainActivity extends AppCompatActivity {
             if (isTablet) {
                 itemNum.setGravity(Gravity.CENTER);
 
-                Button plusButton = new Button(this);
-                plusButton.setText(R.string.plus);
-                plusButton.setTextSize(STP(R.dimen.small_text_size));
+                plusButton = new ImageButton(this);
+                plusButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                plusButton.setImageDrawable(getResources().getDrawable(R.drawable.plus_button));
+                plusButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 plusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
                 plusButton.setTag(minusButton);
-
-                plusButton.setOnClickListener(new Button.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Button minusButton = (Button) view.getTag();
-                        TextView itemNum = (TextView) minusButton.getTag();
-                        int num = Integer.parseInt(itemNum.getText().toString());
-
-                        itemNum.setText(getString(R.string.number, ++num));
-
-                        String cartElement = (String) itemNum.getTag();
-                        int index = itemsInCart.indexOf(cartElement);
-                        String[] cartElements = cartElement.split(",");
-                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num);
-
-                        if (num > 1) {
-                            // If we increased from one item, we can subtract now
-                            minusButton.setEnabled(true);
-                        }
-                    }
-                });
 
                 TextView priceEachText = new TextView(this);
                 priceEachText.setText(getString(R.string.order_price, itemInfo[1]));
@@ -1991,7 +2040,7 @@ public class MainActivity extends AppCompatActivity {
                 itemLayout.addView(priceEachText);
             }
 
-            TextView itemPrice = new TextView(this);
+            final TextView itemPrice = new TextView(this);
             float price = Float.parseFloat(itemInfo[1]) * Integer.parseInt(itemInfo[3]);
             total += price;
             itemPrice.setText(getResources().getString(R.string.order_price, getPriceString(price)));
@@ -2002,11 +2051,77 @@ public class MainActivity extends AppCompatActivity {
             Space space = new Space(this);
             space.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0.5f));
 
-            ImageButton removeButton = new ImageButton(this);
-            removeButton.setScaleType(ImageButton.ScaleType.CENTER);
-            removeButton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_delete));
+            final ImageButton removeButton = new ImageButton(this);
+            removeButton.setScaleType(ImageButton.ScaleType.FIT_CENTER);
+            removeButton.setImageDrawable(getResources().getDrawable(R.drawable.remove_button));
+            removeButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             removeButton.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.cart_subitem_height), weights[3]));
             removeButton.setTag(item);
+
+            if (plusButton != null && minusButton != null) {
+                minusButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView itemNum = (TextView) view.getTag();
+                        int num = Integer.parseInt(itemNum.getText().toString());
+
+                        itemNum.setText(getString(R.string.number, --num));
+
+                        String cartElement = (String) itemNum.getTag();
+                        int index = itemsInCart.indexOf(cartElement);
+                        String[] cartElements = cartElement.split(",");
+                        String newCartElement = cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num;
+                        itemsInCart.set(index, newCartElement);
+
+                        itemNum.setTag(newCartElement);
+                        float individualPrice = Float.parseFloat(cartElements[1]);
+                        float newPrice =  individualPrice * num;
+                        itemPrice.setText(getString(R.string.order_price, getPriceString(newPrice)));
+                        removeButton.setTag(newCartElement);
+                        cartTotal -= individualPrice;
+
+                        float total = Float.parseFloat(totalText.getText().toString().replace("$", ""));
+                        totalText.setText(getString(R.string.order_price, getPriceString(total - individualPrice)));
+
+                        if (num == 1) {
+                            // If there's only one item left on our checkout list, don't let us remove any more this way
+                            view.setEnabled(false);
+                        }
+                    }
+                });
+
+                plusButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ImageButton minusButton = (ImageButton) view.getTag();
+                        TextView itemNum = (TextView) minusButton.getTag();
+                        int num = Integer.parseInt(itemNum.getText().toString());
+
+                        itemNum.setText(getString(R.string.number, ++num));
+
+                        String cartElement = (String) itemNum.getTag();
+                        int index = itemsInCart.indexOf(cartElement);
+                        String[] cartElements = cartElement.split(",");
+                        String newCartElement = cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num;
+                        itemsInCart.set(index, newCartElement);
+
+                        itemNum.setTag(newCartElement);
+                        float individualPrice = Float.parseFloat(cartElements[1]);
+                        float newPrice = individualPrice * num;
+                        itemPrice.setText(getString(R.string.order_price, getPriceString(newPrice)));
+                        removeButton.setTag(newCartElement);
+                        cartTotal += individualPrice;
+
+                        float total = Float.parseFloat(totalText.getText().toString().replace("$", ""));
+                        totalText.setText(getString(R.string.order_price, getPriceString(total + individualPrice)));
+
+                        if (num > 1) {
+                            // If we increased from one item, we can subtract now
+                            minusButton.setEnabled(true);
+                        }
+                    }
+                });
+            }
 
             removeButton.setOnClickListener(new Button.OnClickListener() {
                 @Override
@@ -2030,7 +2145,6 @@ public class MainActivity extends AppCompatActivity {
             orderableItemsInList.add(itemLayout);
         }
 
-        TextView totalText = findViewById(R.id.cartTotalAmount);
         totalText.setText(getString(R.string.order_price, getPriceString(total)));
         cartTotal = total;
 
@@ -2045,8 +2159,21 @@ public class MainActivity extends AppCompatActivity {
         scrollView.post(new Runnable() {
             @Override
             public void run() {
-                canScrollDown.setAlpha(scrollView.canScrollVertically(1) ? 1f : 0.25f);
-                canScrollUp.setAlpha(scrollView.canScrollVertically(-1) ? 1f : 0.25f);
+                if (scrollView.canScrollVertically(1)) {
+                    canScrollDown.setAlpha(1f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollDown.setAlpha(0.25f);
+                    canScrollDown.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
+
+                if (scrollView.canScrollVertically(-1)) {
+                    canScrollUp.setAlpha(1f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll));
+                } else {
+                    canScrollUp.setAlpha(0.25f);
+                    canScrollUp.setImageDrawable(getResources().getDrawable(R.drawable.scroll_dis));
+                }
             }
         });
     }
