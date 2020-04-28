@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     //FRIDGE STUFF:
 
     public void toWhatsInFridge(View view) {
@@ -221,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         expirationDate.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
         expirationDate.setGravity(Gravity.CENTER);
         expirationDate.setTextSize(STP(R.dimen.smaller_text_size));
+        expirationDate.setTextColor(Color.BLACK);
         //expirationDate.setLayoutParams(new LinearLayout.LayoutParams(DTP(R.dimen.recipes_name_width), DTP(R.dimen.recipes_name_height)));
         //expirationDate.setGravity(Gravity.CENTER);
         //expirationDate.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
@@ -232,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
         button.setAllCaps(true);
         button.setGravity(Gravity.CENTER);
         button.setTextSize(STP(R.dimen.what_in_fridge_remove));
-
 
         LinearLayout inFridge = new LinearLayout(this);
         inFridge.setBackground(getResources().getDrawable(android.R.drawable.dialog_holo_light_frame));

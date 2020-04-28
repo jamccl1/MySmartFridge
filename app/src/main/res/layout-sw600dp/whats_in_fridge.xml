@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#D9EBED">
 
     <TextView
         android:id="@+id/wimfTitle"
@@ -22,8 +22,10 @@
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="@dimen/menu_button_height"
         android:layout_marginBottom="48dp"
+        android:background="#21B7CA"
         android:onClick="toHome"
         android:text="@string/back_button_text"
+        android:textAllCaps="false"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,6 +68,7 @@
         android:layout_width="350dp"
         android:layout_height="75dp"
         android:layout_marginBottom="12dp"
+        android:background="#21B7CA"
         android:onClick="toAddItem"
         android:text="@string/add_item_button"
         android:textAllCaps="false"

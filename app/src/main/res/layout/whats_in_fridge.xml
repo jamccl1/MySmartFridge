@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#D9EBED">
 
     <TextView
         android:id="@+id/wimfTitle"
@@ -21,6 +22,7 @@
         android:layout_width="@dimen/menu_button_width"
         android:layout_height="@dimen/menu_button_height"
         android:layout_marginBottom="16dp"
+        android:background="#21B7CA"
         android:onClick="toHome"
         android:text="@string/back_button_text"
         android:textAllCaps="false"
@@ -64,9 +66,10 @@
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginBottom="12dp"
+        android:background="#21B7CA"
         android:onClick="toAddItem"
         android:text="@string/add_item_button"
-        android:textAlignment="viewStart"
+        android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/wimfBackButton"

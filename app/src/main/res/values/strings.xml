@@ -24,7 +24,7 @@
 
     <!-- What's In My Fridge screen strings -->
     <string name="wimf_title">What\'s In My Fridge?</string>
-    <string name="add_item_button">+   Add New Item</string>
+    <string name="add_item_button">Add New Item</string>
     <string name="fridge_item_remove">Remove</string>
     <string name="fridge_add_item_title">New Food Item</string>
 

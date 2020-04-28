@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#D9EBED">
 
     <TextView
         android:id="@+id/wimfTitle"
@@ -56,15 +56,29 @@
 
     <Button
         android:id="@+id/addNewItemButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="89dp"
+        android:layout_height="47dp"
         android:layout_marginTop="20dp"
-        android:background="#42D552"
+        android:background="#8BC34A"
         android:onClick="addNewItem"
         android:text="Add"
+        android:textAllCaps="false"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemExpText" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="89dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="20dp"
+        android:background="#21B7CA"
+        android:onClick="toWhatsInFridge"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addNewItemButton" />
 
 </android.support.constraint.ConstraintLayout>
