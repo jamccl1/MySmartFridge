@@ -37,13 +37,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5" />
 
-        <Button
+        <ImageButton
             android:id="@+id/orderDialogDecButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="@string/minus"
-            android:textSize="@dimen/normal_text_size" />
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/minus_button" />
 
         <Space
             android:id="@+id/orderSelectSpace2"
@@ -70,13 +71,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.25" />
 
-        <Button
+        <ImageButton
             android:id="@+id/orderDialogIncButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="@string/plus"
-            android:textSize="@dimen/normal_text_size" />
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/plus_button" />
 
         <Space
             android:id="@+id/orderSelectSpace4"

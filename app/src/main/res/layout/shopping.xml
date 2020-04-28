@@ -60,11 +60,13 @@
         android:layout_marginStart="9dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:background="@android:color/transparent"
         android:onClick="addToGroceryList"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/shoppingBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/new_item_input"
-        app:srcCompat="@drawable/add_button_small" />
+        app:srcCompat="@drawable/plus_button" />
 
     <EditText
         android:id="@+id/new_item_input"

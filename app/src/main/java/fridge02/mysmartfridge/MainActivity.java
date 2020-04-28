@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             // There won't be anything in the fridge yet, so nothing is expired!
             ImageView expiredIcon = findViewById(R.id.expiredIcon);
-            expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+            expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.fresh_food));
         }
     }
 
@@ -1027,9 +1027,9 @@ public class MainActivity extends AppCompatActivity {
 
             ImageView expiredIcon = findViewById(R.id.expiredIcon);
             if (somethingIsExpired) {
-                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_recent_history));
+                expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.fresh_food));
             } else {
-                expiredIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.star_big_on));
+                expiredIcon.setImageDrawable(getResources().getDrawable(R.drawable.expired_food));
             }
         } else {
             final TextView tempText = findViewById(R.id.temperature);
@@ -1240,8 +1240,8 @@ public class MainActivity extends AppCompatActivity {
                 buttonSpace.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 4));
 
                 ImageView checkmark = new ImageView(this);
-                checkmark.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
-                checkmark.setScaleType(ImageView.ScaleType.CENTER);
+                checkmark.setImageDrawable(getResources().getDrawable(R.drawable.check));
+                checkmark.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 checkmark.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 4));
 
                 ingredientLayout.addView(checkmark);
@@ -1813,8 +1813,8 @@ public class MainActivity extends AppCompatActivity {
             String unit = foodInfo[2].replace("one ", "");
             dialogUnit.setText(getString(R.string.order_unit, foodInfo[1], unit));
 
-            Button decButton = dialogView.findViewById(R.id.orderDialogDecButton);
-            decButton.setOnClickListener(new Button.OnClickListener() {
+            ImageButton decButton = dialogView.findViewById(R.id.orderDialogDecButton);
+            decButton.setOnClickListener(new ImageButton.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
@@ -1826,8 +1826,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            Button incButton = dialogView.findViewById(R.id.orderDialogIncButton);
-            incButton.setOnClickListener(new Button.OnClickListener() {
+            ImageButton incButton = dialogView.findViewById(R.id.orderDialogIncButton);
+            incButton.setOnClickListener(new ImageButton.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     EditText input = dialog.getContentView().findViewById(R.id.orderDialogNumberField);
@@ -1894,7 +1894,9 @@ public class MainActivity extends AppCompatActivity {
         float[] weights = isTablet ? tabletWeights : phoneWeights;
 
         // This is only used for the tablet
-        Button minusButton = null;
+        ImageButton minusButton = null, plusButton = null;
+
+        final TextView totalText = findViewById(R.id.cartTotalAmount);
 
         for (String item : itemsInCart) {
             LinearLayout itemLayout = new LinearLayout(this);
@@ -1917,33 +1919,14 @@ public class MainActivity extends AppCompatActivity {
             itemNum.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, weights[1]));
 
             if (isTablet) {
-                minusButton = new Button(this);
-                minusButton.setText(R.string.minus);
-                minusButton.setTextSize(STP(R.dimen.small_text_size));
+                minusButton = new ImageButton(this);
+                minusButton.setImageDrawable(getResources().getDrawable(R.drawable.minus_button));
+                minusButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                minusButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 minusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
                 minusButton.setTag(itemNum);
 
                 minusButton.setEnabled(Integer.parseInt(itemInfo[3]) != 1);
-
-                minusButton.setOnClickListener(new Button.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        TextView itemNum = (TextView) view.getTag();
-                        int num = Integer.parseInt(itemNum.getText().toString());
-
-                        itemNum.setText(getString(R.string.number, --num));
-
-                        String cartElement = (String) itemNum.getTag();
-                        int index = itemsInCart.indexOf(cartElement);
-                        String[] cartElements = cartElement.split(",");
-                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num);
-
-                        if (num == 1) {
-                            // If there's only one item left on our checkout list, don't let us remove any more this way
-                            view.setEnabled(false);
-                        }
-                    }
-                });
 
                 itemLayout.addView(minusButton);
             }
@@ -1954,32 +1937,12 @@ public class MainActivity extends AppCompatActivity {
             if (isTablet) {
                 itemNum.setGravity(Gravity.CENTER);
 
-                Button plusButton = new Button(this);
-                plusButton.setText(R.string.plus);
-                plusButton.setTextSize(STP(R.dimen.small_text_size));
+                plusButton = new ImageButton(this);
+                plusButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                plusButton.setImageDrawable(getResources().getDrawable(R.drawable.plus_button));
+                plusButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 plusButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.6f));
                 plusButton.setTag(minusButton);
-
-                plusButton.setOnClickListener(new Button.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Button minusButton = (Button) view.getTag();
-                        TextView itemNum = (TextView) minusButton.getTag();
-                        int num = Integer.parseInt(itemNum.getText().toString());
-
-                        itemNum.setText(getString(R.string.number, ++num));
-
-                        String cartElement = (String) itemNum.getTag();
-                        int index = itemsInCart.indexOf(cartElement);
-                        String[] cartElements = cartElement.split(",");
-                        itemsInCart.set(index, cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num);
-
-                        if (num > 1) {
-                            // If we increased from one item, we can subtract now
-                            minusButton.setEnabled(true);
-                        }
-                    }
-                });
 
                 TextView priceEachText = new TextView(this);
                 priceEachText.setText(getString(R.string.order_price, itemInfo[1]));
@@ -1991,7 +1954,7 @@ public class MainActivity extends AppCompatActivity {
                 itemLayout.addView(priceEachText);
             }
 
-            TextView itemPrice = new TextView(this);
+            final TextView itemPrice = new TextView(this);
             float price = Float.parseFloat(itemInfo[1]) * Integer.parseInt(itemInfo[3]);
             total += price;
             itemPrice.setText(getResources().getString(R.string.order_price, getPriceString(price)));
@@ -2002,11 +1965,75 @@ public class MainActivity extends AppCompatActivity {
             Space space = new Space(this);
             space.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0.5f));
 
-            ImageButton removeButton = new ImageButton(this);
-            removeButton.setScaleType(ImageButton.ScaleType.CENTER);
-            removeButton.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_delete));
+            final ImageButton removeButton = new ImageButton(this);
+            removeButton.setScaleType(ImageButton.ScaleType.FIT_CENTER);
+            removeButton.setImageDrawable(getResources().getDrawable(R.drawable.remove_button));
+            removeButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             removeButton.setLayoutParams(new LinearLayout.LayoutParams(0, DTP(R.dimen.cart_subitem_height), weights[3]));
             removeButton.setTag(item);
+
+            if (plusButton != null && minusButton != null) {
+                minusButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView itemNum = (TextView) view.getTag();
+                        int num = Integer.parseInt(itemNum.getText().toString());
+
+                        itemNum.setText(getString(R.string.number, --num));
+
+                        String cartElement = (String) itemNum.getTag();
+                        int index = itemsInCart.indexOf(cartElement);
+                        String[] cartElements = cartElement.split(",");
+                        String newCartElement = cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num;
+                        itemsInCart.set(index, newCartElement);
+
+                        itemNum.setTag(newCartElement);
+                        float individualPrice = Float.parseFloat(cartElements[1]);
+                        float newPrice =  individualPrice * num;
+                        itemPrice.setText(getString(R.string.order_price, getPriceString(newPrice)));
+                        removeButton.setTag(newCartElement);
+
+                        float total = Float.parseFloat(totalText.getText().toString().replace("$", ""));
+                        totalText.setText(getString(R.string.order_price, getPriceString(total - individualPrice)));
+
+                        if (num == 1) {
+                            // If there's only one item left on our checkout list, don't let us remove any more this way
+                            view.setEnabled(false);
+                        }
+                    }
+                });
+
+                plusButton.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ImageButton minusButton = (ImageButton) view.getTag();
+                        TextView itemNum = (TextView) minusButton.getTag();
+                        int num = Integer.parseInt(itemNum.getText().toString());
+
+                        itemNum.setText(getString(R.string.number, ++num));
+
+                        String cartElement = (String) itemNum.getTag();
+                        int index = itemsInCart.indexOf(cartElement);
+                        String[] cartElements = cartElement.split(",");
+                        String newCartElement = cartElements[0] + "," + cartElements[1] + "," + cartElements[2] + "," + num;
+                        itemsInCart.set(index, newCartElement);
+
+                        itemNum.setTag(newCartElement);
+                        float individualPrice = Float.parseFloat(cartElements[1]);
+                        float newPrice = individualPrice * num;
+                        itemPrice.setText(getString(R.string.order_price, getPriceString(newPrice)));
+                        removeButton.setTag(newCartElement);
+
+                        float total = Float.parseFloat(totalText.getText().toString().replace("$", ""));
+                        totalText.setText(getString(R.string.order_price, getPriceString(total + individualPrice)));
+
+                        if (num > 1) {
+                            // If we increased from one item, we can subtract now
+                            minusButton.setEnabled(true);
+                        }
+                    }
+                });
+            }
 
             removeButton.setOnClickListener(new Button.OnClickListener() {
                 @Override
@@ -2030,7 +2057,6 @@ public class MainActivity extends AppCompatActivity {
             orderableItemsInList.add(itemLayout);
         }
 
-        TextView totalText = findViewById(R.id.cartTotalAmount);
         totalText.setText(getString(R.string.order_price, getPriceString(total)));
         cartTotal = total;
 
