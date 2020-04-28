@@ -68,12 +68,13 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
+        android:alpha="0.25"
         android:contentDescription="@string/placeholder"
         android:rotation="90"
         app:layout_constraintBottom_toBottomOf="@+id/recipesScrollView"
         app:layout_constraintEnd_toStartOf="@+id/recipesScrollView"
         app:layout_constraintTop_toTopOf="@+id/recipesScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/recipesCanScrollDown"
@@ -85,6 +86,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/recipesScrollView"
         app:layout_constraintStart_toEndOf="@+id/recipesScrollView"
         app:layout_constraintTop_toTopOf="@+id/recipesScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll" />
 
 </android.support.constraint.ConstraintLayout>

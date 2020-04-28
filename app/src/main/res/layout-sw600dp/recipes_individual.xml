@@ -177,7 +177,7 @@
         android:contentDescription="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/recipesIndvScrollView"
         app:layout_constraintStart_toEndOf="@+id/recipesIndvScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <ImageView
         android:id="@+id/recipesIndvCanScrollUp"
@@ -188,7 +188,7 @@
         android:rotation="180"
         app:layout_constraintStart_toEndOf="@+id/recipesIndvScrollView"
         app:layout_constraintTop_toTopOf="@+id/recipesIndvScrollView"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@drawable/scroll_dis" />
 
     <TextView
         android:id="@+id/textView2"
